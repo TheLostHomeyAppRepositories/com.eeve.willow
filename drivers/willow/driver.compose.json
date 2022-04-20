@@ -132,5 +132,10 @@
             "id": "add_my_devices",
             "template": "add_devices"
         }
-    ]
+    ],
+    "energy": {
+        "batteries": [
+            "INTERNAL"
+        ]
+    }
 }

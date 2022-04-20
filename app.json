@@ -34,6 +34,12 @@
       }
     }
   },
+  "bugs": {
+    "url": "https://github.com/Tixhyl/com.eeve.willow/issues"
+  },
+  "source": "https://github.com/Tixhyl/com.eeve.willow/",
+  "homepage": "https://www.eeve.com",
+  "support": "mailto:info@tixhyl.be",
   "flow": {
     "triggers": [
       {
@@ -250,6 +256,11 @@
           "template": "add_devices"
         }
       ],
+      "energy": {
+        "batteries": [
+          "INTERNAL"
+        ]
+      },
       "id": "willow",
       "settings": [
         {
