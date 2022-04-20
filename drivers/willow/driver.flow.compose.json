@@ -1,0 +1,51 @@
+{
+    "triggers": [{
+            "id": "rpm_changed",
+            "title": {
+                "en": "RPM updated"
+            },
+            "tokens": [{
+                "name": "rpm",
+                "type": "number",
+                "title": {
+                    "en": "RPM"
+                },
+                "example": {
+                    "en": "RPM"
+                }
+            }]
+        },
+        {
+            "id": "status.user_activity_changed",
+            "title": {
+                "en": "User Status updated"
+            },
+            "tokens": [{
+                "name": "status.user_activity",
+                "type": "string",
+                "title": {
+                    "en": "User Status"
+                },
+                "example": {
+                    "en": "Status"
+                }
+            }]
+        },
+        {
+            "id": "status.scheduled_activity_changed",
+            "title": {
+                "en": "Scheduled Status updated"
+            },
+            "tokens": [{
+                "name": "status.scheduled_activity",
+                "type": "string",
+                "title": {
+                    "en": "Scheduled Status"
+                },
+                "example": {
+                    "en": "Status"
+                }
+            }]
+        }
+    ]
+}

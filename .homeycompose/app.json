@@ -1,0 +1,36 @@
+{
+    "id": "com.eeve.willow",
+    "version": "1.0.0",
+    "compatibility": ">=5.0.0",
+    "sdk": 3,
+    "brandColor": "#000000",
+    "platforms": [
+        "local"
+    ],
+    "name": {
+        "en": "Willow"
+    },
+    "description": {
+        "en": "Monitor and control your Personal Worker Robot Willow from EEVE"
+    },
+    "category": [
+        "appliances"
+    ],
+    "permissions": [],
+    "images": {
+        "small": "/assets/images/small.png",
+        "large": "/assets/images/large.png",
+        "xlarge": "/assets/images/xlarge.png"
+    },
+    "author": {
+        "name": "Christophe Rouckhout",
+        "email": "christophe132@gmail.com"
+    },
+    "contributing": {
+        "donate": {
+            "paypal": {
+                "username": "Tixhyl"
+            }
+        }
+    }
+}

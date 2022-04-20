@@ -1,0 +1,29 @@
+[{
+    "type": "group",
+    "label": {
+        "en": "Willow Settings"
+    },
+    "children": [{
+            "id": "ipaddress",
+            "type": "text",
+            "label": {
+                "en": "IP Address"
+            },
+            "value": "192.168.10.50",
+            "hint": {
+                "en": "Enter the ip address of your Willow."
+            }
+        },
+        {
+            "id": "interval",
+            "type": "number",
+            "label": {
+                "en": "Interval"
+            },
+            "value": 60,
+            "hint": {
+                "en": "Enter the refresh interval in seconds."
+            }
+        }
+    ]
+}]

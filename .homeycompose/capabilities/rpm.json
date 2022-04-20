@@ -1,0 +1,12 @@
+{
+    "type": "number",
+    "title": {
+        "en": "Mower RPM",
+        "nl": "Maaier RPM"
+    },
+    "getable": true,
+    "setable": true,
+    "insights": true,
+    "uiComponent": "sensor",
+    "icon": "/assets/spinning-blades-svgrepo-com.svg"
+}

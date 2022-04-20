@@ -1,0 +1,10 @@
+{
+    "type": "string",
+    "title": {
+        "en": "Status"
+    },
+    "getable": true,
+    "setable": true,
+    "uiComponent": "sensor",
+    "icon": "/assets/broad-activity-feed-svgrepo-com.svg"
+}

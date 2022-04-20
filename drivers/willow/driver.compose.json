@@ -1,0 +1,136 @@
+{
+    "name": {
+        "en": "Willow"
+    },
+    "class": "other",
+    "capabilities": [
+        "measure_battery",
+        "measure_humidity",
+        "measure_temperature.module",
+        "measure_temperature.motherboard",
+        "measure_temperature.battery",
+        "measure_current.charging_current",
+        "rpm",
+        "status.user_activity",
+        "status.scheduled_activity",
+        "button.emergency",
+        "button.release_emergency",
+        "button.start_mowing",
+        "button.stop_mowing",
+        "button.docking",
+        "button.follow_me",
+        "button.line_mowing",
+        "button.reboot"
+    ],
+    "capabilitiesOptions": {
+        "status.user_activity": {
+            "title": {
+                "en": "User Activity",
+                "nl": "Gebruikersactiviteit"
+            }
+        },
+        "status.scheduled_activity": {
+            "title": {
+                "en": "Scheduled Activity",
+                "nl": "Geplande Activiteit"
+            }
+        },
+        "measure_current.charging_current": {
+            "decimals": 2,
+            "title": {
+                "en": "Charge Current",
+                "nl": "Laadstroom"
+            }
+        },
+        "measure_temperature.module": {
+            "decimals": 1,
+            "title": {
+                "en": "Module",
+                "nl": "Module"
+            }
+        },
+        "measure_temperature.motherboard": {
+            "decimals": 1,
+            "title": {
+                "en": "Motherboard",
+                "nl": "Moederbord"
+            }
+        },
+        "measure_temperature.battery": {
+            "decimals": 1,
+            "title": {
+                "en": "Battery",
+                "nl": "Batterij"
+            }
+        },
+        "button.emergency": {
+            "title": {
+                "en": "Emergency Stop",
+                "nl": "Noodstop Activeren"
+            }
+        },
+        "button.release_emergency": {
+            "title": {
+                "en": "Release Emergency Stop",
+                "nl": "Noodstop Vrijgeven"
+            }
+        },
+        "button.start_mowing": {
+            "title": {
+                "en": "Start Mowing",
+                "nl": "Start Maaien"
+            }
+        },
+        "button.stop_mowing": {
+            "title": {
+                "en": "Stop Mowing",
+                "nl": "Stop Maaien"
+            }
+        },
+        "button.docking": {
+            "title": {
+                "en": "Dockingstation",
+                "nl": "Laadstation"
+            }
+        },
+        "button.follow_me": {
+            "title": {
+                "en": "Follow me",
+                "nl": "Volg mij"
+            }
+        },
+        "button.line_mowing": {
+            "title": {
+                "en": "Line Mowing",
+                "nl": "Lijnen Maaien"
+            }
+        },
+        "button.reboot": {
+            "title": {
+                "en": "Reboot",
+                "nl": "Herstarten"
+            }
+        }
+    },
+    "platforms": [
+        "local"
+    ],
+    "connectivity": [],
+    "images": {
+        "small": "{{driverAssetsPath}}/images/small.png",
+        "large": "{{driverAssetsPath}}/images/large.png",
+        "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+    },
+    "pair": [{
+            "id": "list_devices",
+            "template": "list_devices",
+            "navigation": {
+                "next": "add_my_devices"
+            }
+        },
+        {
+            "id": "add_my_devices",
+            "template": "add_devices"
+        }
+    ]
+}
