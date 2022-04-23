@@ -65,37 +65,43 @@
             "title": {
                 "en": "Emergency Stop",
                 "nl": "Noodstop Activeren"
-            }
+            },
+            "uiQuickAction": false
         },
         "button.release_emergency": {
             "title": {
                 "en": "Release Emergency Stop",
                 "nl": "Noodstop Vrijgeven"
-            }
+            },
+            "uiQuickAction": false
         },
         "button.start_mowing": {
             "title": {
                 "en": "Start Mowing",
                 "nl": "Start Maaien"
-            }
+            },
+            "uiQuickAction": false
         },
         "button.stop_mowing": {
             "title": {
                 "en": "Stop Mowing",
                 "nl": "Stop Maaien"
-            }
+            },
+            "uiQuickAction": false
         },
         "button.docking": {
             "title": {
                 "en": "Dockingstation",
                 "nl": "Laadstation"
-            }
+            },
+            "uiQuickAction": false
         },
         "button.reboot": {
             "title": {
                 "en": "Reboot",
                 "nl": "Herstarten"
-            }
+            },
+            "uiQuickAction": false
         }
     },
     "platforms": [
