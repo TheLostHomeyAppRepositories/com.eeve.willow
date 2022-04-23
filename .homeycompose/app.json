@@ -1,42 +1,42 @@
 {
-    "id": "com.eeve.willow",
-    "version": "1.0.0",
-    "compatibility": ">=5.0.0",
-    "sdk": 3,
-    "brandColor": "#000000",
-    "platforms": [
-        "local"
-    ],
-    "name": {
-        "en": "EEVE"
-    },
-    "description": {
-        "en": "Personal Worker Robots"
-    },
-    "category": [
-        "appliances"
-    ],
-    "permissions": [],
-    "images": {
-        "small": "/assets/images/small.png",
-        "large": "/assets/images/large.png",
-        "xlarge": "/assets/images/xlarge.png"
-    },
-    "author": {
-        "name": "Christophe Rouckhout",
-        "email": "christophe132@gmail.com"
-    },
-    "contributing": {
-        "donate": {
-            "paypal": {
-                "username": "Tixhyl"
-            }
-        }
-    },
-    "bugs": {
-        "url": "https://github.com/Tixhyl/com.eeve.willow/issues"
-    },
-    "source": "https://github.com/Tixhyl/com.eeve.willow/",
-    "homepage": "https://www.eeve.com",
-    "support": "mailto:info@tixhyl.be"
+  "id": "com.eeve.willow",
+  "version": "1.0.1",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "brandColor": "#000000",
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "EEVE"
+  },
+  "description": {
+    "en": "Personal Worker Robots"
+  },
+  "category": [
+    "appliances"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Christophe Rouckhout",
+    "email": "christophe132@gmail.com"
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "Tixhyl"
+      }
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/Tixhyl/com.eeve.willow/issues"
+  },
+  "source": "https://github.com/Tixhyl/com.eeve.willow/",
+  "homepage": "https://www.eeve.com",
+  "support": "mailto:info@tixhyl.be"
 }
