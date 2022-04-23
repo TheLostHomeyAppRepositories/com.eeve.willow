@@ -18,8 +18,6 @@
         "button.start_mowing",
         "button.stop_mowing",
         "button.docking",
-        "button.follow_me",
-        "button.line_mowing",
         "button.reboot"
     ],
     "capabilitiesOptions": {
@@ -91,18 +89,6 @@
             "title": {
                 "en": "Dockingstation",
                 "nl": "Laadstation"
-            }
-        },
-        "button.follow_me": {
-            "title": {
-                "en": "Follow me",
-                "nl": "Volg mij"
-            }
-        },
-        "button.line_mowing": {
-            "title": {
-                "en": "Line Mowing",
-                "nl": "Lijnen Maaien"
             }
         },
         "button.reboot": {

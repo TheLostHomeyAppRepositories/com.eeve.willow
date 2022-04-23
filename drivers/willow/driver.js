@@ -18,9 +18,7 @@ class Driver extends Homey.Driver {
         id: this.guid(),
       },
       settings: {
-        // Store username & password in settings
-        // so the user can change them later
-        ipaddress: '192.168.10.50',
+        ipaddress: '192.168.0.0',
         interval: 60,
       },
     };
