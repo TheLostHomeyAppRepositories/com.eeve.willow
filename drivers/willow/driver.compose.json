@@ -40,6 +40,9 @@
                 "nl": "Laadstroom"
             }
         },
+        "measure_humidity": {
+            "decimals": 1
+        },
         "measure_temperature.module": {
             "decimals": 1,
             "title": {
@@ -91,7 +94,7 @@
         },
         "button.docking": {
             "title": {
-                "en": "Dockingstation",
+                "en": "Charging station",
                 "nl": "Laadstation"
             },
             "uiQuickAction": false

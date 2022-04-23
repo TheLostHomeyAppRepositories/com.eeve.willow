@@ -45,17 +45,26 @@
       {
         "id": "rpm_changed",
         "title": {
-          "en": "RPM updated"
+          "en": "Mower RPM updated",
+          "nl": "Maaier RPM veranderd"
         },
+        "hint": [
+          {
+            "en": "When the RPM of the mower gets updated",
+            "nl": "Wanneer het toerental van de maaier veranderd"
+          }
+        ],
         "tokens": [
           {
             "name": "rpm",
             "type": "number",
             "title": {
-              "en": "RPM"
+              "en": "RPM",
+              "nl": "RPM"
             },
             "example": {
-              "en": "RPM"
+              "en": "RPM",
+              "nl": "RPM"
             }
           }
         ],
@@ -70,17 +79,26 @@
       {
         "id": "status.user_activity_changed",
         "title": {
-          "en": "User Status updated"
+          "en": "User status updated",
+          "nl": "Gebruiker status veranderd"
         },
+        "hint": [
+          {
+            "en": "When the user status gets updated",
+            "nl": "Wanneer de gebruikers status veranderd"
+          }
+        ],
         "tokens": [
           {
             "name": "status.user_activity",
             "type": "string",
             "title": {
-              "en": "User Status"
+              "en": "User Status",
+              "nl": "Gebruikers Status"
             },
             "example": {
-              "en": "Status"
+              "en": "Status",
+              "nl": "Status"
             }
           }
         ],
@@ -95,20 +113,115 @@
       {
         "id": "status.scheduled_activity_changed",
         "title": {
-          "en": "Scheduled Status updated"
+          "en": "Scheduled status updated",
+          "nl": "Geplande status veranderd"
         },
+        "hint": [
+          {
+            "en": "When the user status gets updated",
+            "nl": "Wanneer de geplande status veranderd"
+          }
+        ],
         "tokens": [
           {
             "name": "status.scheduled_activity",
             "type": "string",
             "title": {
-              "en": "Scheduled Status"
+              "en": "Scheduled Status",
+              "nl": "Geplande Status"
             },
             "example": {
-              "en": "Status"
+              "en": "Status",
+              "nl": "Status"
             }
           }
         ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "activate-emergency",
+        "title": {
+          "en": "Activate emergency",
+          "nl": "Noodstop activeren"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "go-docking",
+        "title": {
+          "en": "Go docking",
+          "nl": "Naar laadstation"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "reboot",
+        "title": {
+          "en": "Reboot",
+          "nl": "Herstarten"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "release-emergency",
+        "title": {
+          "en": "Release emergency",
+          "nl": "Noodstop vrijgeven"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "start-random-mowing",
+        "title": {
+          "en": "Start random mowing",
+          "nl": "Start maaien"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "stop-random-mowing",
+        "title": {
+          "en": "Stop random mowing",
+          "nl": "Stop maaien"
+        },
         "args": [
           {
             "type": "device",
@@ -162,6 +275,9 @@
             "nl": "Laadstroom"
           }
         },
+        "measure_humidity": {
+          "decimals": 1
+        },
         "measure_temperature.module": {
           "decimals": 1,
           "title": {
@@ -213,7 +329,7 @@
         },
         "button.docking": {
           "title": {
-            "en": "Dockingstation",
+            "en": "Charging station",
             "nl": "Laadstation"
           },
           "uiQuickAction": false

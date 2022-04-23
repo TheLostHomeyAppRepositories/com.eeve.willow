@@ -24,6 +24,36 @@ class MyDevice extends Device {
     }
   }
 
+  async activateEmergency() {
+    await this.axiosFetch('/navigation/hardEmergencyStop');
+    await this.getParameters();
+  }
+
+  async releaseEmergency() {
+    await this.axiosFetch('/navigation/releaseEmergencyStop');
+    await this.getParameters();
+  }
+
+  async startMowing() {
+    await this.axiosFetch('/navigation/startmowing');
+    await this.getParameters();
+  }
+
+  async stopMowing() {
+    await this.axiosFetch('/navigation/stopmowing');
+    await this.getParameters();
+  }
+
+  async docking() {
+    await this.axiosFetch('/navigation/startdocking');
+    await this.getParameters();
+  }
+
+  async reboot() {
+    await this.axiosFetch('/maintenance/reboot');
+    await this.getParameters();
+  }
+
   /**
      * onInit is called when the device is initialized.
      */
@@ -33,45 +63,23 @@ class MyDevice extends Device {
 
     await this.getParameters(true);
 
-    this.registerCapabilityListener('button.emergency', async () => {
-      await this.axiosFetch('/navigation/hardEmergencyStop');
-      await this.getParameters();
-    });
+    this.registerCapabilityListener('button.emergency', async () => this.activateEmergency());
+    this.homey.flow.getActionCard('activate-emergency').registerRunListener(async (args, state) => this.activateEmergency());
 
-    this.registerCapabilityListener('button.release_emergency', async () => {
-      await this.axiosFetch('/navigation/releaseEmergencyStop');
-      await this.getParameters();
-    });
+    this.registerCapabilityListener('button.release_emergency', async () => this.releaseEmergency());
+    this.homey.flow.getActionCard('release-emergency').registerRunListener(async (args, state) => this.releaseEmergency());
 
-    this.registerCapabilityListener('button.start_mowing', async () => {
-      await this.axiosFetch('/navigation/startmowing');
-      await this.getParameters();
-    });
+    this.registerCapabilityListener('button.start_mowing', async () => this.startMowing());
+    this.homey.flow.getActionCard('start-random-mowing').registerRunListener(async (args, state) => this.startMowing());
 
-    this.registerCapabilityListener('button.stop_mowing', async () => {
-      await this.axiosFetch('/navigation/stopmowing');
-      await this.getParameters();
-    });
+    this.registerCapabilityListener('button.stop_mowing', async () => this.stopMowing());
+    this.homey.flow.getActionCard('stop-random-mowing').registerRunListener(async (args, state) => this.stopMowing());
 
-    this.registerCapabilityListener('button.docking', async () => {
-      await this.axiosFetch('/navigation/startdocking');
-      await this.getParameters();
-    });
+    this.registerCapabilityListener('button.docking', async () => this.docking());
+    this.homey.flow.getActionCard('go-docking').registerRunListener(async (args, state) => this.docking());
 
-    // this.registerCapabilityListener('button.follow_me', async () => {
-    //   await this.axiosFetch('/navigation/autopilot?speed=0.4&object=person');
-    //   await this.getParameters();
-    // });
-
-    // this.registerCapabilityListener('button.line_mowing', async () => {
-    //   await this.axiosFetch('/navigation/startlinemowing');
-    //   await this.getParameters();
-    // });
-
-    this.registerCapabilityListener('button.reboot', async () => {
-      await this.axiosFetch('/maintenance/reboot');
-      await this.getParameters();
-    });
+    this.registerCapabilityListener('button.reboot', async () => this.reboot());
+    this.homey.flow.getActionCard('reboot').registerRunListener(async (args, state) => this.reboot());
 
     this.log('Willow has been initialized');
   }
