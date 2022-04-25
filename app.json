@@ -12,7 +12,7 @@
     "en": "EEVE"
   },
   "description": {
-    "en": "Personal Worker Robots"
+    "en": "Personal Robot"
   },
   "category": [
     "appliances"
@@ -46,12 +46,14 @@
         "id": "rpm_changed",
         "title": {
           "en": "Mower RPM updated",
-          "nl": "Maaier RPM veranderd"
+          "nl": "Maaier RPM veranderd",
+          "de": "Mäher-Drehzahl aktualisiert"
         },
         "hint": [
           {
             "en": "When the RPM of the mower gets updated",
-            "nl": "Wanneer het toerental van de maaier veranderd"
+            "nl": "Wanneer het toerental van de maaier veranderd",
+            "de": "Wenn die Drehzahl des Mähers aktualisiert wird"
           }
         ],
         "tokens": [
@@ -60,11 +62,13 @@
             "type": "number",
             "title": {
               "en": "RPM",
-              "nl": "RPM"
+              "nl": "RPM",
+              "de": "Drehzahl"
             },
             "example": {
               "en": "RPM",
-              "nl": "RPM"
+              "nl": "RPM",
+              "de": "Drehzahl"
             }
           }
         ],
@@ -80,12 +84,14 @@
         "id": "status.user_activity_changed",
         "title": {
           "en": "User status updated",
-          "nl": "Gebruiker status veranderd"
+          "nl": "Gebruiker status veranderd",
+          "de": "Benutzerstatus aktualisiert"
         },
         "hint": [
           {
             "en": "When the user status gets updated",
-            "nl": "Wanneer de gebruikers status veranderd"
+            "nl": "Wanneer de gebruikers status veranderd",
+            "de": "Wenn der Benutzerstatus aktualisiert wird"
           }
         ],
         "tokens": [
@@ -94,11 +100,13 @@
             "type": "string",
             "title": {
               "en": "User Status",
-              "nl": "Gebruikers Status"
+              "nl": "Gebruikers Status",
+              "de": "Benutzerstatus"
             },
             "example": {
               "en": "Status",
-              "nl": "Status"
+              "nl": "Status",
+              "de": "Status"
             }
           }
         ],
@@ -114,12 +122,14 @@
         "id": "status.scheduled_activity_changed",
         "title": {
           "en": "Scheduled status updated",
-          "nl": "Geplande status veranderd"
+          "nl": "Geplande status veranderd",
+          "de": "Geplanter Status aktualisiert"
         },
         "hint": [
           {
             "en": "When the user status gets updated",
-            "nl": "Wanneer de geplande status veranderd"
+            "nl": "Wanneer de geplande status veranderd",
+            "de": "Wenn der Benutzerstatus aktualisiert wird"
           }
         ],
         "tokens": [
@@ -128,11 +138,13 @@
             "type": "string",
             "title": {
               "en": "Scheduled Status",
-              "nl": "Geplande Status"
+              "nl": "Geplande Status",
+              "de": "Geplanter Status"
             },
             "example": {
               "en": "Status",
-              "nl": "Status"
+              "nl": "Status",
+              "de": "Status"
             }
           }
         ],
@@ -150,7 +162,8 @@
         "id": "activate-emergency",
         "title": {
           "en": "Activate emergency",
-          "nl": "Noodstop activeren"
+          "nl": "Noodstop activeren",
+          "de": "Notfall aktivieren"
         },
         "args": [
           {
@@ -164,7 +177,8 @@
         "id": "go-docking",
         "title": {
           "en": "Go docking",
-          "nl": "Naar laadstation"
+          "nl": "Naar laadstation",
+          "de": "Andocken gehen"
         },
         "args": [
           {
@@ -178,7 +192,8 @@
         "id": "reboot",
         "title": {
           "en": "Reboot",
-          "nl": "Herstarten"
+          "nl": "Herstarten",
+          "de": "Neustart"
         },
         "args": [
           {
@@ -192,7 +207,8 @@
         "id": "release-emergency",
         "title": {
           "en": "Release emergency",
-          "nl": "Noodstop vrijgeven"
+          "nl": "Noodstop vrijgeven",
+          "de": "Notfall freigeben"
         },
         "args": [
           {
@@ -206,7 +222,8 @@
         "id": "start-random-mowing",
         "title": {
           "en": "Start random mowing",
-          "nl": "Start maaien"
+          "nl": "Start maaien",
+          "de": "Zufälliges Mähen starten"
         },
         "args": [
           {
@@ -220,7 +237,8 @@
         "id": "stop-random-mowing",
         "title": {
           "en": "Stop random mowing",
-          "nl": "Stop maaien"
+          "nl": "Stop maaien",
+          "de": "Wahlloses Mähen stoppen"
         },
         "args": [
           {
@@ -259,30 +277,41 @@
         "button.reboot"
       ],
       "capabilitiesOptions": {
+        "alarm_water": {
+          "title": {
+            "en": "Rain detecion",
+            "nl": "Regen detectie",
+            "de": "Regenerkennung"
+          }
+        },
         "status.user_activity": {
           "title": {
             "en": "User Activity",
-            "nl": "Gebruikersactiviteit"
+            "nl": "Gebruikersactiviteit",
+            "de": "Benutzeraktivität"
           }
         },
         "status.scheduled_activity": {
           "title": {
             "en": "Scheduled Activity",
-            "nl": "Geplande Activiteit"
+            "nl": "Geplande Activiteit",
+            "de": "Geplante Tätigkeit"
           }
         },
         "measure_current.charging_current": {
           "decimals": 2,
           "title": {
             "en": "Charge Current",
-            "nl": "Laadstroom"
+            "nl": "Laadstroom",
+            "de": "Ladestrom"
           }
         },
         "measure_power.charging_power": {
           "decimals": 2,
           "title": {
             "en": "Charge Power",
-            "nl": "Laadvermogen"
+            "nl": "Laadvermogen",
+            "de": "Leistung aufladen"
           }
         },
         "measure_humidity": {
@@ -292,62 +321,71 @@
           "decimals": 1,
           "title": {
             "en": "Module",
-            "nl": "Module"
+            "nl": "Module",
+            "de": "Modul"
           }
         },
         "measure_temperature.motherboard": {
           "decimals": 1,
           "title": {
             "en": "Motherboard",
-            "nl": "Moederbord"
+            "nl": "Moederbord",
+            "de": "Hauptplatine"
           }
         },
         "measure_temperature.battery": {
           "decimals": 1,
           "title": {
             "en": "Battery",
-            "nl": "Batterij"
+            "nl": "Batterij",
+            "de": "Batterie"
           }
         },
         "button.emergency": {
           "title": {
             "en": "Emergency Stop",
-            "nl": "Noodstop Activeren"
+            "nl": "Noodstop Activeren",
+            "de": "Not-Aus"
           },
           "uiQuickAction": false
         },
         "button.release_emergency": {
           "title": {
             "en": "Release Emergency Stop",
-            "nl": "Noodstop Vrijgeven"
+            "nl": "Noodstop Vrijgeven",
+            "de": "Notausschalter freigeben"
           },
           "uiQuickAction": false
         },
         "button.start_mowing": {
           "title": {
             "en": "Start Mowing",
-            "nl": "Start Maaien"
+            "nl": "Start Maaien",
+            "de": "Mähen beginnen"
           },
           "uiQuickAction": false
         },
         "button.stop_mowing": {
           "title": {
             "en": "Stop Mowing",
-            "nl": "Stop Maaien"
+            "nl": "Stop Maaien",
+            "de": "Mähen stoppen"
           },
           "uiQuickAction": false
         },
         "button.docking": {
           "title": {
             "en": "Charging station",
-            "nl": "Laadstation"
+            "nl": "Laadstation",
+            "de": "Ladestation"
           },
           "uiQuickAction": false
         },
         "button.reboot": {
           "title": {
             "en": "Reboot",
-            "nl": "Herstarten"
+            "nl": "Herstarten",
+            "de": "Neustart"
           },
           "uiQuickAction": false
         }
@@ -393,7 +431,7 @@
               "label": {
                 "en": "IP Address"
               },
-              "value": "192.168.10.50",
+              "value": "192.168.0.0",
               "hint": {
                 "en": "Enter the ip address of your Willow."
               }
@@ -419,11 +457,13 @@
       "type": "number",
       "title": {
         "en": "Mower height",
-        "nl": "Maaihoogte"
+        "nl": "Maaihoogte",
+        "de": "Mähwerkshöhe"
       },
       "units": {
         "en": "cm",
-        "nl": "cm"
+        "nl": "cm",
+        "de": "cm"
       },
       "getable": true,
       "setable": true,
@@ -435,7 +475,8 @@
       "type": "number",
       "title": {
         "en": "Mower RPM",
-        "nl": "Maaier RPM"
+        "nl": "Maaier RPM",
+        "de": "Mäher-Drehzahl"
       },
       "getable": true,
       "setable": true,
@@ -446,7 +487,9 @@
     "status": {
       "type": "string",
       "title": {
-        "en": "Status"
+        "en": "Status",
+        "nl": "Status",
+        "de": "Status"
       },
       "getable": true,
       "setable": true,
