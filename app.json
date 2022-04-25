@@ -245,7 +245,10 @@
         "measure_temperature.motherboard",
         "measure_temperature.battery",
         "measure_current.charging_current",
+        "measure_power.charging_power",
         "rpm",
+        "height",
+        "alarm_water",
         "status.user_activity",
         "status.scheduled_activity",
         "button.emergency",
@@ -273,6 +276,13 @@
           "title": {
             "en": "Charge Current",
             "nl": "Laadstroom"
+          }
+        },
+        "measure_power.charging_power": {
+          "decimals": 2,
+          "title": {
+            "en": "Charge Power",
+            "nl": "Laadvermogen"
           }
         },
         "measure_humidity": {
@@ -405,6 +415,22 @@
     }
   ],
   "capabilities": {
+    "height": {
+      "type": "number",
+      "title": {
+        "en": "Mower height",
+        "nl": "Maaihoogte"
+      },
+      "units": {
+        "en": "cm",
+        "nl": "cm"
+      },
+      "getable": true,
+      "setable": true,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "/assets/height.svg"
+    },
     "rpm": {
       "type": "number",
       "title": {

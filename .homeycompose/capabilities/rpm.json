@@ -2,7 +2,8 @@
     "type": "number",
     "title": {
         "en": "Mower RPM",
-        "nl": "Maaier RPM"
+        "nl": "Maaier RPM",
+        "de": "Mäher-Drehzahl"
     },
     "getable": true,
     "setable": true,

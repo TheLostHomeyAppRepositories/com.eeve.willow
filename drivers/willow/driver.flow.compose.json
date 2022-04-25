@@ -3,42 +3,48 @@
             "id": "activate-emergency",
             "title": {
                 "en": "Activate emergency",
-                "nl": "Noodstop activeren"
+                "nl": "Noodstop activeren",
+                "de": "Notfall aktivieren"
             }
         },
         {
             "id": "go-docking",
             "title": {
                 "en": "Go docking",
-                "nl": "Naar laadstation"
+                "nl": "Naar laadstation",
+                "de": "Andocken gehen"
             }
         },
         {
             "id": "reboot",
             "title": {
                 "en": "Reboot",
-                "nl": "Herstarten"
+                "nl": "Herstarten",
+                "de": "Neustart"
             }
         },
         {
             "id": "release-emergency",
             "title": {
                 "en": "Release emergency",
-                "nl": "Noodstop vrijgeven"
+                "nl": "Noodstop vrijgeven",
+                "de": "Notfall freigeben"
             }
         },
         {
             "id": "start-random-mowing",
             "title": {
                 "en": "Start random mowing",
-                "nl": "Start maaien"
+                "nl": "Start maaien",
+                "de": "Zufälliges Mähen starten"
             }
         },
         {
             "id": "stop-random-mowing",
             "title": {
                 "en": "Stop random mowing",
-                "nl": "Stop maaien"
+                "nl": "Stop maaien",
+                "de": "Wahlloses Mähen stoppen"
             }
         }
     ],
@@ -46,22 +52,26 @@
             "id": "rpm_changed",
             "title": {
                 "en": "Mower RPM updated",
-                "nl": "Maaier RPM veranderd"
+                "nl": "Maaier RPM veranderd",
+                "de": "Mäher-Drehzahl aktualisiert"
             },
             "hint": [{
                 "en": "When the RPM of the mower gets updated",
-                "nl": "Wanneer het toerental van de maaier veranderd"
+                "nl": "Wanneer het toerental van de maaier veranderd",
+                "de": "Wenn die Drehzahl des Mähers aktualisiert wird"
             }],
             "tokens": [{
                 "name": "rpm",
                 "type": "number",
                 "title": {
                     "en": "RPM",
-                    "nl": "RPM"
+                    "nl": "RPM",
+                    "de": "Drehzahl"
                 },
                 "example": {
                     "en": "RPM",
-                    "nl": "RPM"
+                    "nl": "RPM",
+                    "de": "Drehzahl"
                 }
             }]
         },
@@ -69,22 +79,26 @@
             "id": "status.user_activity_changed",
             "title": {
                 "en": "User status updated",
-                "nl": "Gebruiker status veranderd"
+                "nl": "Gebruiker status veranderd",
+                "de": "Benutzerstatus aktualisiert"
             },
             "hint": [{
                 "en": "When the user status gets updated",
-                "nl": "Wanneer de gebruikers status veranderd"
+                "nl": "Wanneer de gebruikers status veranderd",
+                "de": "Wenn der Benutzerstatus aktualisiert wird"
             }],
             "tokens": [{
                 "name": "status.user_activity",
                 "type": "string",
                 "title": {
                     "en": "User Status",
-                    "nl": "Gebruikers Status"
+                    "nl": "Gebruikers Status",
+                    "de": "Benutzerstatus"
                 },
                 "example": {
                     "en": "Status",
-                    "nl": "Status"
+                    "nl": "Status",
+                    "de": "Status"
                 }
             }]
         },
@@ -92,22 +106,26 @@
             "id": "status.scheduled_activity_changed",
             "title": {
                 "en": "Scheduled status updated",
-                "nl": "Geplande status veranderd"
+                "nl": "Geplande status veranderd",
+                "de": "Geplanter Status aktualisiert"
             },
             "hint": [{
                 "en": "When the user status gets updated",
-                "nl": "Wanneer de geplande status veranderd"
+                "nl": "Wanneer de geplande status veranderd",
+                "de": "Wenn der Benutzerstatus aktualisiert wird"
             }],
             "tokens": [{
                 "name": "status.scheduled_activity",
                 "type": "string",
                 "title": {
                     "en": "Scheduled Status",
-                    "nl": "Geplande Status"
+                    "nl": "Geplande Status",
+                    "de": "Geplanter Status"
                 },
                 "example": {
                     "en": "Status",
-                    "nl": "Status"
+                    "nl": "Status",
+                    "de": "Status"
                 }
             }]
         }

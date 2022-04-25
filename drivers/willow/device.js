@@ -135,17 +135,27 @@ class MyDevice extends Device {
         this.setCapabilityValue('measure_temperature.module', json.temperature).catch(this.error);
       });
 
-    this.axiosFetch('/statuslog/sensors/power')
-      .then(json => {
-        if (json.error !== undefined) return;
-        this.setCapabilityValue('measure_current.charging_current', json.chg_bat_current).catch(this.error);
-      });
-
     this.axiosFetch('/system/mowerInfo')
       .then(json => {
         if (json.error !== undefined) return;
         this.setCapabilityValue('rpm', json.rpm).catch(this.error);
+        this.setCapabilityValue('height', Math.round(json.mowerHeight * 1000) / 10).catch(this.error);
       });
+
+    this.axiosFetch('/system/dockingInfo')
+      .then(json => {
+        if (json.error !== undefined) return;
+        this.setCapabilityValue('measure_current.charging_current', json.chargingCurrent).catch(this.error);
+        this.setCapabilityValue('measure_power.charging_power', json.chargingPower).catch(this.error);
+      });
+
+    this.axiosFetch('/statuslog/sensors/rain')
+      .then(json => {
+        if (json.error !== undefined) return;
+        this.setCapabilityValue('alarm_water', json.state === 1).catch(this.error);
+      });
+
+    // http://192.168.10.50:8080/system/dockingInfo
 
     if (startinterval) setTimeout(async () => this.getParameters(true), this.interval * 1000);
   }

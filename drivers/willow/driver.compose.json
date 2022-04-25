@@ -10,7 +10,10 @@
         "measure_temperature.motherboard",
         "measure_temperature.battery",
         "measure_current.charging_current",
+        "measure_power.charging_power",
         "rpm",
+        "height",
+        "alarm_water",
         "status.user_activity",
         "status.scheduled_activity",
         "button.emergency",
@@ -21,23 +24,41 @@
         "button.reboot"
     ],
     "capabilitiesOptions": {
+        "alarm_water": {
+            "title": {
+                "en": "Rain detecion",
+                "nl": "Regen detectie",
+                "de": "Regenerkennung"
+            }
+        },
         "status.user_activity": {
             "title": {
                 "en": "User Activity",
-                "nl": "Gebruikersactiviteit"
+                "nl": "Gebruikersactiviteit",
+                "de": "Benutzeraktivität"
             }
         },
         "status.scheduled_activity": {
             "title": {
                 "en": "Scheduled Activity",
-                "nl": "Geplande Activiteit"
+                "nl": "Geplande Activiteit",
+                "de": "Geplante Tätigkeit"
             }
         },
         "measure_current.charging_current": {
             "decimals": 2,
             "title": {
                 "en": "Charge Current",
-                "nl": "Laadstroom"
+                "nl": "Laadstroom",
+                "de": "Ladestrom"
+            }
+        },
+        "measure_power.charging_power": {
+            "decimals": 2,
+            "title": {
+                "en": "Charge Power",
+                "nl": "Laadvermogen",
+                "de": "Leistung aufladen"
             }
         },
         "measure_humidity": {
@@ -47,62 +68,71 @@
             "decimals": 1,
             "title": {
                 "en": "Module",
-                "nl": "Module"
+                "nl": "Module",
+                "de": "Modul"
             }
         },
         "measure_temperature.motherboard": {
             "decimals": 1,
             "title": {
                 "en": "Motherboard",
-                "nl": "Moederbord"
+                "nl": "Moederbord",
+                "de": "Hauptplatine"
             }
         },
         "measure_temperature.battery": {
             "decimals": 1,
             "title": {
                 "en": "Battery",
-                "nl": "Batterij"
+                "nl": "Batterij",
+                "de": "Batterie"
             }
         },
         "button.emergency": {
             "title": {
                 "en": "Emergency Stop",
-                "nl": "Noodstop Activeren"
+                "nl": "Noodstop Activeren",
+                "de": "Not-Aus"
             },
             "uiQuickAction": false
         },
         "button.release_emergency": {
             "title": {
                 "en": "Release Emergency Stop",
-                "nl": "Noodstop Vrijgeven"
+                "nl": "Noodstop Vrijgeven",
+                "de": "Notausschalter freigeben"
             },
             "uiQuickAction": false
         },
         "button.start_mowing": {
             "title": {
                 "en": "Start Mowing",
-                "nl": "Start Maaien"
+                "nl": "Start Maaien",
+                "de": "Mähen beginnen"
             },
             "uiQuickAction": false
         },
         "button.stop_mowing": {
             "title": {
                 "en": "Stop Mowing",
-                "nl": "Stop Maaien"
+                "nl": "Stop Maaien",
+                "de": "Mähen stoppen"
             },
             "uiQuickAction": false
         },
         "button.docking": {
             "title": {
                 "en": "Charging station",
-                "nl": "Laadstation"
+                "nl": "Laadstation",
+                "de": "Ladestation"
             },
             "uiQuickAction": false
         },
         "button.reboot": {
             "title": {
                 "en": "Reboot",
-                "nl": "Herstarten"
+                "nl": "Herstarten",
+                "de": "Neustart"
             },
             "uiQuickAction": false
         }

@@ -1,0 +1,18 @@
+{
+    "type": "number",
+    "title": {
+        "en": "Mower height",
+        "nl": "Maaihoogte",
+        "de": "Mähwerkshöhe"
+    },
+    "units": {
+        "en": "cm",
+        "nl": "cm",
+        "de": "cm"
+    },
+    "getable": true,
+    "setable": true,
+    "insights": true,
+    "uiComponent": "sensor",
+    "icon": "/assets/height.svg"
+}
