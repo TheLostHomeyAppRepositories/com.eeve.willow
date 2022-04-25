@@ -7,5 +7,8 @@
   },
   "1.0.2": {
     "en": "New Action flows and other patches"
+  },
+  "1.0.3": {
+    "en": "Added sensors: mower height, rain sensor, charge power. Added Deutsch language"
   }
 }
