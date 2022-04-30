@@ -10,5 +10,11 @@
   },
   "1.0.3": {
     "en": "Added sensors: mower height, rain sensor, charge power. Added Deutsch language"
+  },
+  "2.0.0": {
+    "en": "+ Camera View"
+  },
+  "2.0.1": {
+    "en": "+ Camera View, + Multiple Willows support, + DockStatus sensor capability, + New condition flows for Is Mowing and In EmergencyStop, + New action flows for playing sounds on Willow, + Energy fixed (shows charging power), + Bugfixes, --- Make sure to re-add your Willow as device to get all the new features ---"
   }
 }

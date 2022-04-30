@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.eeve.willow",
-  "version": "1.0.3",
+  "version": "2.0.1",
   "compatibility": ">=5.0.0",
   "sdk": 3,
   "brandColor": "#000000",
@@ -155,6 +155,86 @@
             "filter": "driver_id=willow"
           }
         ]
+      },
+      {
+        "id": "status.docking_state_changed",
+        "title": {
+          "en": "Docking state updated",
+          "nl": "Dockstatus bijgewerkt",
+          "de": "Andockstatus aktualisiert"
+        },
+        "hint": [
+          {
+            "en": "When the docking status gets updated",
+            "nl": "Wanneer de dokstatus is bijgewerkt",
+            "de": "Wenn der Andockstatus aktualisiert wird"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "status.scheduled_activity",
+            "type": "string",
+            "title": {
+              "en": "Docking State",
+              "nl": "Dokstatus",
+              "de": "Andockzustand"
+            },
+            "example": {
+              "en": "Status",
+              "nl": "Status",
+              "de": "Status"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "is-in-emergency-stop",
+        "title": {
+          "en": "!{{Is|Isn't}} in emergency stop",
+          "nl": "Noodstop is !{{geactiveerd|gedeactiveerd}}",
+          "de": "!{{Befindet sich im Notstopp|Befindet sich nicht im Notstopp}}"
+        },
+        "hint": {
+          "en": "Checks if Willow is in emergency stop at this moment.",
+          "nl": "Controleert of Willow momenteel in noodstop staat.",
+          "de": "Überprüft, ob sich Willow gerade im Notstopp befindet."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "is-mowing",
+        "title": {
+          "en": "!{{Is|Isn't}} mowing",
+          "nl": "!{{Is|Is niet}} aan het maaien",
+          "de": "!{{Wird gemäht|Ist Mähen nicht}} mowing"
+        },
+        "hint": {
+          "en": "Checks if Willow is mowing at this moment.",
+          "nl": "Controleert of Willow momenteel aan het maaien is.",
+          "de": "Prüft, ob Willow gerade mäht."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
       }
     ],
     "actions": [
@@ -247,6 +327,48 @@
             "filter": "driver_id=willow"
           }
         ]
+      },
+      {
+        "id": "play-sound",
+        "title": {
+          "en": "Play sound",
+          "nl": "Geluid afspelen",
+          "de": "Ton abspielen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          },
+          {
+            "type": "number",
+            "name": "Volume",
+            "placeholder": {
+              "en": "Volume",
+              "nl": "Volume",
+              "de": "Lautstärke"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1
+          }
+        ]
+      },
+      {
+        "id": "stop-sound",
+        "title": {
+          "en": "Stop sound",
+          "nl": "Stop geluid",
+          "de": "Geräusch abstellen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
       }
     ]
   },
@@ -263,10 +385,11 @@
         "measure_temperature.motherboard",
         "measure_temperature.battery",
         "measure_current.charging_current",
-        "measure_power.charging_power",
+        "measure_power",
         "rpm",
         "height",
         "alarm_water",
+        "status.docking_state",
         "status.user_activity",
         "status.scheduled_activity",
         "button.emergency",
@@ -298,6 +421,13 @@
             "de": "Geplante Tätigkeit"
           }
         },
+        "status.docking_state": {
+          "title": {
+            "en": "Docking State",
+            "nl": "Dokstatus",
+            "de": "Andockzustand"
+          }
+        },
         "measure_current.charging_current": {
           "decimals": 2,
           "title": {
@@ -306,7 +436,7 @@
             "de": "Ladestrom"
           }
         },
-        "measure_power.charging_power": {
+        "measure_power": {
           "decimals": 2,
           "title": {
             "en": "Charge Power",
