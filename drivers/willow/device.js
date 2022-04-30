@@ -2,25 +2,28 @@
 
 const { Device } = require('homey');
 const axios = require('axios');
+const fetch = require('node-fetch');
 
 class MyDevice extends Device {
 
-  static ip;
-  static interval;
+  // static ip;
+  // static interval;
+  // static alive = true;
 
   async axiosFetch(endpoint, _timeout = 3000) {
     const url = `http://${this.ip}:8080${endpoint}`;
     this.log(`Requesting ${url} with timeout ${_timeout}`);
     try {
       const resp = await axios.get(url, { timeout: _timeout });
+      this.setAvailable().catch(this.error);
       return resp.data;
     } catch (error) {
-      let errMessage;
-      if (error.response === undefined) errMessage = 'Timeout';
-      if (error.response !== undefined && error.response.data.status === 404) errMessage = '404 - Not Found';
-      const fullMessage = { error: true, error_message: errMessage };
-      this.log(`Error at endpoint ${endpoint}`, fullMessage);
-      return fullMessage;
+      let errcode;
+      if (error.response === undefined) errcode = 1; // Timeout
+      if (error.response !== undefined && error.response.data.status === 404) errcode = 2; // 404 - Not Found
+      const errMess = { error: true, error_code: errcode };
+      this.log(`Error at endpoint ${endpoint}`, errMess);
+      return errMess;
     }
   }
 
@@ -58,10 +61,21 @@ class MyDevice extends Device {
      * onInit is called when the device is initialized.
      */
   async onInit() {
+    this.alive = true;
+    this.is_error = false;
+    this.error_message = '';
     this.ip = this.getSettings().ipaddress;
     this.interval = this.getSettings().interval;
 
-    await this.getParameters(true);
+    const myImage = await this.homey.images.createImage();
+    myImage.setStream(async stream => {
+      const res = await fetch(`http://${this.ip}:8080/image/front/img.jpg`);
+      if (!res.ok) throw new Error('Invalid Response');
+      return res.body.pipe(stream);
+    });
+
+    // Front camera image of Willow
+    this.setCameraImage('front', this.homey.__('camera'), myImage).catch(this.error);
 
     this.registerCapabilityListener('button.emergency', async () => this.activateEmergency());
     this.homey.flow.getActionCard('activate-emergency').registerRunListener(async (args, state) => this.activateEmergency());
@@ -81,7 +95,40 @@ class MyDevice extends Device {
     this.registerCapabilityListener('button.reboot', async () => this.reboot());
     this.homey.flow.getActionCard('reboot').registerRunListener(async (args, state) => this.reboot());
 
+    this.homey.flow.getActionCard('play-sound').registerRunListener(async (args, state) => {
+      this.playSound(args.Volume);
+    });
+    this.homey.flow.getActionCard('stop-sound').registerRunListener(async (args, state) => {
+      this.stopSound();
+    });
+
+    // Conditions
+
+    this.homey.flow.getConditionCard('is-in-emergency-stop').registerRunListener(async (args, state) => {
+      await this.getParameters();
+      return (this.scheduledActivity === 'EmergencyStop');
+    });
+
+    this.homey.flow.getConditionCard('is-mowing').registerRunListener(async (args, state) => {
+      await this.getParameters();
+      return (this.userActivity === 'MowActivity' || this.scheduledActivity === 'MowingPlannerActivity');
+    });
+
+    await this.getParameters(true);
+
     this.log('Willow has been initialized');
+  }
+
+  // Play a sound on Willow
+  async playSound(volume = 60) {
+    this.log('Playing sound with volume', volume);
+    await this.axiosFetch(`/maintenance/sound/play?fileName=R2D2.wav&volume=${volume}`).catch(this.error);
+  }
+
+  // Stop playing a sound on Willow
+  async stopSound() {
+    this.log('Stopping sound');
+    await this.axiosFetch('/maintenance/sound/stop').catch(this.error);
   }
 
   /**
@@ -105,57 +152,66 @@ class MyDevice extends Device {
     this.getParameters();
   }
 
+  checkError(params) {
+    this.is_error = false;
+    this.error_message = 0;
+    params.forEach(element => {
+      if (element.error !== undefined || !this.alive) {
+        this.is_error = true;
+        if (element.error_code === 1) this.error_message = this.homey.__('device_timeout');
+        if (element.error_code === 2) this.error_message = this.homey.__('device_404');
+      }
+    });
+    return this.is_error;
+  }
+
   async getParameters(startinterval = false) {
-    this.log('Getting parameters', this.interval * 1000);
+    if (!this.alive) {
+      this.log('Exiting, device has been removed');
+      return;
+    }
+    this.log('Getting parameters, seconds:', this.interval);
 
-    this.axiosFetch('/activities/info')
-      .then(json => {
-        if (json.error !== undefined) return;
-        this.setCapabilityValue('status.user_activity', json.userActivity).catch(this.error);
-        this.setCapabilityValue('status.scheduled_activity', json.scheduledActivity).catch(this.error);
-      });
+    this.is_error = false;
+    this.type_error = undefined;
 
-    this.axiosFetch('/system/batteryStatus')
-      .then(json => {
-        if (json.error !== undefined) return;
-        this.setCapabilityValue('measure_temperature.battery', json.temperature).catch(this.error);
-        this.setCapabilityValue('measure_battery', json.percentage).catch(this.error);
-      });
+    Promise.all([
+      this.axiosFetch('/activities/info'),
+      this.axiosFetch('/system/batteryStatus'),
+      this.axiosFetch('/system/sensors/baseboard'),
+      this.axiosFetch('/system/sensors/module'),
+      this.axiosFetch('/system/mowerInfo'),
+      this.axiosFetch('/system/dockingInfo'),
+      this.axiosFetch('/statuslog/sensors/rain'),
+    ])
+      .then(values => {
+        if (this.checkError(values)) {
+          this.log('Setting device unavailable..');
+          this.setUnavailable(this.error_message).catch(this.error);
+          return;
+        }
+        this.setAvailable().catch(this.error);
+        this.userActivity = values[0].userActivity;
+        this.scheduledActivity = values[0].scheduledActivity;
+        this.setCapabilityValue('status.user_activity', this.userActivity).catch(this.error);
+        this.setCapabilityValue('status.scheduled_activity', this.scheduledActivity).catch(this.error);
+        this.setCapabilityValue('measure_temperature.battery', values[1].temperature).catch(this.error);
+        this.setCapabilityValue('measure_battery', values[1].percentage).catch(this.error);
+        this.setCapabilityValue('measure_temperature.motherboard', values[2].temperature).catch(this.error);
+        this.setCapabilityValue('measure_humidity', values[2].humidity).catch(this.error);
+        this.setCapabilityValue('measure_temperature.module', values[3].temperature).catch(this.error);
+        this.setCapabilityValue('rpm', values[4].rpm).catch(this.error);
+        this.setCapabilityValue('height', Math.round(values[4].mowerHeight * 1000) / 10).catch(this.error);
+        this.setCapabilityValue('measure_current.charging_current', values[5].chargingCurrent).catch(this.error);
+        this.setCapabilityValue('measure_power', values[5].chargingPower).catch(this.error);
+        this.setCapabilityValue('status.docking_state', values[5].dockingState).catch(this.error);
+        this.setCapabilityValue('alarm_water', values[6].state === 1).catch(this.error);
+      }).catch(this.error);
 
-    this.axiosFetch('/system/sensors/baseboard')
-      .then(json => {
-        if (json.error !== undefined) return;
-        this.setCapabilityValue('measure_temperature.motherboard', json.temperature).catch(this.error);
-        this.setCapabilityValue('measure_humidity', json.humidity).catch(this.error);
-      });
+    this.log('Getting parameters done!');
 
-    this.axiosFetch('/system/sensors/module')
-      .then(json => {
-        if (json.error !== undefined) return;
-        this.setCapabilityValue('measure_temperature.module', json.temperature).catch(this.error);
-      });
-
-    this.axiosFetch('/system/mowerInfo')
-      .then(json => {
-        if (json.error !== undefined) return;
-        this.setCapabilityValue('rpm', json.rpm).catch(this.error);
-        this.setCapabilityValue('height', Math.round(json.mowerHeight * 1000) / 10).catch(this.error);
-      });
-
-    this.axiosFetch('/system/dockingInfo')
-      .then(json => {
-        if (json.error !== undefined) return;
-        this.setCapabilityValue('measure_current.charging_current', json.chargingCurrent).catch(this.error);
-        this.setCapabilityValue('measure_power.charging_power', json.chargingPower).catch(this.error);
-      });
-
-    this.axiosFetch('/statuslog/sensors/rain')
-      .then(json => {
-        if (json.error !== undefined) return;
-        this.setCapabilityValue('alarm_water', json.state === 1).catch(this.error);
-      });
-
-    // http://192.168.10.50:8080/system/dockingInfo
+    // this.setUnavailable(this.homey.__('device_timeout')).catch(this.error);
+    // this.setUnavailable(this.homey.__('device_404')).catch(this.error);
 
     if (startinterval) setTimeout(async () => this.getParameters(true), this.interval * 1000);
   }
@@ -174,6 +230,7 @@ class MyDevice extends Device {
      */
   async onDeleted() {
     this.log('Willow has been deleted');
+    this.alive = false;
   }
 
 }

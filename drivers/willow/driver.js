@@ -12,10 +12,11 @@ class Driver extends Homey.Driver {
   }
 
   async onPairListDevices() {
+    const gui = await this.guid();
     return {
       name: 'Willow',
       data: {
-        id: this.guid(),
+        id: gui,
       },
       settings: {
         ipaddress: '192.168.0.0',

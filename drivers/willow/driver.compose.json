@@ -10,10 +10,11 @@
         "measure_temperature.motherboard",
         "measure_temperature.battery",
         "measure_current.charging_current",
-        "measure_power.charging_power",
+        "measure_power",
         "rpm",
         "height",
         "alarm_water",
+        "status.docking_state",
         "status.user_activity",
         "status.scheduled_activity",
         "button.emergency",
@@ -45,6 +46,13 @@
                 "de": "Geplante Tätigkeit"
             }
         },
+        "status.docking_state": {
+            "title": {
+                "en": "Docking State",
+                "nl": "Dokstatus",
+                "de": "Andockzustand"
+            }
+        },
         "measure_current.charging_current": {
             "decimals": 2,
             "title": {
@@ -53,7 +61,7 @@
                 "de": "Ladestrom"
             }
         },
-        "measure_power.charging_power": {
+        "measure_power": {
             "decimals": 2,
             "title": {
                 "en": "Charge Power",

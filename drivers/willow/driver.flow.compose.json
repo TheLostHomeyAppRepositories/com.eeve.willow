@@ -46,6 +46,34 @@
                 "nl": "Stop maaien",
                 "de": "Wahlloses Mähen stoppen"
             }
+        },
+        {
+            "id": "play-sound",
+            "title": {
+                "en": "Play sound",
+                "nl": "Geluid afspelen",
+                "de": "Ton abspielen"
+            },
+            "args": [{
+                "type": "number",
+                "name": "Volume",
+                "placeholder": {
+                    "en": "Volume",
+                    "nl": "Volume",
+                    "de": "Lautstärke"
+                },
+                "min": 0,
+                "max": 100,
+                "step": 1
+            }]
+        },
+        {
+            "id": "stop-sound",
+            "title": {
+                "en": "Stop sound",
+                "nl": "Stop geluid",
+                "de": "Geräusch abstellen"
+            }
         }
     ],
     "triggers": [{
@@ -128,6 +156,60 @@
                     "de": "Status"
                 }
             }]
+        },
+        {
+            "id": "status.docking_state_changed",
+            "title": {
+                "en": "Docking state updated",
+                "nl": "Dockstatus bijgewerkt",
+                "de": "Andockstatus aktualisiert"
+            },
+            "hint": [{
+                "en": "When the docking status gets updated",
+                "nl": "Wanneer de dokstatus is bijgewerkt",
+                "de": "Wenn der Andockstatus aktualisiert wird"
+            }],
+            "tokens": [{
+                "name": "status.scheduled_activity",
+                "type": "string",
+                "title": {
+                    "en": "Docking State",
+                    "nl": "Dokstatus",
+                    "de": "Andockzustand"
+                },
+                "example": {
+                    "en": "Status",
+                    "nl": "Status",
+                    "de": "Status"
+                }
+            }]
+        }
+    ],
+    "conditions": [{
+            "id": "is-in-emergency-stop",
+            "title": {
+                "en": "!{{Is|Isn't}} in emergency stop",
+                "nl": "Noodstop is !{{geactiveerd|gedeactiveerd}}",
+                "de": "!{{Befindet sich im Notstopp|Befindet sich nicht im Notstopp}}"
+            },
+            "hint": {
+                "en": "Checks if Willow is in emergency stop at this moment.",
+                "nl": "Controleert of Willow momenteel in noodstop staat.",
+                "de": "Überprüft, ob sich Willow gerade im Notstopp befindet."
+            }
+        },
+        {
+            "id": "is-mowing",
+            "title": {
+                "en": "!{{Is|Isn't}} mowing",
+                "nl": "!{{Is|Is niet}} aan het maaien",
+                "de": "!{{Wird gemäht|Ist Mähen nicht}} mowing"
+            },
+            "hint": {
+                "en": "Checks if Willow is mowing at this moment.",
+                "nl": "Controleert of Willow momenteel aan het maaien is.",
+                "de": "Prüft, ob Willow gerade mäht."
+            }
         }
     ]
 }
