@@ -1,0 +1,5 @@
+{
+    "device_timeout": "Timout error, please check if the device has the correct IP Address and if it is online.",
+    "device_404": "404 error, please check with the developer of the App.",
+    "camera": "Camera"
+}

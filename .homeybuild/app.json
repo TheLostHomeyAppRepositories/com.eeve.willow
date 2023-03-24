@@ -1,0 +1,640 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "com.eeve.willow",
+  "version": "2.0.1",
+  "compatibility": ">=5.0.0",
+  "sdk": 3,
+  "brandColor": "#000000",
+  "platforms": [
+    "local"
+  ],
+  "name": {
+    "en": "EEVE"
+  },
+  "description": {
+    "en": "Personal Robot"
+  },
+  "category": [
+    "appliances"
+  ],
+  "permissions": [],
+  "images": {
+    "small": "/assets/images/small.png",
+    "large": "/assets/images/large.png",
+    "xlarge": "/assets/images/xlarge.png"
+  },
+  "author": {
+    "name": "Christophe Rouckhout",
+    "email": "christophe132@gmail.com"
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "Tixhyl"
+      }
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/Tixhyl/com.eeve.willow/issues"
+  },
+  "source": "https://github.com/Tixhyl/com.eeve.willow/",
+  "homepage": "https://www.eeve.com",
+  "support": "mailto:info@tixhyl.be",
+  "flow": {
+    "triggers": [
+      {
+        "id": "rpm_changed",
+        "title": {
+          "en": "Mower RPM updated",
+          "nl": "Maaier RPM veranderd",
+          "de": "Mäher-Drehzahl aktualisiert"
+        },
+        "hint": [
+          {
+            "en": "When the RPM of the mower gets updated",
+            "nl": "Wanneer het toerental van de maaier veranderd",
+            "de": "Wenn die Drehzahl des Mähers aktualisiert wird"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "rpm",
+            "type": "number",
+            "title": {
+              "en": "RPM",
+              "nl": "RPM",
+              "de": "Drehzahl"
+            },
+            "example": {
+              "en": "RPM",
+              "nl": "RPM",
+              "de": "Drehzahl"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "status.user_activity_changed",
+        "title": {
+          "en": "User status updated",
+          "nl": "Gebruiker status veranderd",
+          "de": "Benutzerstatus aktualisiert"
+        },
+        "hint": [
+          {
+            "en": "When the user status gets updated",
+            "nl": "Wanneer de gebruikers status veranderd",
+            "de": "Wenn der Benutzerstatus aktualisiert wird"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "status.user_activity",
+            "type": "string",
+            "title": {
+              "en": "User Status",
+              "nl": "Gebruikers Status",
+              "de": "Benutzerstatus"
+            },
+            "example": {
+              "en": "Status",
+              "nl": "Status",
+              "de": "Status"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "status.scheduled_activity_changed",
+        "title": {
+          "en": "Scheduled status updated",
+          "nl": "Geplande status veranderd",
+          "de": "Geplanter Status aktualisiert"
+        },
+        "hint": [
+          {
+            "en": "When the user status gets updated",
+            "nl": "Wanneer de geplande status veranderd",
+            "de": "Wenn der Benutzerstatus aktualisiert wird"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "status.scheduled_activity",
+            "type": "string",
+            "title": {
+              "en": "Scheduled Status",
+              "nl": "Geplande Status",
+              "de": "Geplanter Status"
+            },
+            "example": {
+              "en": "Status",
+              "nl": "Status",
+              "de": "Status"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "status.docking_state_changed",
+        "title": {
+          "en": "Docking state updated",
+          "nl": "Dockstatus bijgewerkt",
+          "de": "Andockstatus aktualisiert"
+        },
+        "hint": [
+          {
+            "en": "When the docking status gets updated",
+            "nl": "Wanneer de dokstatus is bijgewerkt",
+            "de": "Wenn der Andockstatus aktualisiert wird"
+          }
+        ],
+        "tokens": [
+          {
+            "name": "status.scheduled_activity",
+            "type": "string",
+            "title": {
+              "en": "Docking State",
+              "nl": "Dokstatus",
+              "de": "Andockzustand"
+            },
+            "example": {
+              "en": "Status",
+              "nl": "Status",
+              "de": "Status"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      }
+    ],
+    "conditions": [
+      {
+        "id": "is-in-emergency-stop",
+        "title": {
+          "en": "!{{Is|Isn't}} in emergency stop",
+          "nl": "Noodstop is !{{geactiveerd|gedeactiveerd}}",
+          "de": "!{{Befindet sich im Notstopp|Befindet sich nicht im Notstopp}}"
+        },
+        "hint": {
+          "en": "Checks if Willow is in emergency stop at this moment.",
+          "nl": "Controleert of Willow momenteel in noodstop staat.",
+          "de": "Überprüft, ob sich Willow gerade im Notstopp befindet."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "is-mowing",
+        "title": {
+          "en": "!{{Is|Isn't}} mowing",
+          "nl": "!{{Is|Is niet}} aan het maaien",
+          "de": "!{{Wird gemäht|Ist Mähen nicht}} mowing"
+        },
+        "hint": {
+          "en": "Checks if Willow is mowing at this moment.",
+          "nl": "Controleert of Willow momenteel aan het maaien is.",
+          "de": "Prüft, ob Willow gerade mäht."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      }
+    ],
+    "actions": [
+      {
+        "id": "activate-emergency",
+        "title": {
+          "en": "Activate emergency",
+          "nl": "Noodstop activeren",
+          "de": "Notfall aktivieren"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "go-docking",
+        "title": {
+          "en": "Go docking",
+          "nl": "Naar laadstation",
+          "de": "Andocken gehen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "reboot",
+        "title": {
+          "en": "Reboot",
+          "nl": "Herstarten",
+          "de": "Neustart"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "release-emergency",
+        "title": {
+          "en": "Release emergency",
+          "nl": "Noodstop vrijgeven",
+          "de": "Notfall freigeben"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "start-random-mowing",
+        "title": {
+          "en": "Start random mowing",
+          "nl": "Start maaien",
+          "de": "Zufälliges Mähen starten"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "stop-random-mowing",
+        "title": {
+          "en": "Stop random mowing",
+          "nl": "Stop maaien",
+          "de": "Wahlloses Mähen stoppen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "play-sound",
+        "title": {
+          "en": "Play sound",
+          "nl": "Geluid afspelen",
+          "de": "Ton abspielen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          },
+          {
+            "type": "number",
+            "name": "Volume",
+            "placeholder": {
+              "en": "Volume",
+              "nl": "Volume",
+              "de": "Lautstärke"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1
+          }
+        ]
+      },
+      {
+        "id": "stop-sound",
+        "title": {
+          "en": "Stop sound",
+          "nl": "Stop geluid",
+          "de": "Geräusch abstellen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Willow"
+      },
+      "class": "other",
+      "capabilities": [
+        "measure_battery",
+        "measure_humidity",
+        "measure_temperature.module",
+        "measure_temperature.motherboard",
+        "measure_temperature.battery",
+        "measure_current.charging_current",
+        "measure_power",
+        "rpm",
+        "height",
+        "alarm_water",
+        "status.docking_state",
+        "status.user_activity",
+        "status.scheduled_activity",
+        "button.emergency",
+        "button.release_emergency",
+        "button.start_mowing",
+        "button.stop_mowing",
+        "button.docking",
+        "button.reboot"
+      ],
+      "capabilitiesOptions": {
+        "alarm_water": {
+          "title": {
+            "en": "Rain detecion",
+            "nl": "Regen detectie",
+            "de": "Regenerkennung"
+          }
+        },
+        "status.user_activity": {
+          "title": {
+            "en": "User Activity",
+            "nl": "Gebruikersactiviteit",
+            "de": "Benutzeraktivität"
+          }
+        },
+        "status.scheduled_activity": {
+          "title": {
+            "en": "Scheduled Activity",
+            "nl": "Geplande Activiteit",
+            "de": "Geplante Tätigkeit"
+          }
+        },
+        "status.docking_state": {
+          "title": {
+            "en": "Docking State",
+            "nl": "Dokstatus",
+            "de": "Andockzustand"
+          }
+        },
+        "measure_current.charging_current": {
+          "decimals": 2,
+          "title": {
+            "en": "Charge Current",
+            "nl": "Laadstroom",
+            "de": "Ladestrom"
+          }
+        },
+        "measure_power": {
+          "decimals": 2,
+          "title": {
+            "en": "Charge Power",
+            "nl": "Laadvermogen",
+            "de": "Leistung aufladen"
+          }
+        },
+        "measure_humidity": {
+          "decimals": 1
+        },
+        "measure_temperature.module": {
+          "decimals": 1,
+          "title": {
+            "en": "Module",
+            "nl": "Module",
+            "de": "Modul"
+          }
+        },
+        "measure_temperature.motherboard": {
+          "decimals": 1,
+          "title": {
+            "en": "Motherboard",
+            "nl": "Moederbord",
+            "de": "Hauptplatine"
+          }
+        },
+        "measure_temperature.battery": {
+          "decimals": 1,
+          "title": {
+            "en": "Battery",
+            "nl": "Batterij",
+            "de": "Batterie"
+          }
+        },
+        "button.emergency": {
+          "title": {
+            "en": "Emergency Stop",
+            "nl": "Noodstop Activeren",
+            "de": "Not-Aus"
+          },
+          "uiQuickAction": false
+        },
+        "button.release_emergency": {
+          "title": {
+            "en": "Release Emergency Stop",
+            "nl": "Noodstop Vrijgeven",
+            "de": "Notausschalter freigeben"
+          },
+          "uiQuickAction": false
+        },
+        "button.start_mowing": {
+          "title": {
+            "en": "Start Mowing",
+            "nl": "Start Maaien",
+            "de": "Mähen beginnen"
+          },
+          "uiQuickAction": false
+        },
+        "button.stop_mowing": {
+          "title": {
+            "en": "Stop Mowing",
+            "nl": "Stop Maaien",
+            "de": "Mähen stoppen"
+          },
+          "uiQuickAction": false
+        },
+        "button.docking": {
+          "title": {
+            "en": "Charging station",
+            "nl": "Laadstation",
+            "de": "Ladestation"
+          },
+          "uiQuickAction": false
+        },
+        "button.reboot": {
+          "title": {
+            "en": "Reboot",
+            "nl": "Herstarten",
+            "de": "Neustart"
+          },
+          "uiQuickAction": false
+        }
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [],
+      "images": {
+        "small": "/drivers/willow/assets/images/small.png",
+        "large": "/drivers/willow/assets/images/large.png",
+        "xlarge": "/drivers/willow/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_my_devices"
+          }
+        },
+        {
+          "id": "add_my_devices",
+          "template": "add_devices"
+        }
+      ],
+      "energy": {
+        "batteries": [
+          "INTERNAL"
+        ]
+      },
+      "id": "willow",
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Willow Settings",
+            "nl": "Willow Instellingen",
+            "de": "Willow Einstellungen"
+          },
+          "children": [
+            {
+              "id": "ipaddress",
+              "type": "text",
+              "label": {
+                "en": "IP Address",
+                "nl": "IP Adres",
+                "de": "IP-Adresse"
+              },
+              "value": "192.168.0.0",
+              "hint": {
+                "en": "Enter the ip address of your Willow.",
+                "nl": "Voer het ip-adres van uw Willow in.",
+                "de": "Geben Sie die IP-Adresse Ihrer Willow ein."
+              }
+            },
+            {
+              "id": "interval",
+              "type": "number",
+              "label": {
+                "en": "Interval",
+                "nl": "Interval",
+                "de": "Intervall"
+              },
+              "value": 60,
+              "hint": {
+                "en": "Enter the refresh interval in seconds.",
+                "nl": "Voer de verversingsinterval in seconden in.",
+                "de": "Geben Sie das Aktualisierungsintervall in Sekunden ein."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "capabilities": {
+    "height": {
+      "type": "number",
+      "title": {
+        "en": "Mower height",
+        "nl": "Maaihoogte",
+        "de": "Mähwerkshöhe"
+      },
+      "units": {
+        "en": "cm",
+        "nl": "cm",
+        "de": "cm"
+      },
+      "getable": true,
+      "setable": true,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "/assets/height.svg"
+    },
+    "rpm": {
+      "type": "number",
+      "title": {
+        "en": "Mower RPM",
+        "nl": "Maaier RPM",
+        "de": "Mäher-Drehzahl"
+      },
+      "getable": true,
+      "setable": true,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "/assets/spinning-blades-svgrepo-com.svg"
+    },
+    "status": {
+      "type": "string",
+      "title": {
+        "en": "Status",
+        "nl": "Status",
+        "de": "Status"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "sensor",
+      "icon": "/assets/broad-activity-feed-svgrepo-com.svg"
+    }
+  }
+}
