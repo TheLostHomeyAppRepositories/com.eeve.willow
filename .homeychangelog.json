@@ -19,5 +19,8 @@
   },
   "2.0.2": {
     "en": "Fix for Homey Pro 23"
+  },
+  "2.0.3": {
+    "en": "Fixed docking issue while manual mowing"
   }
 }
