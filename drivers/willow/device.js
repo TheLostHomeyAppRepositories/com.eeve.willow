@@ -48,6 +48,7 @@ class MyDevice extends Device {
   }
 
   async docking() {
+    await this.axiosFetch('/navigation/stopmowing');
     await this.axiosFetch('/navigation/startdocking');
     await this.getParameters();
   }

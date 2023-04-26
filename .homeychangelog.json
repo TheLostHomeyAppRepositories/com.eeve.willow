@@ -16,5 +16,8 @@
   },
   "2.0.1": {
     "en": "+ Camera View, + Multiple Willows support, + DockStatus sensor capability, + New condition flows for Is Mowing and In EmergencyStop, + New action flows for playing sounds on Willow, + Energy fixed (shows charging power), + Bugfixes, --- Make sure to re-add your Willow as device to get all the new features ---"
+  },
+  "2.0.2": {
+    "en": "Fix for Homey Pro 23"
   }
 }
