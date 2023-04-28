@@ -67,6 +67,8 @@ class MyDevice extends Device {
     this.error_message = '';
     this.ip = this.getSettings().ipaddress;
     this.interval = this.getSettings().interval;
+    this.person_detected = false;
+    this.person_detected_flag = false;
 
     const myImage = await this.homey.images.createImage();
     myImage.setStream(async stream => {
@@ -116,6 +118,23 @@ class MyDevice extends Device {
     });
 
     await this.getParameters(true);
+
+    setInterval(() => {
+      this.axiosFetch('/api/slam/distanceToObject/person')
+        .then((value) => {
+          if (value.hasOwnProperty('distance') && !this.person_detected) {
+            this.person_detected = true;
+            this.person_detected_flag = true;
+            this.log("A person has been detected!");
+            this.homey.flow.getTriggerCard('person-detected').trigger();
+          }
+          if (!value.hasOwnProperty('distance') && this.person_detected) {
+            this.person_detected = false;
+            this.log("Person has gone away!");
+          }
+        })
+        .catch(this.error);
+    }, 2000);
 
     this.log('Willow has been initialized');
   }
@@ -183,7 +202,7 @@ class MyDevice extends Device {
       this.axiosFetch('/system/sensors/module'),
       this.axiosFetch('/system/mowerInfo'),
       this.axiosFetch('/system/dockingInfo'),
-      this.axiosFetch('/statuslog/sensors/rain'),
+      this.axiosFetch('/statuslog/sensors/rain')
     ])
       .then(values => {
         if (this.checkError(values)) {
@@ -207,6 +226,7 @@ class MyDevice extends Device {
         this.setCapabilityValue('measure_power', values[5].chargingPower).catch(this.error);
         this.setCapabilityValue('status.docking_state', values[5].dockingState).catch(this.error);
         this.setCapabilityValue('alarm_water', values[6].state === 1).catch(this.error);
+        
       }).catch(this.error);
 
     this.log('Getting parameters done!');
