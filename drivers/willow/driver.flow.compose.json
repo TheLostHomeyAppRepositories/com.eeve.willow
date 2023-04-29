@@ -1,215 +1,261 @@
 {
-    "actions": [{
-            "id": "activate-emergency",
-            "title": {
-                "en": "Activate emergency",
-                "nl": "Noodstop activeren",
-                "de": "Notfall aktivieren"
-            }
-        },
+  "actions": [
+    {
+      "id": "activate-emergency",
+      "title": {
+        "en": "Activate emergency",
+        "nl": "Noodstop activeren",
+        "de": "Notfall aktivieren"
+      }
+    },
+    {
+      "id": "go-docking",
+      "title": {
+        "en": "Go docking",
+        "nl": "Naar laadstation",
+        "de": "Andocken gehen"
+      }
+    },
+    {
+      "id": "reboot",
+      "title": {
+        "en": "Reboot",
+        "nl": "Herstarten",
+        "de": "Neustart"
+      }
+    },
+    {
+      "id": "release-emergency",
+      "title": {
+        "en": "Release emergency",
+        "nl": "Noodstop vrijgeven",
+        "de": "Notfall freigeben"
+      }
+    },
+    {
+      "id": "start-random-mowing",
+      "title": {
+        "en": "Start random mowing",
+        "nl": "Start maaien",
+        "de": "Zufälliges Mähen starten"
+      }
+    },
+    {
+      "id": "stop-random-mowing",
+      "title": {
+        "en": "Stop random mowing",
+        "nl": "Stop maaien",
+        "de": "Wahlloses Mähen stoppen"
+      }
+    },
+    {
+      "id": "play-sound",
+      "title": {
+        "en": "Play sound",
+        "nl": "Geluid afspelen",
+        "de": "Ton abspielen"
+      },
+      "args": [
         {
-            "id": "go-docking",
-            "title": {
-                "en": "Go docking",
-                "nl": "Naar laadstation",
-                "de": "Andocken gehen"
-            }
-        },
+          "type": "number",
+          "name": "Volume",
+          "placeholder": {
+            "en": "Volume",
+            "nl": "Volume",
+            "de": "Lautstärke"
+          },
+          "min": 0,
+          "max": 100,
+          "step": 1
+        }
+      ]
+    },
+    {
+      "id": "stop-sound",
+      "title": {
+        "en": "Stop sound",
+        "nl": "Stop geluid",
+        "de": "Geräusch abstellen"
+      }
+    }
+  ],
+  "triggers": [
+    {
+      "id": "rpm_changed",
+      "title": {
+        "en": "Mower RPM updated",
+        "nl": "Maaier RPM veranderd",
+        "de": "Mäher-Drehzahl aktualisiert"
+      },
+      "hint": [
         {
-            "id": "reboot",
-            "title": {
-                "en": "Reboot",
-                "nl": "Herstarten",
-                "de": "Neustart"
-            }
-        },
+          "en": "When the RPM of the mower gets updated",
+          "nl": "Wanneer het toerental van de maaier veranderd",
+          "de": "Wenn die Drehzahl des Mähers aktualisiert wird"
+        }
+      ],
+      "tokens": [
         {
-            "id": "release-emergency",
-            "title": {
-                "en": "Release emergency",
-                "nl": "Noodstop vrijgeven",
-                "de": "Notfall freigeben"
-            }
-        },
+          "name": "rpm",
+          "type": "number",
+          "title": {
+            "en": "RPM",
+            "nl": "RPM",
+            "de": "Drehzahl"
+          },
+          "example": {
+            "en": "RPM",
+            "nl": "RPM",
+            "de": "Drehzahl"
+          }
+        }
+      ]
+    },
+    {
+      "id": "status.user_activity_changed",
+      "title": {
+        "en": "User status updated",
+        "nl": "Gebruiker status veranderd",
+        "de": "Benutzerstatus aktualisiert"
+      },
+      "hint": [
         {
-            "id": "start-random-mowing",
-            "title": {
-                "en": "Start random mowing",
-                "nl": "Start maaien",
-                "de": "Zufälliges Mähen starten"
-            }
-        },
+          "en": "When the user status gets updated",
+          "nl": "Wanneer de gebruikers status veranderd",
+          "de": "Wenn der Benutzerstatus aktualisiert wird"
+        }
+      ],
+      "tokens": [
         {
-            "id": "stop-random-mowing",
-            "title": {
-                "en": "Stop random mowing",
-                "nl": "Stop maaien",
-                "de": "Wahlloses Mähen stoppen"
-            }
-        },
+          "name": "status.user_activity",
+          "type": "string",
+          "title": {
+            "en": "User Status",
+            "nl": "Gebruikers Status",
+            "de": "Benutzerstatus"
+          },
+          "example": {
+            "en": "Status",
+            "nl": "Status",
+            "de": "Status"
+          }
+        }
+      ]
+    },
+    {
+      "id": "status.scheduled_activity_changed",
+      "title": {
+        "en": "Scheduled status updated",
+        "nl": "Geplande status veranderd",
+        "de": "Geplanter Status aktualisiert"
+      },
+      "hint": [
         {
-            "id": "play-sound",
-            "title": {
-                "en": "Play sound",
-                "nl": "Geluid afspelen",
-                "de": "Ton abspielen"
-            },
-            "args": [{
+          "en": "When the user status gets updated",
+          "nl": "Wanneer de geplande status veranderd",
+          "de": "Wenn der Benutzerstatus aktualisiert wird"
+        }
+      ],
+      "tokens": [
+        {
+          "name": "status.scheduled_activity",
+          "type": "string",
+          "title": {
+            "en": "Scheduled Status",
+            "nl": "Geplande Status",
+            "de": "Geplanter Status"
+          },
+          "example": {
+            "en": "Status",
+            "nl": "Status",
+            "de": "Status"
+          }
+        }
+      ]
+    },
+    {
+      "id": "status.docking_state_changed",
+      "title": {
+        "en": "Docking state updated",
+        "nl": "Dockstatus bijgewerkt",
+        "de": "Andockstatus aktualisiert"
+      },
+      "hint": [
+        {
+          "en": "When the docking status gets updated",
+          "nl": "Wanneer de dokstatus is bijgewerkt",
+          "de": "Wenn der Andockstatus aktualisiert wird"
+        }
+      ],
+      "tokens": [
+        {
+          "name": "status.scheduled_activity",
+          "type": "string",
+          "title": {
+            "en": "Docking State",
+            "nl": "Dokstatus",
+            "de": "Andockzustand"
+          },
+          "example": {
+            "en": "Status",
+            "nl": "Status",
+            "de": "Status"
+          }
+        }
+      ]
+    },
+    {
+        "id": "person-detected",
+        "title": {
+            "en": "Person detected",
+            "nl": "Persoon gezien"
+        },
+        "hint": {
+            "en": "When a person is detected",
+            "nl": "Wanneer een persoon gezien wordt"
+        },
+        "tokens": [
+            {
                 "type": "number",
-                "name": "Volume",
-                "placeholder": {
-                    "en": "Volume",
-                    "nl": "Volume",
-                    "de": "Lautstärke"
+                "name": "distance",
+                "title": {
+                    "en": "Distance (m)",
+                    "nl": "Afstand (m)"
                 },
-                "min": 0,
-                "max": 100,
-                "step": 1
-            }]
-        },
-        {
-            "id": "stop-sound",
-            "title": {
-                "en": "Stop sound",
-                "nl": "Stop geluid",
-                "de": "Geräusch abstellen"
+                "example": {
+                    "en": "The distance between Willow and the person",
+                    "nl": "De afstand tussen Willow en de persoon"
+                }
             }
-        }
-    ],
-    "triggers": [{
-            "id": "rpm_changed",
-            "title": {
-                "en": "Mower RPM updated",
-                "nl": "Maaier RPM veranderd",
-                "de": "Mäher-Drehzahl aktualisiert"
-            },
-            "hint": [{
-                "en": "When the RPM of the mower gets updated",
-                "nl": "Wanneer het toerental van de maaier veranderd",
-                "de": "Wenn die Drehzahl des Mähers aktualisiert wird"
-            }],
-            "tokens": [{
-                "name": "rpm",
-                "type": "number",
-                "title": {
-                    "en": "RPM",
-                    "nl": "RPM",
-                    "de": "Drehzahl"
-                },
-                "example": {
-                    "en": "RPM",
-                    "nl": "RPM",
-                    "de": "Drehzahl"
-                }
-            }]
-        },
-        {
-            "id": "status.user_activity_changed",
-            "title": {
-                "en": "User status updated",
-                "nl": "Gebruiker status veranderd",
-                "de": "Benutzerstatus aktualisiert"
-            },
-            "hint": [{
-                "en": "When the user status gets updated",
-                "nl": "Wanneer de gebruikers status veranderd",
-                "de": "Wenn der Benutzerstatus aktualisiert wird"
-            }],
-            "tokens": [{
-                "name": "status.user_activity",
-                "type": "string",
-                "title": {
-                    "en": "User Status",
-                    "nl": "Gebruikers Status",
-                    "de": "Benutzerstatus"
-                },
-                "example": {
-                    "en": "Status",
-                    "nl": "Status",
-                    "de": "Status"
-                }
-            }]
-        },
-        {
-            "id": "status.scheduled_activity_changed",
-            "title": {
-                "en": "Scheduled status updated",
-                "nl": "Geplande status veranderd",
-                "de": "Geplanter Status aktualisiert"
-            },
-            "hint": [{
-                "en": "When the user status gets updated",
-                "nl": "Wanneer de geplande status veranderd",
-                "de": "Wenn der Benutzerstatus aktualisiert wird"
-            }],
-            "tokens": [{
-                "name": "status.scheduled_activity",
-                "type": "string",
-                "title": {
-                    "en": "Scheduled Status",
-                    "nl": "Geplande Status",
-                    "de": "Geplanter Status"
-                },
-                "example": {
-                    "en": "Status",
-                    "nl": "Status",
-                    "de": "Status"
-                }
-            }]
-        },
-        {
-            "id": "status.docking_state_changed",
-            "title": {
-                "en": "Docking state updated",
-                "nl": "Dockstatus bijgewerkt",
-                "de": "Andockstatus aktualisiert"
-            },
-            "hint": [{
-                "en": "When the docking status gets updated",
-                "nl": "Wanneer de dokstatus is bijgewerkt",
-                "de": "Wenn der Andockstatus aktualisiert wird"
-            }],
-            "tokens": [{
-                "name": "status.scheduled_activity",
-                "type": "string",
-                "title": {
-                    "en": "Docking State",
-                    "nl": "Dokstatus",
-                    "de": "Andockzustand"
-                },
-                "example": {
-                    "en": "Status",
-                    "nl": "Status",
-                    "de": "Status"
-                }
-            }]
-        }
-    ],
-    "conditions": [{
-            "id": "is-in-emergency-stop",
-            "title": {
-                "en": "!{{Is|Isn't}} in emergency stop",
-                "nl": "Noodstop is !{{geactiveerd|gedeactiveerd}}",
-                "de": "!{{Befindet sich im Notstopp|Befindet sich nicht im Notstopp}}"
-            },
-            "hint": {
-                "en": "Checks if Willow is in emergency stop at this moment.",
-                "nl": "Controleert of Willow momenteel in noodstop staat.",
-                "de": "Überprüft, ob sich Willow gerade im Notstopp befindet."
-            }
-        },
-        {
-            "id": "is-mowing",
-            "title": {
-                "en": "!{{Is|Isn't}} mowing",
-                "nl": "!{{Is|Is niet}} aan het maaien",
-                "de": "!{{Wird gemäht|Ist Mähen nicht}} mowing"
-            },
-            "hint": {
-                "en": "Checks if Willow is mowing at this moment.",
-                "nl": "Controleert of Willow momenteel aan het maaien is.",
-                "de": "Prüft, ob Willow gerade mäht."
-            }
-        }
-    ]
+        ]
+    }
+  ],
+  "conditions": [
+    {
+      "id": "is-in-emergency-stop",
+      "title": {
+        "en": "!{{Is|Isn't}} in emergency stop",
+        "nl": "Noodstop is !{{geactiveerd|gedeactiveerd}}",
+        "de": "!{{Befindet sich im Notstopp|Befindet sich nicht im Notstopp}}"
+      },
+      "hint": {
+        "en": "Checks if Willow is in emergency stop at this moment.",
+        "nl": "Controleert of Willow momenteel in noodstop staat.",
+        "de": "Überprüft, ob sich Willow gerade im Notstopp befindet."
+      }
+    },
+    {
+      "id": "is-mowing",
+      "title": {
+        "en": "!{{Is|Isn't}} mowing",
+        "nl": "!{{Is|Is niet}} aan het maaien",
+        "de": "!{{Wird gemäht|Ist Mähen nicht}} mowing"
+      },
+      "hint": {
+        "en": "Checks if Willow is mowing at this moment.",
+        "nl": "Controleert of Willow momenteel aan het maaien is.",
+        "de": "Prüft, ob Willow gerade mäht."
+      }
+    }
+  ]
 }

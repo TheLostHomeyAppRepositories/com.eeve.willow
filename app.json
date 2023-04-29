@@ -43,15 +43,6 @@
   "flow": {
     "triggers": [
       {
-        "title": {
-          "en": "Person detected"
-        },
-        "hint": {
-          "en": "A person has been detected"
-        },
-        "id": "person-detected"
-      },
-      {
         "id": "rpm_changed",
         "title": {
           "en": "Mower RPM updated",
@@ -192,6 +183,38 @@
               "en": "Status",
               "nl": "Status",
               "de": "Status"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "person-detected",
+        "title": {
+          "en": "Person detected",
+          "nl": "Persoon gezien"
+        },
+        "hint": {
+          "en": "When a person is detected",
+          "nl": "Wanneer een persoon gezien wordt"
+        },
+        "tokens": [
+          {
+            "type": "number",
+            "name": "distance",
+            "title": {
+              "en": "Distance",
+              "nl": "Afstand"
+            },
+            "example": {
+              "en": "The distance between Willow and the person",
+              "nl": "De afstand tussen Willow en de persoon"
             }
           }
         ],

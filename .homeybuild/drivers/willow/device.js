@@ -6,16 +6,11 @@ const fetch = require('node-fetch');
 
 class MyDevice extends Device {
 
-  // static ip;
-  // static interval;
-  // static alive = true;
-
   async axiosFetch(endpoint, _timeout = 3000) {
     const url = `http://${this.ip}:8080${endpoint}`;
-    this.log(`Requesting ${url} with timeout ${_timeout}`);
+    // this.log(`Requesting ${url} with timeout ${_timeout}`);
     try {
       const resp = await axios.get(url, { timeout: _timeout });
-      this.setAvailable().catch(this.error);
       return resp.data;
     } catch (error) {
       let errcode;
@@ -117,24 +112,8 @@ class MyDevice extends Device {
       return (this.userActivity === 'MowActivity' || this.scheduledActivity === 'MowingPlannerActivity');
     });
 
-    await this.getParameters(true);
-
-    setInterval(() => {
-      this.axiosFetch('/api/slam/distanceToObject/person')
-        .then((value) => {
-          if (value.hasOwnProperty('distance') && !this.person_detected) {
-            this.person_detected = true;
-            this.person_detected_flag = true;
-            this.log("A person has been detected!");
-            this.homey.flow.getTriggerCard('person-detected').trigger();
-          }
-          if (!value.hasOwnProperty('distance') && this.person_detected) {
-            this.person_detected = false;
-            this.log("Person has gone away!");
-          }
-        })
-        .catch(this.error);
-    }, 2000);
+    this.getParameters(true).catch(this.error);
+    this.getPersonDetection(true).catch(this.error);
 
     this.log('Willow has been initialized');
   }
@@ -186,6 +165,81 @@ class MyDevice extends Device {
   }
 
   async getParameters(startinterval = false) {
+    if (!this.alive) {
+      this.log('Exiting, device has been removed');
+      return;
+    }
+    this.log('Getting parameters, seconds:', this.interval);
+
+    this.is_error = false;
+    this.type_error = undefined;
+
+    Promise.all([
+      this.axiosFetch('/activities/info'),
+      this.axiosFetch('/system/batteryStatus'),
+      this.axiosFetch('/system/sensors/baseboard'),
+      this.axiosFetch('/system/sensors/module'),
+      this.axiosFetch('/system/mowerInfo'),
+      this.axiosFetch('/system/dockingInfo'),
+      this.axiosFetch('/statuslog/sensors/rain')
+    ])
+      .then(values => {
+        if (this.checkError(values)) {
+          this.log('Setting device unavailable..');
+          this.setUnavailable(this.error_message).catch(this.error);
+          return;
+        }
+        this.setAvailable().catch(this.error);
+        this.userActivity = values[0].userActivity;
+        this.scheduledActivity = values[0].scheduledActivity;
+        this.setCapabilityValue('status.user_activity', this.userActivity).catch(this.error);
+        this.setCapabilityValue('status.scheduled_activity', this.scheduledActivity).catch(this.error);
+        this.setCapabilityValue('measure_temperature.battery', values[1].temperature).catch(this.error);
+        this.setCapabilityValue('measure_battery', values[1].percentage).catch(this.error);
+        this.setCapabilityValue('measure_temperature.motherboard', values[2].temperature).catch(this.error);
+        this.setCapabilityValue('measure_humidity', values[2].humidity).catch(this.error);
+        this.setCapabilityValue('measure_temperature.module', values[3].temperature).catch(this.error);
+        this.setCapabilityValue('rpm', values[4].rpm).catch(this.error);
+        this.setCapabilityValue('height', Math.round(values[4].mowerHeight * 1000) / 10).catch(this.error);
+        this.setCapabilityValue('measure_current.charging_current', values[5].chargingCurrent).catch(this.error);
+        this.setCapabilityValue('measure_power', values[5].chargingPower).catch(this.error);
+        this.setCapabilityValue('status.docking_state', values[5].dockingState).catch(this.error);
+        this.setCapabilityValue('alarm_water', values[6].state === 1).catch(this.error);
+        
+      }).catch(this.error);
+
+    this.log('Getting parameters done!');
+
+    // this.setUnavailable(this.homey.__('device_timeout')).catch(this.error);
+    // this.setUnavailable(this.homey.__('device_404')).catch(this.error);
+
+    if (startinterval) setTimeout(async () => this.getParameters(true), this.interval * 1000);
+  }
+
+
+  /**
+   * Check if a person has been detected
+   * @param {boolean} startinterval If set to true, it will auto start the interval
+   */
+  async getPersonDetection(startinterval = false) {
+    await this.axiosFetch('/api/slam/distanceToObject/person')
+      .then((value) => {
+        if (value.hasOwnProperty('distance') && !this.person_detected) {
+          this.person_detected = true;
+          this.person_detected_flag = true;
+          this.log("A person has been detected!");
+          this.homey.flow.getDeviceTriggerCard('person-detected').trigger(this, {distance: Math.round(value.distance * 100) / 100.0}).catch(this.error);
+        }
+        if (!value.hasOwnProperty('distance') && this.person_detected) {
+          this.person_detected = false;
+          this.log("Person has gone away!");
+        }
+      })
+      .catch(this.error);
+    if (startinterval) setTimeout(async () => this.getPersonDetection(true), 1000);
+  }
+
+  async getParametersNew(startinterval = false) {
     if (!this.alive) {
       this.log('Exiting, device has been removed');
       return;
