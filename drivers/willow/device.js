@@ -181,7 +181,8 @@ class MyDevice extends Device {
       this.axiosFetch('/system/sensors/module'),
       this.axiosFetch('/system/mowerInfo'),
       this.axiosFetch('/system/dockingInfo'),
-      this.axiosFetch('/statuslog/sensors/rain')
+      this.axiosFetch('/statuslog/sensors/rain'),
+      this.axiosFetch('/statuslog/sensors/power')
     ])
       .then(values => {
         if (this.checkError(values)) {
@@ -202,7 +203,7 @@ class MyDevice extends Device {
         this.setCapabilityValue('rpm', values[4].rpm).catch(this.error);
         this.setCapabilityValue('height', Math.round(values[4].mowerHeight * 1000) / 10).catch(this.error);
         this.setCapabilityValue('measure_current.charging_current', values[5].chargingCurrent).catch(this.error);
-        this.setCapabilityValue('measure_power', values[5].chargingPower).catch(this.error);
+        this.setCapabilityValue('measure_power', values[7].receiver_power).catch(this.error);
         this.setCapabilityValue('status.docking_state', values[5].dockingState).catch(this.error);
         this.setCapabilityValue('alarm_water', values[6].state === 1).catch(this.error);
         

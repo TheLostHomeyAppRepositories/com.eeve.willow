@@ -209,8 +209,8 @@
             "type": "number",
             "name": "distance",
             "title": {
-              "en": "Distance",
-              "nl": "Afstand"
+              "en": "Distance (m)",
+              "nl": "Afstand (m)"
             },
             "example": {
               "en": "The distance between Willow and the person",
