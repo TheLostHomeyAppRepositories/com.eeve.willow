@@ -1,0 +1,18 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Accuracy in map",
+    "nl": "Nauwkeurigheid in kaart",
+    "de": "Genauigkeit der Karte"
+  },
+  "units": {
+    "en": "m",
+    "nl": "m",
+    "de": "m"
+  },
+  "getable": true,
+  "setable": true,
+  "insights": true,
+  "uiComponent": "sensor",
+  "icon": "/assets/accuracy.svg"
+}

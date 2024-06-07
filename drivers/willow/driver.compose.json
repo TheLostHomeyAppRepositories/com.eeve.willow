@@ -1,174 +1,211 @@
 {
-    "name": {
-        "en": "Willow"
+  "name": {
+    "en": "Willow"
+  },
+  "class": "other",
+  "capabilities": [
+    "measure_battery",
+    "measure_humidity",
+    "measure_temperature.module",
+    "measure_temperature.motherboard",
+    "measure_temperature.battery",
+    "measure_current.charging_current",
+    "measure_power",
+    "rpm",
+    "height",
+    "alarm_water",
+    "status.docking_state",
+    "status.user_activity",
+    "status.scheduled_activity",
+    "button.emergency",
+    "button.release_emergency",
+    "button.start_mowing",
+    "button.stop_mowing",
+    "button.docking",
+    "button.reboot"
+  ],
+  "capabilitiesOptions": {
+    "alarm_water": {
+      "title": {
+        "en": "Rain detecion",
+        "nl": "Regen detectie",
+        "de": "Regenerkennung"
+      }
     },
-    "class": "other",
-    "capabilities": [
-        "measure_battery",
-        "measure_humidity",
-        "measure_temperature.module",
-        "measure_temperature.motherboard",
-        "measure_temperature.battery",
-        "measure_current.charging_current",
-        "measure_power",
-        "rpm",
-        "height",
-        "alarm_water",
-        "status.docking_state",
-        "status.user_activity",
-        "status.scheduled_activity",
-        "button.emergency",
-        "button.release_emergency",
-        "button.start_mowing",
-        "button.stop_mowing",
-        "button.docking",
-        "button.reboot"
-    ],
-    "capabilitiesOptions": {
-        "alarm_water": {
-            "title": {
-                "en": "Rain detecion",
-                "nl": "Regen detectie",
-                "de": "Regenerkennung"
-            }
-        },
-        "status.user_activity": {
-            "title": {
-                "en": "User Activity",
-                "nl": "Gebruikersactiviteit",
-                "de": "Benutzeraktivität"
-            }
-        },
-        "status.scheduled_activity": {
-            "title": {
-                "en": "Scheduled Activity",
-                "nl": "Geplande Activiteit",
-                "de": "Geplante Tätigkeit"
-            }
-        },
-        "status.docking_state": {
-            "title": {
-                "en": "Docking State",
-                "nl": "Dokstatus",
-                "de": "Andockzustand"
-            }
-        },
-        "measure_current.charging_current": {
-            "decimals": 2,
-            "title": {
-                "en": "Charge Current",
-                "nl": "Laadstroom",
-                "de": "Ladestrom"
-            }
-        },
-        "measure_power": {
-            "decimals": 2,
-            "title": {
-                "en": "Charge Power",
-                "nl": "Laadvermogen",
-                "de": "Leistung aufladen"
-            }
-        },
-        "measure_humidity": {
-            "decimals": 1
-        },
-        "measure_temperature.module": {
-            "decimals": 1,
-            "title": {
-                "en": "Module",
-                "nl": "Module",
-                "de": "Modul"
-            }
-        },
-        "measure_temperature.motherboard": {
-            "decimals": 1,
-            "title": {
-                "en": "Motherboard",
-                "nl": "Moederbord",
-                "de": "Hauptplatine"
-            }
-        },
-        "measure_temperature.battery": {
-            "decimals": 1,
-            "title": {
-                "en": "Battery",
-                "nl": "Batterij",
-                "de": "Batterie"
-            }
-        },
-        "button.emergency": {
-            "title": {
-                "en": "Emergency Stop",
-                "nl": "Noodstop Activeren",
-                "de": "Not-Aus"
-            },
-            "uiQuickAction": false
-        },
-        "button.release_emergency": {
-            "title": {
-                "en": "Release Emergency Stop",
-                "nl": "Noodstop Vrijgeven",
-                "de": "Notausschalter freigeben"
-            },
-            "uiQuickAction": false
-        },
-        "button.start_mowing": {
-            "title": {
-                "en": "Start Mowing",
-                "nl": "Start Maaien",
-                "de": "Mähen beginnen"
-            },
-            "uiQuickAction": false
-        },
-        "button.stop_mowing": {
-            "title": {
-                "en": "Stop Mowing",
-                "nl": "Stop Maaien",
-                "de": "Mähen stoppen"
-            },
-            "uiQuickAction": false
-        },
-        "button.docking": {
-            "title": {
-                "en": "Charging station",
-                "nl": "Laadstation",
-                "de": "Ladestation"
-            },
-            "uiQuickAction": false
-        },
-        "button.reboot": {
-            "title": {
-                "en": "Reboot",
-                "nl": "Herstarten",
-                "de": "Neustart"
-            },
-            "uiQuickAction": false
-        }
+    "status.user_activity": {
+      "title": {
+        "en": "User Activity",
+        "nl": "Gebruikersactiviteit",
+        "de": "Benutzeraktivität"
+      }
     },
-    "platforms": [
-        "local"
-    ],
-    "connectivity": [],
-    "images": {
-        "small": "{{driverAssetsPath}}/images/small.png",
-        "large": "{{driverAssetsPath}}/images/large.png",
-        "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+    "status.scheduled_activity": {
+      "title": {
+        "en": "Scheduled Activity",
+        "nl": "Geplande Activiteit",
+        "de": "Geplante Tätigkeit"
+      }
     },
-    "pair": [{
-            "id": "list_devices",
-            "template": "list_devices",
-            "navigation": {
-                "next": "add_my_devices"
-            }
-        },
-        {
-            "id": "add_my_devices",
-            "template": "add_devices"
-        }
-    ],
-    "energy": {
-        "batteries": [
-            "INTERNAL"
-        ]
+    "status.docking_state": {
+      "title": {
+        "en": "Docking State",
+        "nl": "Dokstatus",
+        "de": "Andockzustand"
+      }
+    },
+    "measure_current.charging_current": {
+      "decimals": 2,
+      "title": {
+        "en": "Charge Current",
+        "nl": "Laadstroom",
+        "de": "Ladestrom"
+      }
+    },
+    "measure_current.mower_current": {
+      "decimals": 2,
+      "title": {
+        "en": "Mower Current",
+        "nl": "Maaier Stroom",
+        "de": "Mäher Strom"
+      }
+    },
+    "measure_current.left_wheel_current": {
+      "decimals": 2,
+      "title": {
+        "en": "Left Wheel Current",
+        "nl": "Linker Wiel Stroom",
+        "de": "Linkes Rad Strom"
+      }
+    },
+    "measure_current.right_wheel_current": {
+      "decimals": 2,
+      "title": {
+        "en": "Right Wheel Current",
+        "nl": "Rechter Wiel Stroom",
+        "de": "Rechtes Rad Strom"
+      }
+    },
+    "measure_power": {
+      "decimals": 2,
+      "title": {
+        "en": "Receiver Power",
+        "nl": "Laadstation Vermogen",
+        "de": "Leistung aufladen"
+      }
+    },
+    "measure_voltage.battery_voltage": {
+      "decimals": 2,
+      "title": {
+        "en": "Battery Voltage",
+        "nl": "Batterijspanning",
+        "de": "Spannung der Batterie"
+      }
+    },
+    "measure_voltage.receiver_voltage": {
+      "decimals": 2,
+      "title": {
+        "en": "Receiver Voltage",
+        "nl": "Laadstation Spanning",
+        "de": "Empfängerspannung"
+      }
+    },
+    "measure_humidity": {
+      "decimals": 1
+    },
+    "measure_temperature.module": {
+      "decimals": 1,
+      "title": {
+        "en": "Module",
+        "nl": "Module",
+        "de": "Modul"
+      }
+    },
+    "measure_temperature.motherboard": {
+      "decimals": 1,
+      "title": {
+        "en": "Motherboard",
+        "nl": "Moederbord",
+        "de": "Hauptplatine"
+      }
+    },
+    "measure_temperature.battery": {
+      "decimals": 1,
+      "title": {
+        "en": "Battery",
+        "nl": "Batterij",
+        "de": "Batterie"
+      }
+    },
+    "button.emergency": {
+      "title": {
+        "en": "Emergency Stop",
+        "nl": "Noodstop Activeren",
+        "de": "Not-Aus"
+      },
+      "uiQuickAction": false
+    },
+    "button.release_emergency": {
+      "title": {
+        "en": "Release Emergency Stop",
+        "nl": "Noodstop Vrijgeven",
+        "de": "Notausschalter freigeben"
+      },
+      "uiQuickAction": false
+    },
+    "button.start_mowing": {
+      "title": {
+        "en": "Start Mowing",
+        "nl": "Start Maaien",
+        "de": "Mähen beginnen"
+      },
+      "uiQuickAction": false
+    },
+    "button.stop_mowing": {
+      "title": {
+        "en": "Stop Mowing",
+        "nl": "Stop Maaien",
+        "de": "Mähen stoppen"
+      },
+      "uiQuickAction": false
+    },
+    "button.docking": {
+      "title": {
+        "en": "Charging station",
+        "nl": "Laadstation",
+        "de": "Ladestation"
+      },
+      "uiQuickAction": false
+    },
+    "button.reboot": {
+      "title": {
+        "en": "Reboot",
+        "nl": "Herstarten",
+        "de": "Neustart"
+      },
+      "uiQuickAction": false
     }
+  },
+  "platforms": ["local"],
+  "connectivity": [],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": {
+        "next": "add_my_devices"
+      }
+    },
+    {
+      "id": "add_my_devices",
+      "template": "add_devices"
+    }
+  ],
+  "energy": {
+    "batteries": ["INTERNAL"]
+  }
 }

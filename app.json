@@ -468,12 +468,52 @@
             "de": "Ladestrom"
           }
         },
+        "measure_current.mower_current": {
+          "decimals": 2,
+          "title": {
+            "en": "Mower Current",
+            "nl": "Maaier Stroom",
+            "de": "Mäher Strom"
+          }
+        },
+        "measure_current.left_wheel_current": {
+          "decimals": 2,
+          "title": {
+            "en": "Left Wheel Current",
+            "nl": "Linker Wiel Stroom",
+            "de": "Linkes Rad Strom"
+          }
+        },
+        "measure_current.right_wheel_current": {
+          "decimals": 2,
+          "title": {
+            "en": "Right Wheel Current",
+            "nl": "Rechter Wiel Stroom",
+            "de": "Rechtes Rad Strom"
+          }
+        },
         "measure_power": {
           "decimals": 2,
           "title": {
-            "en": "Charge Power",
-            "nl": "Laadvermogen",
+            "en": "Receiver Power",
+            "nl": "Laadstation Vermogen",
             "de": "Leistung aufladen"
+          }
+        },
+        "measure_voltage.battery_voltage": {
+          "decimals": 2,
+          "title": {
+            "en": "Battery Voltage",
+            "nl": "Batterijspanning",
+            "de": "Spannung der Batterie"
+          }
+        },
+        "measure_voltage.receiver_voltage": {
+          "decimals": 2,
+          "title": {
+            "en": "Receiver Voltage",
+            "nl": "Laadstation Spanning",
+            "de": "Empfängerspannung"
           }
         },
         "measure_humidity": {
@@ -625,6 +665,24 @@
     }
   ],
   "capabilities": {
+    "accuracy": {
+      "type": "number",
+      "title": {
+        "en": "Accuracy in map",
+        "nl": "Nauwkeurigheid in kaart",
+        "de": "Genauigkeit der Karte"
+      },
+      "units": {
+        "en": "m",
+        "nl": "m",
+        "de": "m"
+      },
+      "getable": true,
+      "setable": true,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "/assets/accuracy.svg"
+    },
     "height": {
       "type": "number",
       "title": {
@@ -642,6 +700,32 @@
       "insights": true,
       "uiComponent": "sensor",
       "icon": "/assets/height.svg"
+    },
+    "measure_location_latitude": {
+      "type": "number",
+      "title": {
+        "en": "Latitude",
+        "de": "Breitengrad",
+        "nl": "Breedtegraad"
+      },
+      "decimals": 8,
+      "insights": true,
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/measure_location_latitude.svg"
+    },
+    "measure_location_longitude": {
+      "type": "number",
+      "title": {
+        "en": "Longitude",
+        "de": "Längengrad",
+        "nl": "Lengtegraad"
+      },
+      "decimals": 8,
+      "insights": true,
+      "getable": true,
+      "setable": false,
+      "icon": "./assets/measure_location_longitude.svg"
     },
     "rpm": {
       "type": "number",
