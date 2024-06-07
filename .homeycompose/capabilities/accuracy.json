@@ -10,8 +10,9 @@
     "nl": "m",
     "de": "m"
   },
+  "decimals": 2,
   "getable": true,
-  "setable": true,
+  "setable": false,
   "insights": true,
   "uiComponent": "sensor",
   "icon": "/assets/accuracy.svg"

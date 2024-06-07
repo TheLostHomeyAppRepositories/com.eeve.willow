@@ -87,7 +87,7 @@ class MyDevice extends Device {
       this.addCapability("accuracy");
     }
 
-    if (!this.hasCapability("measure_noise")) {
+    if (this.hasCapability("measure_noise")) {
       this.removeCapability("measure_noise");
     }
 
