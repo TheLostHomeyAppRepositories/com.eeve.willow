@@ -5,9 +5,8 @@ const axios = require("axios");
 const fetch = require("node-fetch");
 
 class MyDevice extends Device {
-  async axiosFetch(endpoint, _timeout = 3000) {
+  async axiosFetch(endpoint, _timeout = 30000) {
     const url = `http://${this.ip}:8080${endpoint}`;
-    // this.log(`Requesting ${url} with timeout ${_timeout}`);
     try {
       const resp = await axios.get(url, { timeout: _timeout });
       return resp.data;
@@ -97,20 +96,6 @@ class MyDevice extends Device {
     if (!this.hasCapability("measure_location_longitude")) {
       this.addCapability("measure_location_longitude");
     }
-    //
-
-    //measure_noise
-    const myImage = await this.homey.images.createImage();
-    myImage.setStream(async (stream) => {
-      const res = await fetch(`http://${this.ip}:8080/image/front/img.jpg`);
-      if (!res.ok) throw new Error("Invalid Response");
-      return res.body.pipe(stream);
-    });
-
-    // Front camera image of Willow
-    this.setCameraImage("front", this.homey.__("camera"), myImage).catch(
-      this.error
-    );
 
     this.registerCapabilityListener("button.emergency", async () =>
       this.activateEmergency()
@@ -181,6 +166,19 @@ class MyDevice extends Device {
           this.scheduledActivity === "MowingPlannerActivity"
         );
       });
+
+    //measure_noise
+    const myImage = await this.homey.images.createImage();
+    myImage.setStream(async (stream) => {
+      const res = await fetch(`http://${this.ip}:8080/image/front/img.jpg`);
+      if (!res.ok) throw new Error("Invalid Response For Camera");
+      return res.body.pipe(stream);
+    });
+
+    // Front camera image of Willow
+    this.setCameraImage("front", this.homey.__("camera"), myImage).catch(
+      this.error("Failed to set camera image")
+    );
 
     this.getParameters(true).catch(this.error);
     this.getPersonDetection(true).catch(this.error);
