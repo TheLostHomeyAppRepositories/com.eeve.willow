@@ -1,5 +1,5 @@
 {
-    "device_timeout": "Zeitüberschreitungsfehler, bitte prüfen Sie, ob das Gerät online ist und die IP korrekt ist.",
-    "device_404": "404-Fehler, bitte prüfen Sie mit dem Entwickler der App.",
-    "camera": "Kamera"
+  "device_timeout": "Zeitüberschreitungsfehler, bitte prüfen Sie, ob das Gerät online ist und die IP korrekt ist.",
+  "device_404": "404-Fehler, bitte prüfen Sie mit dem Entwickler der App.",
+  "camera": "Kamera"
 }

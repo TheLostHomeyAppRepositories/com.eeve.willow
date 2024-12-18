@@ -12,6 +12,7 @@ class MyDevice extends Device {
       return resp.data;
     } catch (error) {
       let errcode;
+      this.log("meh", error);
       if (error.response === undefined) errcode = 1; // Timeout
       if (error.response !== undefined && error.response.data.status === 404)
         errcode = 2; // 404 - Not Found
@@ -168,10 +169,15 @@ class MyDevice extends Device {
       });
 
     //measure_noise
+
     const myImage = await this.homey.images.createImage();
+
     myImage.setStream(async (stream) => {
       const res = await fetch(`http://${this.ip}:8080/image/front/img.jpg`);
-      if (!res.ok) throw new Error("Invalid Response For Camera");
+      if (!res.ok) {
+        throw new Error("Invalid Response");
+      }
+
       return res.body.pipe(stream);
     });
 
@@ -264,7 +270,6 @@ class MyDevice extends Device {
           this.setUnavailable(this.error_message).catch(this.error);
           return;
         }
-        this.log("position", values[8]);
         this.setAvailable().catch(this.error);
         this.userActivity = values[0].userActivity;
         this.scheduledActivity = values[0].scheduledActivity;
@@ -385,7 +390,7 @@ class MyDevice extends Device {
       })
       .catch(this.error);
     if (startinterval)
-      setTimeout(async () => this.getPersonDetection(true), 1000);
+      setTimeout(async () => this.getPersonDetection(true), 10000);
   }
 
   /**

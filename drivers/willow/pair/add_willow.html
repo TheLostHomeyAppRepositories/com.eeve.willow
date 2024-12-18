@@ -1,0 +1,133 @@
+<script type="text/javascript">
+  Homey.setTitle(Homey.__("pair.title"));
+
+  $(function () {
+    let to_add_device = null;
+
+    $("#test-connection").click(function () {
+      to_add_device = null;
+      $("#test-connection").prop("disabled", true);
+      //$("#test-connection").addClass("is-disabled");
+      $("#test-connection").addClass("is-loading");
+      $("#connect").prop("disabled", true);
+      $("#connect").addClass("is-disabled");
+      $(".willow-test").hide();
+      $(".willow-ok").hide();
+      $(".willow-error").hide();
+
+      var inputaddress = $("#address").val();
+
+      if (inputaddress != "") {
+        var data = {
+          address: inputaddress,
+        };
+
+        Homey.emit("manual_pairing", data)
+          .then((result) => {
+            to_add_device = result.device;
+            $(".willow-test").show();
+            $("#connect").prop("disabled", false);
+            $("#connect").removeClass("is-disabled");
+            $("#test-connection").prop("disabled", false);
+            $("#test-connection").removeClass("is-disabled");
+            $("#test-connection").removeClass("is-loading");
+          })
+          .catch((error) => {
+            $(".willow-error").show();
+            $(".willow-error-msg").html(error);
+            $("#test-connection").prop("disabled", false);
+            $("#test-connection").removeClass("is-disabled");
+            $("#test-connection").removeClass("is-loading");
+          });
+      } else {
+        $(".willow-error").show();
+        $(".willow-error-msg").html(Homey.__("pair.nosettings"));
+        $("#connect").prop("disabled", true);
+        $("#connect").addClass("is-disabled");
+        $("#test-connection").prop("disabled", false);
+        $("#test-connection").removeClass("is-disabled");
+        $("#test-connection").removeClass("is-loading");
+      }
+    });
+
+    $("#connect").click(function () {
+      if (to_add_device !== null) {
+        console.log("Adding device", to_add_device);
+        Homey.createDevice(to_add_device);
+        Homey.done();
+      } else {
+        Homey.alert("No Willow found to add", "error");
+      }
+    });
+  });
+</script>
+
+<style type="text/css">
+  .form-group {
+    width: 100%;
+    display: block;
+    margin-bottom: 12px;
+  }
+  .form-group label {
+    display: block;
+  }
+  .willow-status {
+    display: none;
+  }
+  .homey-button-secondary {
+    min-width: 100px;
+  }
+  #test-connection {
+    margin-bottom: 1em;
+  }
+</style>
+
+<header class="homey-header mb-0">
+  <p class="homey-subtitle" data-i18n="pair.subtitle"></p>
+</header>
+
+<form class="homey-form">
+  <fieldset class="homey-form-fieldset">
+    <div class="homey-form-group">
+      <label class="homey-form-label" for="address">IP address</label>
+      <input
+        class="homey-form-input"
+        id="address"
+        type="text"
+        value="192.168.x.x"
+      />
+    </div>
+  </fieldset>
+</form>
+
+<div class="homey-form-group">
+  <button
+    id="test-connection"
+    class="homey-button-primary-full-shadow"
+    data-i18n="pair.testConnection"
+  ></button>
+  <button
+    id="connect"
+    class="homey-button-primary-full is-disabled"
+    disabled
+    data-i18n="pair.addDevice"
+  ></button>
+</div>
+
+<div class="messages">
+  <p class="willow-status willow-test" style="color: #008c23">
+    <i class="fa fa-check"></i>
+    <span class="willow-test-msg" data-i18n="pair.testing"
+      >Connection test succesfull</span
+    >
+  </p>
+  <p class="willow-status willow-ok" style="color: #008c23">
+    <i class="fa fa-check"></i>
+    <span class="willow-ok-msg" data-i18n="pair.success"
+      >Willow added succesfully</span
+    >
+  </p>
+  <p class="willow-status willow-error" style="color: #ff6300">
+    <i class="fa fa-times"></i> <span class="willow-error-msg"></span>
+  </p>
+</div>

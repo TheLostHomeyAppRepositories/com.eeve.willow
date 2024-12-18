@@ -1,5 +1,15 @@
 {
-    "device_timeout": "Timout error, please check if the device has the correct IP Address and if it is online.",
-    "device_404": "404 error, please check with the developer of the App.",
-    "camera": "Camera"
+  "device_timeout": "Timout error, please check if the device has the correct IP Address and if it is online.",
+  "device_404": "404 error, please check with the developer of the App.",
+  "camera": "Camera",
+  "pair": {
+    "title": "Add Willow",
+    "subtitle": "Enter the IP address for your Willow",
+    "startpairingwillow": "To get started with adding your Willow robot, you'll need to find its IP address. Here's a simple guide on how to do that: Open the EEVE app and connect to your robot. Then, go to the Settings widget and select Remote Control. This will open a web browser where you can view the URL containing the robot's IP address, typically in the format http://192.168.x.x:8080. Copy the IP address (excluding the port :8080) and enter it in the next view in the app to proceed with the remote control setup.",
+    "softwareVersion": "Software Version",
+    "nosettings": "Please enter the IP for your Willow",
+    "testConnection": "Test Connection",
+    "testing": "Connection test succesfull, you can now connect the Willow device.",
+    "addDevice": "Add device"
+  }
 }
