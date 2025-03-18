@@ -4,7 +4,27 @@ const { v4: uuidv4 } = require("uuid");
 
 class Driver extends Homey.Driver {
   // this method is called when the app is started and the Driver is inited
-  async onInit() {}
+  async onInit() {
+    this.homey.dashboards
+      .getWidget("willow")
+      .registerSettingAutocompleteListener(
+        "device",
+        async (query, settings) => {
+          let willows = [];
+
+          let devices = this.homey.drivers.getDriver("willow").getDevices();
+          devices.forEach((device) => {
+            willows.push({
+              name: device.getName(),
+              id: device.getData().id,
+            });
+          });
+          return willows.filter((item) =>
+            item.name.toLowerCase().includes(query.toLowerCase())
+          );
+        }
+      );
+  }
 
   async onPair(session) {
     let connect_to_willow_address = null;

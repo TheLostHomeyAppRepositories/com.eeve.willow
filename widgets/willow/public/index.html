@@ -1,0 +1,259 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+
+  <body class="homey-widget">
+    <img id="willow-image" class="custom-image-class" />
+
+    <!-- Emergency / Resume button view (bottom-right) -->
+    <div class="icon-view position-bottom-right">
+      <button class="icon-button size-large" id="grass-button">
+        <div class="homey-custom-icon-grass size-medium"></div>
+      </button>
+      <button class="icon-button size-large" id="home-button">
+        <div class="homey-custom-icon-home size-medium"></div>
+      </button>
+      <button class="icon-button size-large" id="webportal-button">
+        <div class="homey-custom-icon-controller size-medium"></div>
+      </button>
+      <button class="icon-button size-large" id="emergency-button">
+        <div
+          class="homey-custom-icon-play-circle size-medium"
+          id="emergency"
+        ></div>
+      </button>
+    </div>
+
+    <!-- Battery status view (top-right) -->
+    <div class="icon-view position-top-right">
+      <div class="icon-button size-medium">
+        <div class="homey-custom-icon-battery-missing" id="battery"></div>
+      </div>
+    </div>
+
+    <!-- Info text (top-left) -->
+    <div class="text-label position-top-left" id="info">Loading...</div>
+
+    <script type="text/javascript">
+      async function onHomeyReady(Homey) {
+        Homey.ready();
+        const settings = Homey.getSettings();
+        console.log("Widget settings:", settings);
+
+        if (!settings.show_info)
+          document.getElementById("info").style.display = "none";
+
+        async function fetchAndDisplayImage() {
+          try {
+            const deviceId = settings.device.id;
+            const imageUrl = await Homey.api(
+              "GET",
+              "/willow_image?id=" + deviceId
+            );
+            document.getElementById("willow-image").src = imageUrl;
+          } catch (error) {
+            console.error("Error fetching image:", error);
+          }
+        }
+
+        async function fetchData() {
+          // Constants for battery thresholds
+          const THRESHOLDS = [5, 20, 35, 50, 65, 80, 95];
+          try {
+            const deviceId = Homey.getSettings().device.id;
+            const willowData = await Homey.api("GET", "/?id=" + deviceId);
+            console.log("Willow Data:", willowData);
+
+            // Get the battery icon element
+            const batteryIcon = document.querySelector("#battery");
+
+            // Default to missing if no battery data
+            if (!willowData || willowData.battery === undefined) {
+              batteryIcon.className =
+                "homey-custom-icon-battery-missing battery-icon-display";
+              document.getElementById("battery-info").textContent = "N/A";
+              return;
+            }
+
+            const batteryLevel = willowData.battery;
+            const isCharging = willowData.chargingCurrent > 0.0;
+
+            // Update battery icon based on level and charging state
+            if (isCharging) {
+              if (batteryLevel < THRESHOLDS[0]) {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-charging-0 battery-icon-display";
+              } else if (batteryLevel < THRESHOLDS[1]) {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-charging-1 battery-icon-display";
+              } else if (batteryLevel < THRESHOLDS[2]) {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-charging-2 battery-icon-display";
+              } else if (batteryLevel < THRESHOLDS[3]) {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-charging-3 battery-icon-display";
+              } else if (batteryLevel < THRESHOLDS[4]) {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-charging-4 battery-icon-display";
+              } else if (batteryLevel < THRESHOLDS[5]) {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-charging-5 battery-icon-display";
+              } else if (batteryLevel < THRESHOLDS[6]) {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-charging-6 battery-icon-display";
+              } else {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-charging-7 battery-icon-display";
+              }
+            } else {
+              if (batteryLevel < THRESHOLDS[0]) {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-0 battery-icon-display";
+              } else if (batteryLevel < THRESHOLDS[1]) {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-1 battery-icon-display";
+              } else if (batteryLevel < THRESHOLDS[2]) {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-2 battery-icon-display";
+              } else if (batteryLevel < THRESHOLDS[3]) {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-3 battery-icon-display";
+              } else if (batteryLevel < THRESHOLDS[4]) {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-4 battery-icon-display";
+              } else if (batteryLevel < THRESHOLDS[5]) {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-5 battery-icon-display";
+              } else if (batteryLevel < THRESHOLDS[6]) {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-6 battery-icon-display";
+              } else {
+                batteryIcon.className =
+                  "homey-custom-icon-battery-7 battery-icon-display";
+              }
+            }
+
+            // Update text labels
+
+            // Charging current (top-left)
+            let info_text = "";
+
+            if (willowData.user_activity)
+              info_text += willowData.user_activity + "<br />";
+
+            if (willowData.scheduled_activity)
+              info_text += willowData.scheduled_activity + "<br />";
+
+            if (willowData.temperature_motherboard)
+              info_text +=
+                "Motherboard: " +
+                Math.round(willowData.temperature_motherboard * 10) / 10.0 +
+                "°C<br />";
+
+            if (willowData.temperature_battery)
+              info_text +=
+                "Battery: " +
+                Math.round(willowData.temperature_battery * 10) / 10.0 +
+                "°C<br />";
+
+            if (willowData.measure_power)
+              info_text +=
+                "Power: " +
+                Math.round(willowData.measure_power * 10) / 10.0 +
+                "W<br />";
+
+            document.getElementById("info").innerHTML = info_text;
+
+            // Check Emergency state
+            const emergencyIcon = document.querySelector("#emergency");
+            if (willowData.in_emergency) {
+              // Emergency mode activated
+              emergencyIcon.className =
+                "homey-custom-icon-play-circle size-medium";
+            } else {
+              emergencyIcon.className =
+                "homey-custom-icon-stop-circle size-medium";
+            }
+          } catch (error) {
+            console.log("Error fetching data:", error);
+          }
+        }
+
+        await fetchAndDisplayImage();
+        await fetchData();
+
+        setInterval(
+          fetchAndDisplayImage,
+          (settings.interval_camera || 5) * 1000
+        );
+        setInterval(fetchData, (settings.interval_data || 10) * 1000);
+
+        // Add event listener for emergency button
+        document
+          .getElementById("emergency-button")
+          .addEventListener("click", async () => {
+            console.log("Emergency button clicked!");
+            // Emergency mode activated
+            try {
+              await Homey.api("POST", "/", {
+                id: Homey.getSettings().device.id,
+                description: "emergency_button",
+              });
+              await fetchData();
+              console.log("Emergency action triggered");
+            } catch (err) {
+              console.error("Error triggering emergency action:", err);
+            }
+          });
+
+        // Add event listener for emergency button
+        document
+          .getElementById("grass-button")
+          .addEventListener("click", async () => {
+            console.log("Grass button clicked!");
+            try {
+              await Homey.api("POST", "/", {
+                id: Homey.getSettings().device.id,
+                description: "grass_button",
+              });
+              await fetchData();
+              console.log("Grass action triggered");
+            } catch (err) {
+              console.error("Error triggering grass action:", err);
+            }
+          });
+
+        // Add event listener for emergency button
+        document
+          .getElementById("home-button")
+          .addEventListener("click", async () => {
+            console.log("Home button clicked!");
+            try {
+              await Homey.api("POST", "/", {
+                id: Homey.getSettings().device.id,
+                description: "home_button",
+              });
+              await fetchData();
+              console.log("Home action triggered");
+            } catch (err) {
+              console.error("Error triggering home action:", err);
+            }
+          });
+
+        // Add event listener for webportal button
+        document
+          .getElementById("webportal-button")
+          .addEventListener("click", async () => {
+            console.log("Remote control button clicked!");
+            try {
+              const deviceId = Homey.getSettings().device.id;
+              await Homey.popup("http://192.168.30.50:8080");
+            } catch (err) {
+              console.error("Error opening remote control:", err);
+            }
+          });
+      }
+    </script>
+  </body>
+</html>

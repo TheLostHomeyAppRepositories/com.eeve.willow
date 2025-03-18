@@ -1,0 +1,257 @@
+/* Battery 0% */
+.homey-custom-icon-battery-0 {
+  -webkit-mask-image: url("MaterialSymbolsBattery0BarRounded.svg");
+  mask-image: url("MaterialSymbolsBattery0BarRounded.svg");
+  background-color: white;
+}
+
+/* Battery 1 Bar (~17%) */
+.homey-custom-icon-battery-1 {
+  -webkit-mask-image: url("MaterialSymbolsBattery1BarRounded.svg");
+  mask-image: url("MaterialSymbolsBattery1BarRounded.svg");
+  background-color: white;
+}
+
+/* Battery 2 Bars (~33%) */
+.homey-custom-icon-battery-2 {
+  -webkit-mask-image: url("MaterialSymbolsBattery2BarRounded.svg");
+  mask-image: url("MaterialSymbolsBattery2BarRounded.svg");
+  background-color: white;
+}
+
+/* Battery 3 Bars (~50%) */
+.homey-custom-icon-battery-3 {
+  -webkit-mask-image: url("MaterialSymbolsBattery3BarRounded.svg");
+  mask-image: url("MaterialSymbolsBattery3BarRounded.svg");
+  background-color: white;
+}
+
+/* Battery 4 Bars (~67%) */
+.homey-custom-icon-battery-4 {
+  -webkit-mask-image: url("MaterialSymbolsBattery4BarRounded.svg");
+  mask-image: url("MaterialSymbolsBattery4BarRounded.svg");
+  background-color: white;
+}
+
+/* Battery 5 Bars (~83%) */
+.homey-custom-icon-battery-5 {
+  -webkit-mask-image: url("MaterialSymbolsBattery5BarRounded.svg");
+  mask-image: url("MaterialSymbolsBattery5BarRounded.svg");
+  background-color: white;
+}
+
+/* Battery 6 Bars (~100%) */
+.homey-custom-icon-battery-6 {
+  -webkit-mask-image: url("MaterialSymbolsBattery6BarRounded.svg");
+  mask-image: url("MaterialSymbolsBattery6BarRounded.svg");
+  background-color: white;
+}
+
+/* Battery Full */
+.homey-custom-icon-battery-7 {
+  -webkit-mask-image: url("MaterialSymbolsBatteryFullRounded.svg");
+  mask-image: url("MaterialSymbolsBatteryFullRounded.svg");
+  background-color: white;
+}
+
+/* Battery Charging 0 */
+.homey-custom-icon-battery-charging-0 {
+  -webkit-mask-image: url("MaterialSymbolsBatteryChargingFullOutlineRounded.svg");
+  mask-image: url("MaterialSymbolsBatteryChargingFullOutlineRounded.svg");
+  background-color: white;
+}
+
+/* Battery Charging 20% */
+.homey-custom-icon-battery-charging-1 {
+  -webkit-mask-image: url("MaterialSymbolsBatteryCharging20Rounded.svg");
+  mask-image: url("MaterialSymbolsBatteryCharging20Rounded.svg");
+  background-color: white;
+}
+
+/* Battery Charging 30% */
+.homey-custom-icon-battery-charging-2 {
+  -webkit-mask-image: url("MaterialSymbolsBatteryCharging30Rounded.svg");
+  mask-image: url("MaterialSymbolsBatteryCharging30Rounded.svg");
+  background-color: white;
+}
+
+/* Battery Charging 50% */
+.homey-custom-icon-battery-charging-3 {
+  -webkit-mask-image: url("MaterialSymbolsBatteryCharging50Rounded.svg");
+  mask-image: url("MaterialSymbolsBatteryCharging50Rounded.svg");
+  background-color: white;
+}
+
+/* Battery Charging 60% */
+.homey-custom-icon-battery-charging-4 {
+  -webkit-mask-image: url("MaterialSymbolsBatteryCharging60Rounded.svg");
+  mask-image: url("MaterialSymbolsBatteryCharging60Rounded.svg");
+  background-color: white;
+}
+
+/* Battery Charging 80% */
+.homey-custom-icon-battery-charging-5 {
+  -webkit-mask-image: url("MaterialSymbolsBatteryCharging80Rounded.svg");
+  mask-image: url("MaterialSymbolsBatteryCharging80Rounded.svg");
+  background-color: white;
+}
+
+/* Battery Charging 90% */
+.homey-custom-icon-battery-charging-6 {
+  -webkit-mask-image: url("MaterialSymbolsBatteryCharging90Rounded.svg");
+  mask-image: url("MaterialSymbolsBatteryCharging90Rounded.svg");
+  background-color: white;
+}
+
+/* Battery Charging Full */
+.homey-custom-icon-battery-charging-7 {
+  -webkit-mask-image: url("MaterialSymbolsBatteryChargingFullRounded.svg");
+  mask-image: url("MaterialSymbolsBatteryChargingFullRounded.svg");
+  background-color: white;
+}
+
+/* Battery Missing */
+.homey-custom-icon-battery-missing {
+  -webkit-mask-image: url("MaterialSymbolsBatteryUnknownOutlineRounded.svg");
+  mask-image: url("MaterialSymbolsBatteryUnknownOutlineRounded.svg");
+  background-color: white;
+}
+
+/* Stop Circle */
+.homey-custom-icon-stop-circle {
+  -webkit-mask-image: url("MaterialSymbolsStopCircleRounded.svg");
+  mask-image: url("MaterialSymbolsStopCircleRounded.svg");
+  background-color: white;
+}
+
+/* Play Circle */
+.homey-custom-icon-play-circle {
+  -webkit-mask-image: url("MaterialSymbolsPlayCircleRounded.svg");
+  mask-image: url("MaterialSymbolsPlayCircleRounded.svg");
+  background-color: white;
+}
+
+/* Stadia Controller */
+.homey-custom-icon-controller {
+  -webkit-mask-image: url("MaterialSymbolsStadiaController.svg");
+  mask-image: url("MaterialSymbolsStadiaController.svg");
+  background-color: white;
+}
+
+/* Home */
+.homey-custom-icon-home {
+  -webkit-mask-image: url("MaterialSymbolsHomeRounded.svg");
+  mask-image: url("MaterialSymbolsHomeRounded.svg");
+  background-color: white;
+}
+
+/* Grass */
+.homey-custom-icon-grass {
+  -webkit-mask-image: url("MaterialSymbolsGrassRounded.svg");
+  mask-image: url("MaterialSymbolsGrassRounded.svg");
+  background-color: white;
+}
+
+/* Remove default padding/margins from the widget container */
+.homey-widget {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.custom-image-class {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: 10px;
+}
+
+/* View container for icons/buttons */
+.icon-view {
+  background-color: var(--homey-background-color);
+  opacity: 0.6;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 2px 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Reusable icon button styling */
+.icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* Positioning classes */
+.position-bottom-right {
+  position: absolute;
+  bottom: var(--homey-su-2);
+  right: var(--homey-su-2);
+}
+
+.position-bottom-left {
+  position: absolute;
+  bottom: var(--homey-su-2);
+  left: var(--homey-su-2);
+}
+
+.position-top-right {
+  position: absolute;
+  top: var(--homey-su-2);
+  right: var(--homey-su-2);
+}
+
+.position-top-left {
+  position: absolute;
+  top: var(--homey-su-2);
+  left: var(--homey-su-2);
+}
+
+/* Size classes */
+.size-large {
+  width: 40px;
+  height: 40px;
+}
+
+.size-medium {
+  width: 32px;
+  height: 32px;
+}
+
+/* Text label styling (Homey-compliant) */
+.text-label {
+  color: var(--homey-text-color);
+  font-size: var(--homey-font-size-small);
+  padding: var(--homey-su-1);
+  background-color: var(--homey-background-color);
+  opacity: 0.8;
+  border-radius: var(--homey-su-1);
+  position: absolute;
+  white-space: nowrap;
+}
+
+/* Specific positioning for text labels */
+.position-top-left {
+  top: var(--homey-su-2);
+  left: var(--homey-su-2);
+}
+
+.position-top-right-info {
+  top: calc(var(--homey-su-2) + 32px + var(--homey-su-1));
+  right: var(--homey-su-2);
+}
+
+/* Ensure non-button elements don't inherit cursor */
+.icon-button:not(button) {
+  cursor: default;
+}

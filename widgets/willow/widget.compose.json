@@ -1,0 +1,61 @@
+{
+  "name": {
+    "en": "Willow"
+  },
+  "height": 250,
+  "transparent": true,
+  "settings": [
+    {
+      "id": "device",
+      "type": "autocomplete",
+      "title": {
+        "en": "Willow"
+      }
+    },
+    {
+      "id": "interval_camera",
+      "type": "number",
+      "title": { "en": "Camera Interval" },
+      "value": 5,
+      "hint": {
+        "en": "Camera refresh interval in seconds. Warning: Anything under 5 seconds might slow your Homey down."
+      },
+      "min": 1,
+      "max": 3600
+    },
+    {
+      "id": "interval_data",
+      "type": "number",
+      "title": { "en": "Data Interval" },
+      "value": 10,
+      "hint": {
+        "en": "The refresh rate for the data of your Willow in seconds."
+      },
+      "min": 1,
+      "max": 3600
+    },
+    {
+      "id": "show_info",
+      "type": "checkbox",
+      "title": { "en": "Show status info" },
+      "value": true,
+      "hint": {
+        "en": "Show the temperature, activity info and charging power."
+      }
+    }
+  ],
+  "api": {
+    "getWillowImage": {
+      "method": "GET",
+      "path": "/willow_image"
+    },
+    "getWillowData": {
+      "method": "GET",
+      "path": "/"
+    },
+    "postWillowTask": {
+      "method": "POST",
+      "path": "/"
+    }
+  }
+}
