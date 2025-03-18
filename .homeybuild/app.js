@@ -51,6 +51,7 @@ class App extends Homey.App {
     );
     data.measure_power = device.getCapabilityValue("measure_power");
     data.in_emergency = await device.api.checkInEmergency();
+    data.ip = device.ip;
 
     return data;
   }

@@ -36,6 +36,8 @@
     <div class="text-label position-top-left" id="info">Loading...</div>
 
     <script type="text/javascript">
+      var ip = "";
+
       async function onHomeyReady(Homey) {
         Homey.ready();
         const settings = Homey.getSettings();
@@ -64,6 +66,8 @@
             const deviceId = Homey.getSettings().device.id;
             const willowData = await Homey.api("GET", "/?id=" + deviceId);
             console.log("Willow Data:", willowData);
+
+            ip = willowData.ip;
 
             // Get the battery icon element
             const batteryIcon = document.querySelector("#battery");
@@ -248,7 +252,7 @@
             console.log("Remote control button clicked!");
             try {
               const deviceId = Homey.getSettings().device.id;
-              await Homey.popup("http://192.168.30.50:8080");
+              await Homey.popup(`http://${ip}:8080`);
             } catch (err) {
               console.error("Error opening remote control:", err);
             }
