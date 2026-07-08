@@ -5,6 +5,18 @@ const Homey = require("homey");
 class App extends Homey.App {
   async onInit() {
     this.log("Started");
+
+    const strategy = this.homey.discovery.getStrategy("toadi");
+
+    // Anything already discovered
+    for (const r of Object.values(strategy.getDiscoveryResults())) {
+      this.log("existing:", r.id, r.address, r.port, r.txt);
+    }
+
+    // Live results as they arrive
+    strategy.on("result", (r) => {
+      this.log("NEW:", r.id, r.address, r.port, r.txt);
+    });
   }
 
   /** WIDGET API */
@@ -37,17 +49,17 @@ class App extends Homey.App {
     let data = {};
     data.battery = device.getCapabilityValue("measure_battery");
     data.chargingCurrent = device.getCapabilityValue(
-      "measure_current.charging_current"
+      "measure_current.charging_current",
     );
     data.user_activity = device.getCapabilityValue("status.user_activity");
     data.scheduled_activity = device.getCapabilityValue(
-      "status.scheduled_activity"
+      "status.scheduled_activity",
     );
     data.temperature_motherboard = device.getCapabilityValue(
-      "measure_temperature.motherboard"
+      "measure_temperature.motherboard",
     );
     data.temperature_battery = device.getCapabilityValue(
-      "measure_temperature.battery"
+      "measure_temperature.battery",
     );
     data.measure_power = device.getCapabilityValue("measure_power");
     data.in_emergency = await device.api.checkInEmergency();

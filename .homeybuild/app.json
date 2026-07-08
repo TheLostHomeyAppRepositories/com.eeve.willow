@@ -601,6 +601,7 @@
         "large": "/drivers/willow/assets/images/large.png",
         "xlarge": "/drivers/willow/assets/images/xlarge.png"
       },
+      "discovery": "toadi",
       "pair": [
         {
           "id": "willow",
@@ -888,6 +889,16 @@
       "setable": true,
       "uiComponent": "sensor",
       "icon": "/assets/broad-activity-feed-svgrepo-com.svg"
+    }
+  },
+  "discovery": {
+    "toadi": {
+      "type": "mdns-sd",
+      "mdns-sd": {
+        "name": "toadi",
+        "protocol": "tcp"
+      },
+      "id": "{{txt.serial}}"
     }
   }
 }
