@@ -192,6 +192,7 @@
     "large": "{{driverAssetsPath}}/images/large.png",
     "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
   },
+  "discovery": "toadi",
   "pair": [
     {
       "id": "willow",
