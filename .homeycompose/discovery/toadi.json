@@ -1,0 +1,8 @@
+{
+  "type": "mdns-sd",
+  "mdns-sd": {
+    "name": "toadi",
+    "protocol": "tcp"
+  },
+  "id": "{{txt.serial}}"
+}
