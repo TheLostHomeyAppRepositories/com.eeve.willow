@@ -1,5 +1,20 @@
 {
   "device_timeout": "Zeitüberschreitungsfehler, bitte prüfen Sie, ob das Gerät online ist und die IP korrekt ist.",
   "device_404": "404-Fehler, bitte prüfen Sie mit dem Entwickler der App.",
-  "camera": "Kamera"
+  "camera": "Kamera",
+  "state": {
+    "mowing": "Mähen",
+    "returning": "Rückkehr zur Ladestation",
+    "charging": "Laden",
+    "docked": "Angedockt",
+    "manual": "Manuelles Fahren",
+    "mapping": "Kartierung",
+    "emergency": "Not-Aus",
+    "idle": "Untätig"
+  },
+  "errors": {
+    "offline": "Willow ist nicht erreichbar. Prüfe, ob er eingeschaltet und mit deinem Netzwerk verbunden ist.",
+    "not_supported": "Diese Funktion wird von der Software deines Willow nicht unterstützt.",
+    "unknown": "Willow hat einen unerwarteten Fehler gemeldet."
+  }
 }

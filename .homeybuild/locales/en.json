@@ -11,5 +11,20 @@
     "testConnection": "Test Connection",
     "testing": "Connection test succesfull, you can now connect the Willow device.",
     "addDevice": "Add device"
+  },
+  "state": {
+    "mowing": "Mowing",
+    "returning": "Returning to dock",
+    "charging": "Charging",
+    "docked": "Docked",
+    "manual": "Manual driving",
+    "mapping": "Mapping",
+    "emergency": "Emergency stop",
+    "idle": "Idle"
+  },
+  "errors": {
+    "offline": "Willow can't be reached. Check that it is switched on and connected to your network.",
+    "not_supported": "This function is not supported by the software on your Willow.",
+    "unknown": "Willow returned an unexpected error."
   }
 }

@@ -1,0 +1,505 @@
+{
+  "triggers": [
+    {
+      "id": "mower_state_changed",
+      "title": {
+        "en": "The state changed",
+        "nl": "De status is veranderd",
+        "de": "Der Status hat sich geändert"
+      },
+      "tokens": [
+        {
+          "name": "state",
+          "type": "string",
+          "title": {
+            "en": "State",
+            "nl": "Status",
+            "de": "Status"
+          },
+          "example": {
+            "en": "Mowing",
+            "nl": "Maaien",
+            "de": "Mähen"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mower_state_changed_to",
+      "title": {
+        "en": "The state changed to …",
+        "nl": "De status is veranderd naar …",
+        "de": "Der Status hat sich geändert zu …"
+      },
+      "titleFormatted": {
+        "en": "The state changed to [[state]]",
+        "nl": "De status is veranderd naar [[state]]",
+        "de": "Der Status hat sich geändert zu [[state]]"
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "state",
+          "title": {
+            "en": "State",
+            "nl": "Status",
+            "de": "Status"
+          },
+          "values": [
+            {
+              "id": "mowing",
+              "label": {
+                "en": "Mowing",
+                "nl": "Maaien",
+                "de": "Mähen"
+              }
+            },
+            {
+              "id": "returning",
+              "label": {
+                "en": "Returning to dock",
+                "nl": "Terug naar laadstation",
+                "de": "Rückkehr zur Ladestation"
+              }
+            },
+            {
+              "id": "charging",
+              "label": {
+                "en": "Charging",
+                "nl": "Opladen",
+                "de": "Laden"
+              }
+            },
+            {
+              "id": "docked",
+              "label": {
+                "en": "Docked",
+                "nl": "In laadstation",
+                "de": "Angedockt"
+              }
+            },
+            {
+              "id": "manual",
+              "label": {
+                "en": "Manual driving",
+                "nl": "Handmatig rijden",
+                "de": "Manuelles Fahren"
+              }
+            },
+            {
+              "id": "mapping",
+              "label": {
+                "en": "Mapping",
+                "nl": "Kaart maken",
+                "de": "Kartierung"
+              }
+            },
+            {
+              "id": "emergency",
+              "label": {
+                "en": "Emergency stop",
+                "nl": "Noodstop",
+                "de": "Not-Aus"
+              }
+            },
+            {
+              "id": "idle",
+              "label": {
+                "en": "Idle",
+                "nl": "Inactief",
+                "de": "Untätig"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "person_detected",
+      "title": {
+        "en": "A person was detected",
+        "nl": "Er is een persoon gezien",
+        "de": "Eine Person wurde erkannt"
+      },
+      "tokens": [
+        {
+          "name": "distance",
+          "type": "number",
+          "title": {
+            "en": "Distance (m)",
+            "nl": "Afstand (m)",
+            "de": "Entfernung (m)"
+          },
+          "example": 2.5
+        }
+      ]
+    }
+  ],
+  "conditions": [
+    {
+      "id": "mower_state_is",
+      "title": {
+        "en": "The state !{{is|is not}} …",
+        "nl": "De status !{{is|is niet}} …",
+        "de": "Der Status !{{ist|ist nicht}} …"
+      },
+      "titleFormatted": {
+        "en": "The state !{{is|is not}} [[state]]",
+        "nl": "De status !{{is|is niet}} [[state]]",
+        "de": "Der Status !{{ist|ist nicht}} [[state]]"
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "state",
+          "title": {
+            "en": "State",
+            "nl": "Status",
+            "de": "Status"
+          },
+          "values": [
+            {
+              "id": "mowing",
+              "label": {
+                "en": "Mowing",
+                "nl": "Maaien",
+                "de": "Mähen"
+              }
+            },
+            {
+              "id": "returning",
+              "label": {
+                "en": "Returning to dock",
+                "nl": "Terug naar laadstation",
+                "de": "Rückkehr zur Ladestation"
+              }
+            },
+            {
+              "id": "charging",
+              "label": {
+                "en": "Charging",
+                "nl": "Opladen",
+                "de": "Laden"
+              }
+            },
+            {
+              "id": "docked",
+              "label": {
+                "en": "Docked",
+                "nl": "In laadstation",
+                "de": "Angedockt"
+              }
+            },
+            {
+              "id": "manual",
+              "label": {
+                "en": "Manual driving",
+                "nl": "Handmatig rijden",
+                "de": "Manuelles Fahren"
+              }
+            },
+            {
+              "id": "mapping",
+              "label": {
+                "en": "Mapping",
+                "nl": "Kaart maken",
+                "de": "Kartierung"
+              }
+            },
+            {
+              "id": "emergency",
+              "label": {
+                "en": "Emergency stop",
+                "nl": "Noodstop",
+                "de": "Not-Aus"
+              }
+            },
+            {
+              "id": "idle",
+              "label": {
+                "en": "Idle",
+                "nl": "Inactief",
+                "de": "Untätig"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "is_mowing",
+      "title": {
+        "en": "!{{Is|Is not}} mowing",
+        "nl": "!{{Is|Is niet}} aan het maaien",
+        "de": "!{{Mäht|Mäht nicht}}"
+      }
+    },
+    {
+      "id": "is_emergency_stopped",
+      "title": {
+        "en": "Emergency stop !{{is|is not}} active",
+        "nl": "Noodstop !{{is|is niet}} actief",
+        "de": "Not-Aus !{{ist|ist nicht}} aktiv"
+      }
+    }
+  ],
+  "actions": [
+    {
+      "id": "start_mowing",
+      "title": {
+        "en": "Start mowing",
+        "nl": "Start maaien",
+        "de": "Mähen starten"
+      }
+    },
+    {
+      "id": "stop_mowing",
+      "title": {
+        "en": "Stop mowing",
+        "nl": "Stop maaien",
+        "de": "Mähen stoppen"
+      }
+    },
+    {
+      "id": "return_to_dock",
+      "title": {
+        "en": "Return to dock",
+        "nl": "Terug naar laadstation",
+        "de": "Zur Ladestation zurückkehren"
+      }
+    },
+    {
+      "id": "resume_schedule",
+      "title": {
+        "en": "Resume mowing schedule",
+        "nl": "Maaischema hervatten",
+        "de": "Mähplan fortsetzen"
+      },
+      "hint": {
+        "en": "Lets the robot continue its schedule after it was sent to the dock.",
+        "nl": "Laat de robot zijn schema hervatten nadat hij naar het laadstation is gestuurd.",
+        "de": "Lässt den Roboter seinen Plan fortsetzen, nachdem er zur Ladestation geschickt wurde."
+      }
+    },
+    {
+      "id": "activate_emergency_stop",
+      "title": {
+        "en": "Activate emergency stop",
+        "nl": "Noodstop activeren",
+        "de": "Not-Aus aktivieren"
+      }
+    },
+    {
+      "id": "release_emergency_stop",
+      "title": {
+        "en": "Release emergency stop",
+        "nl": "Noodstop vrijgeven",
+        "de": "Not-Aus freigeben"
+      }
+    },
+    {
+      "id": "clear_rain_sensor",
+      "title": {
+        "en": "Clear rain detection",
+        "nl": "Regendetectie wissen",
+        "de": "Regenerkennung zurücksetzen"
+      },
+      "hint": {
+        "en": "Tells the robot it is dry again, so it can continue mowing.",
+        "nl": "Laat de robot weten dat het weer droog is, zodat hij verder kan maaien.",
+        "de": "Teilt dem Roboter mit, dass es wieder trocken ist, damit er weitermähen kann."
+      }
+    },
+    {
+      "id": "play_sound",
+      "title": {
+        "en": "Play a sound",
+        "nl": "Geluid afspelen",
+        "de": "Ton abspielen"
+      },
+      "titleFormatted": {
+        "en": "Play a sound at volume [[volume]]",
+        "nl": "Geluid afspelen op volume [[volume]]",
+        "de": "Ton mit Lautstärke [[volume]] abspielen"
+      },
+      "args": [
+        {
+          "type": "range",
+          "name": "volume",
+          "min": 0,
+          "max": 100,
+          "step": 5,
+          "value": 60,
+          "label": "%",
+          "title": {
+            "en": "Volume",
+            "nl": "Volume",
+            "de": "Lautstärke"
+          }
+        }
+      ]
+    },
+    {
+      "id": "stop_sound",
+      "title": {
+        "en": "Stop the sound",
+        "nl": "Geluid stoppen",
+        "de": "Ton stoppen"
+      }
+    },
+    {
+      "id": "show_emotion",
+      "title": {
+        "en": "Show an emotion",
+        "nl": "Emotie tonen",
+        "de": "Emotion anzeigen"
+      },
+      "titleFormatted": {
+        "en": "Show emotion [[emotion]]",
+        "nl": "Toon emotie [[emotion]]",
+        "de": "Emotion [[emotion]] anzeigen"
+      },
+      "args": [
+        {
+          "type": "dropdown",
+          "name": "emotion",
+          "title": {
+            "en": "Emotion",
+            "nl": "Emotie",
+            "de": "Emotion"
+          },
+          "values": [
+            {
+              "id": "HardEmergencyStop",
+              "label": {
+                "en": "Hard emergency stop"
+              }
+            },
+            {
+              "id": "EmergencyStop",
+              "label": {
+                "en": "Emergency stop"
+              }
+            },
+            {
+              "id": "Docked",
+              "label": {
+                "en": "Docked"
+              }
+            },
+            {
+              "id": "Docking",
+              "label": {
+                "en": "Docking"
+              }
+            },
+            {
+              "id": "FollowPersons",
+              "label": {
+                "en": "Follow persons"
+              }
+            },
+            {
+              "id": "WaitForPersons",
+              "label": {
+                "en": "Wait for persons"
+              }
+            },
+            {
+              "id": "NoPersonFound",
+              "label": {
+                "en": "No person found"
+              }
+            },
+            {
+              "id": "SupervisedMappingFailed",
+              "label": {
+                "en": "Supervised mapping failed"
+              }
+            },
+            {
+              "id": "QrScanning",
+              "label": {
+                "en": "Qr scanning"
+              }
+            },
+            {
+              "id": "QrScanned",
+              "label": {
+                "en": "Qr scanned"
+              }
+            },
+            {
+              "id": "WifiConnected",
+              "label": {
+                "en": "Wifi connected"
+              }
+            },
+            {
+              "id": "WifiFailed",
+              "label": {
+                "en": "Wifi failed"
+              }
+            },
+            {
+              "id": "BackendConnected",
+              "label": {
+                "en": "Backend connected"
+              }
+            },
+            {
+              "id": "UserLinked",
+              "label": {
+                "en": "User linked"
+              }
+            },
+            {
+              "id": "BatteryEmpty",
+              "label": {
+                "en": "Battery empty"
+              }
+            },
+            {
+              "id": "BatteryLow",
+              "label": {
+                "en": "Battery low"
+              }
+            },
+            {
+              "id": "BatteryMedium",
+              "label": {
+                "en": "Battery medium"
+              }
+            },
+            {
+              "id": "BatteryHigh",
+              "label": {
+                "en": "Battery high"
+              }
+            },
+            {
+              "id": "BatteryFull",
+              "label": {
+                "en": "Battery full"
+              }
+            },
+            {
+              "id": "RemoteControl",
+              "label": {
+                "en": "Remote control"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reboot_robot",
+      "title": {
+        "en": "Reboot the robot",
+        "nl": "Robot herstarten",
+        "de": "Roboter neu starten"
+      }
+    }
+  ]
+}

@@ -2,6 +2,7 @@
   "name": {
     "en": "Willow"
   },
+  "deprecated": true,
   "class": "other",
   "capabilities": [
     "measure_battery",
@@ -192,7 +193,6 @@
     "large": "{{driverAssetsPath}}/images/large.png",
     "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
   },
-  "discovery": "toadi",
   "pair": [
     {
       "id": "willow",

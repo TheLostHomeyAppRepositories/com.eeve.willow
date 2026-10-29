@@ -225,6 +225,159 @@
             "filter": "driver_id=willow"
           }
         ]
+      },
+      {
+        "id": "mower_state_changed",
+        "title": {
+          "en": "The state changed",
+          "nl": "De status is veranderd",
+          "de": "Der Status hat sich geändert"
+        },
+        "tokens": [
+          {
+            "name": "state",
+            "type": "string",
+            "title": {
+              "en": "State",
+              "nl": "Status",
+              "de": "Status"
+            },
+            "example": {
+              "en": "Mowing",
+              "nl": "Maaien",
+              "de": "Mähen"
+            }
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          }
+        ]
+      },
+      {
+        "id": "mower_state_changed_to",
+        "title": {
+          "en": "The state changed to …",
+          "nl": "De status is veranderd naar …",
+          "de": "Der Status hat sich geändert zu …"
+        },
+        "titleFormatted": {
+          "en": "The state changed to [[state]]",
+          "nl": "De status is veranderd naar [[state]]",
+          "de": "Der Status hat sich geändert zu [[state]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          },
+          {
+            "type": "dropdown",
+            "name": "state",
+            "title": {
+              "en": "State",
+              "nl": "Status",
+              "de": "Status"
+            },
+            "values": [
+              {
+                "id": "mowing",
+                "label": {
+                  "en": "Mowing",
+                  "nl": "Maaien",
+                  "de": "Mähen"
+                }
+              },
+              {
+                "id": "returning",
+                "label": {
+                  "en": "Returning to dock",
+                  "nl": "Terug naar laadstation",
+                  "de": "Rückkehr zur Ladestation"
+                }
+              },
+              {
+                "id": "charging",
+                "label": {
+                  "en": "Charging",
+                  "nl": "Opladen",
+                  "de": "Laden"
+                }
+              },
+              {
+                "id": "docked",
+                "label": {
+                  "en": "Docked",
+                  "nl": "In laadstation",
+                  "de": "Angedockt"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual driving",
+                  "nl": "Handmatig rijden",
+                  "de": "Manuelles Fahren"
+                }
+              },
+              {
+                "id": "mapping",
+                "label": {
+                  "en": "Mapping",
+                  "nl": "Kaart maken",
+                  "de": "Kartierung"
+                }
+              },
+              {
+                "id": "emergency",
+                "label": {
+                  "en": "Emergency stop",
+                  "nl": "Noodstop",
+                  "de": "Not-Aus"
+                }
+              },
+              {
+                "id": "idle",
+                "label": {
+                  "en": "Idle",
+                  "nl": "Inactief",
+                  "de": "Untätig"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "person_detected",
+        "title": {
+          "en": "A person was detected",
+          "nl": "Er is een persoon gezien",
+          "de": "Eine Person wurde erkannt"
+        },
+        "tokens": [
+          {
+            "name": "distance",
+            "type": "number",
+            "title": {
+              "en": "Distance (m)",
+              "nl": "Afstand (m)",
+              "de": "Entfernung (m)"
+            },
+            "example": 2.5
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          }
+        ]
       }
     ],
     "conditions": [
@@ -265,6 +418,131 @@
             "type": "device",
             "name": "device",
             "filter": "driver_id=willow"
+          }
+        ]
+      },
+      {
+        "id": "mower_state_is",
+        "title": {
+          "en": "The state !{{is|is not}} …",
+          "nl": "De status !{{is|is niet}} …",
+          "de": "Der Status !{{ist|ist nicht}} …"
+        },
+        "titleFormatted": {
+          "en": "The state !{{is|is not}} [[state]]",
+          "nl": "De status !{{is|is niet}} [[state]]",
+          "de": "Der Status !{{ist|ist nicht}} [[state]]"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          },
+          {
+            "type": "dropdown",
+            "name": "state",
+            "title": {
+              "en": "State",
+              "nl": "Status",
+              "de": "Status"
+            },
+            "values": [
+              {
+                "id": "mowing",
+                "label": {
+                  "en": "Mowing",
+                  "nl": "Maaien",
+                  "de": "Mähen"
+                }
+              },
+              {
+                "id": "returning",
+                "label": {
+                  "en": "Returning to dock",
+                  "nl": "Terug naar laadstation",
+                  "de": "Rückkehr zur Ladestation"
+                }
+              },
+              {
+                "id": "charging",
+                "label": {
+                  "en": "Charging",
+                  "nl": "Opladen",
+                  "de": "Laden"
+                }
+              },
+              {
+                "id": "docked",
+                "label": {
+                  "en": "Docked",
+                  "nl": "In laadstation",
+                  "de": "Angedockt"
+                }
+              },
+              {
+                "id": "manual",
+                "label": {
+                  "en": "Manual driving",
+                  "nl": "Handmatig rijden",
+                  "de": "Manuelles Fahren"
+                }
+              },
+              {
+                "id": "mapping",
+                "label": {
+                  "en": "Mapping",
+                  "nl": "Kaart maken",
+                  "de": "Kartierung"
+                }
+              },
+              {
+                "id": "emergency",
+                "label": {
+                  "en": "Emergency stop",
+                  "nl": "Noodstop",
+                  "de": "Not-Aus"
+                }
+              },
+              {
+                "id": "idle",
+                "label": {
+                  "en": "Idle",
+                  "nl": "Inactief",
+                  "de": "Untätig"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "is_mowing",
+        "title": {
+          "en": "!{{Is|Is not}} mowing",
+          "nl": "!{{Is|Is niet}} aan het maaien",
+          "de": "!{{Mäht|Mäht nicht}}"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          }
+        ]
+      },
+      {
+        "id": "is_emergency_stopped",
+        "title": {
+          "en": "Emergency stop !{{is|is not}} active",
+          "nl": "Noodstop !{{is|is niet}} actief",
+          "de": "Not-Aus !{{ist|ist nicht}} aktiv"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
           }
         ]
       }
@@ -401,6 +679,336 @@
             "filter": "driver_id=willow"
           }
         ]
+      },
+      {
+        "id": "start_mowing",
+        "title": {
+          "en": "Start mowing",
+          "nl": "Start maaien",
+          "de": "Mähen starten"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          }
+        ]
+      },
+      {
+        "id": "stop_mowing",
+        "title": {
+          "en": "Stop mowing",
+          "nl": "Stop maaien",
+          "de": "Mähen stoppen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          }
+        ]
+      },
+      {
+        "id": "return_to_dock",
+        "title": {
+          "en": "Return to dock",
+          "nl": "Terug naar laadstation",
+          "de": "Zur Ladestation zurückkehren"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          }
+        ]
+      },
+      {
+        "id": "resume_schedule",
+        "title": {
+          "en": "Resume mowing schedule",
+          "nl": "Maaischema hervatten",
+          "de": "Mähplan fortsetzen"
+        },
+        "hint": {
+          "en": "Lets the robot continue its schedule after it was sent to the dock.",
+          "nl": "Laat de robot zijn schema hervatten nadat hij naar het laadstation is gestuurd.",
+          "de": "Lässt den Roboter seinen Plan fortsetzen, nachdem er zur Ladestation geschickt wurde."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          }
+        ]
+      },
+      {
+        "id": "activate_emergency_stop",
+        "title": {
+          "en": "Activate emergency stop",
+          "nl": "Noodstop activeren",
+          "de": "Not-Aus aktivieren"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          }
+        ]
+      },
+      {
+        "id": "release_emergency_stop",
+        "title": {
+          "en": "Release emergency stop",
+          "nl": "Noodstop vrijgeven",
+          "de": "Not-Aus freigeben"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          }
+        ]
+      },
+      {
+        "id": "clear_rain_sensor",
+        "title": {
+          "en": "Clear rain detection",
+          "nl": "Regendetectie wissen",
+          "de": "Regenerkennung zurücksetzen"
+        },
+        "hint": {
+          "en": "Tells the robot it is dry again, so it can continue mowing.",
+          "nl": "Laat de robot weten dat het weer droog is, zodat hij verder kan maaien.",
+          "de": "Teilt dem Roboter mit, dass es wieder trocken ist, damit er weitermähen kann."
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          }
+        ]
+      },
+      {
+        "id": "play_sound",
+        "title": {
+          "en": "Play a sound",
+          "nl": "Geluid afspelen",
+          "de": "Ton abspielen"
+        },
+        "titleFormatted": {
+          "en": "Play a sound at volume [[volume]]",
+          "nl": "Geluid afspelen op volume [[volume]]",
+          "de": "Ton mit Lautstärke [[volume]] abspielen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          },
+          {
+            "type": "range",
+            "name": "volume",
+            "min": 0,
+            "max": 100,
+            "step": 5,
+            "value": 60,
+            "label": "%",
+            "title": {
+              "en": "Volume",
+              "nl": "Volume",
+              "de": "Lautstärke"
+            }
+          }
+        ]
+      },
+      {
+        "id": "stop_sound",
+        "title": {
+          "en": "Stop the sound",
+          "nl": "Geluid stoppen",
+          "de": "Ton stoppen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          }
+        ]
+      },
+      {
+        "id": "show_emotion",
+        "title": {
+          "en": "Show an emotion",
+          "nl": "Emotie tonen",
+          "de": "Emotion anzeigen"
+        },
+        "titleFormatted": {
+          "en": "Show emotion [[emotion]]",
+          "nl": "Toon emotie [[emotion]]",
+          "de": "Emotion [[emotion]] anzeigen"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          },
+          {
+            "type": "dropdown",
+            "name": "emotion",
+            "title": {
+              "en": "Emotion",
+              "nl": "Emotie",
+              "de": "Emotion"
+            },
+            "values": [
+              {
+                "id": "HardEmergencyStop",
+                "label": {
+                  "en": "Hard emergency stop"
+                }
+              },
+              {
+                "id": "EmergencyStop",
+                "label": {
+                  "en": "Emergency stop"
+                }
+              },
+              {
+                "id": "Docked",
+                "label": {
+                  "en": "Docked"
+                }
+              },
+              {
+                "id": "Docking",
+                "label": {
+                  "en": "Docking"
+                }
+              },
+              {
+                "id": "FollowPersons",
+                "label": {
+                  "en": "Follow persons"
+                }
+              },
+              {
+                "id": "WaitForPersons",
+                "label": {
+                  "en": "Wait for persons"
+                }
+              },
+              {
+                "id": "NoPersonFound",
+                "label": {
+                  "en": "No person found"
+                }
+              },
+              {
+                "id": "SupervisedMappingFailed",
+                "label": {
+                  "en": "Supervised mapping failed"
+                }
+              },
+              {
+                "id": "QrScanning",
+                "label": {
+                  "en": "Qr scanning"
+                }
+              },
+              {
+                "id": "QrScanned",
+                "label": {
+                  "en": "Qr scanned"
+                }
+              },
+              {
+                "id": "WifiConnected",
+                "label": {
+                  "en": "Wifi connected"
+                }
+              },
+              {
+                "id": "WifiFailed",
+                "label": {
+                  "en": "Wifi failed"
+                }
+              },
+              {
+                "id": "BackendConnected",
+                "label": {
+                  "en": "Backend connected"
+                }
+              },
+              {
+                "id": "UserLinked",
+                "label": {
+                  "en": "User linked"
+                }
+              },
+              {
+                "id": "BatteryEmpty",
+                "label": {
+                  "en": "Battery empty"
+                }
+              },
+              {
+                "id": "BatteryLow",
+                "label": {
+                  "en": "Battery low"
+                }
+              },
+              {
+                "id": "BatteryMedium",
+                "label": {
+                  "en": "Battery medium"
+                }
+              },
+              {
+                "id": "BatteryHigh",
+                "label": {
+                  "en": "Battery high"
+                }
+              },
+              {
+                "id": "BatteryFull",
+                "label": {
+                  "en": "Battery full"
+                }
+              },
+              {
+                "id": "RemoteControl",
+                "label": {
+                  "en": "Remote control"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "reboot_robot",
+        "title": {
+          "en": "Reboot the robot",
+          "nl": "Robot herstarten",
+          "de": "Roboter neu starten"
+        },
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          }
+        ]
       }
     ]
   },
@@ -409,6 +1017,7 @@
       "name": {
         "en": "Willow"
       },
+      "deprecated": true,
       "class": "other",
       "capabilities": [
         "measure_battery",
@@ -601,7 +1210,6 @@
         "large": "/drivers/willow/assets/images/large.png",
         "xlarge": "/drivers/willow/assets/images/xlarge.png"
       },
-      "discovery": "toadi",
       "pair": [
         {
           "id": "willow",
@@ -671,6 +1279,289 @@
                 "en": "Enter the refresh interval in seconds.",
                 "nl": "Voer de verversingsinterval in seconden in.",
                 "de": "Geben Sie das Aktualisierungsintervall in Sekunden ein."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": {
+        "en": "Willow"
+      },
+      "class": "lawnmower",
+      "capabilities": [
+        "mower_state",
+        "measure_battery",
+        "remaining_mowing_time",
+        "mowing_time_today",
+        "mowing_time_total",
+        "blade_height",
+        "measure_temperature.battery",
+        "measure_power",
+        "alarm_water",
+        "alarm_motion",
+        "emergency_stop",
+        "button.start_mowing",
+        "button.stop_mowing",
+        "button.dock",
+        "button.reboot"
+      ],
+      "capabilitiesOptions": {
+        "measure_temperature.battery": {
+          "decimals": 1,
+          "title": {
+            "en": "Battery temperature",
+            "nl": "Batterijtemperatuur",
+            "de": "Batterietemperatur"
+          }
+        },
+        "measure_power": {
+          "decimals": 1,
+          "title": {
+            "en": "Power usage",
+            "nl": "Stroomverbruik",
+            "de": "Leistungsaufnahme"
+          }
+        },
+        "alarm_water": {
+          "title": {
+            "en": "Rain",
+            "nl": "Regen",
+            "de": "Regen"
+          }
+        },
+        "alarm_motion": {
+          "title": {
+            "en": "Person detected",
+            "nl": "Persoon gezien",
+            "de": "Person erkannt"
+          }
+        },
+        "button.start_mowing": {
+          "title": {
+            "en": "Start mowing",
+            "nl": "Start maaien",
+            "de": "Mähen starten"
+          }
+        },
+        "button.stop_mowing": {
+          "title": {
+            "en": "Stop mowing",
+            "nl": "Stop maaien",
+            "de": "Mähen stoppen"
+          }
+        },
+        "button.dock": {
+          "title": {
+            "en": "Return to dock",
+            "nl": "Naar laadstation",
+            "de": "Zur Ladestation"
+          }
+        },
+        "button.reboot": {
+          "maintenanceAction": true,
+          "title": {
+            "en": "Reboot",
+            "nl": "Herstarten",
+            "de": "Neustart"
+          }
+        },
+        "status.activity": {
+          "title": {
+            "en": "Activity (raw)",
+            "nl": "Activiteit (ruw)",
+            "de": "Aktivität (roh)"
+          }
+        },
+        "status.docking": {
+          "title": {
+            "en": "Docking state (raw)",
+            "nl": "Dokstatus (ruw)",
+            "de": "Andockzustand (roh)"
+          }
+        },
+        "measure_temperature.motherboard": {
+          "decimals": 1,
+          "title": {
+            "en": "Motherboard temperature",
+            "nl": "Moederbordtemperatuur",
+            "de": "Hauptplatinentemperatur"
+          }
+        },
+        "measure_temperature.module": {
+          "decimals": 1,
+          "title": {
+            "en": "Module temperature",
+            "nl": "Moduletemperatuur",
+            "de": "Modultemperatur"
+          }
+        },
+        "measure_humidity.motherboard": {
+          "decimals": 1,
+          "title": {
+            "en": "Motherboard humidity",
+            "nl": "Moederbord vochtigheid",
+            "de": "Hauptplatinenfeuchte"
+          }
+        },
+        "measure_current.charging": {
+          "decimals": 2,
+          "title": {
+            "en": "Charging current",
+            "nl": "Laadstroom",
+            "de": "Ladestrom"
+          }
+        },
+        "measure_current.blades": {
+          "decimals": 2,
+          "title": {
+            "en": "Blade motor current",
+            "nl": "Maaimotor stroom",
+            "de": "Mähmotor Strom"
+          }
+        },
+        "measure_current.wheel_left": {
+          "decimals": 2,
+          "title": {
+            "en": "Left wheel current",
+            "nl": "Linker wiel stroom",
+            "de": "Linkes Rad Strom"
+          }
+        },
+        "measure_current.wheel_right": {
+          "decimals": 2,
+          "title": {
+            "en": "Right wheel current",
+            "nl": "Rechter wiel stroom",
+            "de": "Rechtes Rad Strom"
+          }
+        },
+        "measure_voltage.battery": {
+          "decimals": 2,
+          "title": {
+            "en": "Battery voltage",
+            "nl": "Batterijspanning",
+            "de": "Batteriespannung"
+          }
+        },
+        "measure_voltage.receiver": {
+          "decimals": 2,
+          "title": {
+            "en": "Charging station voltage",
+            "nl": "Laadstation spanning",
+            "de": "Ladestation Spannung"
+          }
+        }
+      },
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "lan"
+      ],
+      "images": {
+        "small": "/drivers/willow2/assets/images/small.png",
+        "large": "/drivers/willow2/assets/images/large.png",
+        "xlarge": "/drivers/willow2/assets/images/xlarge.png"
+      },
+      "discovery": "toadi",
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "energy": {
+        "batteries": [
+          "INTERNAL"
+        ]
+      },
+      "id": "willow2",
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Robot",
+            "nl": "Robot",
+            "de": "Roboter"
+          },
+          "children": [
+            {
+              "id": "address",
+              "type": "label",
+              "label": {
+                "en": "IP address",
+                "nl": "IP-adres",
+                "de": "IP-Adresse"
+              },
+              "value": "",
+              "hint": {
+                "en": "Found automatically on your network and kept up to date.",
+                "nl": "Automatisch gevonden op je netwerk en up-to-date gehouden.",
+                "de": "Wird automatisch im Netzwerk gefunden und aktuell gehalten."
+              }
+            },
+            {
+              "id": "serial",
+              "type": "label",
+              "label": {
+                "en": "Serial number",
+                "nl": "Serienummer",
+                "de": "Seriennummer"
+              },
+              "value": ""
+            },
+            {
+              "id": "firmware",
+              "type": "label",
+              "label": {
+                "en": "Software version",
+                "nl": "Softwareversie",
+                "de": "Softwareversion"
+              },
+              "value": ""
+            },
+            {
+              "id": "hardware",
+              "type": "label",
+              "label": {
+                "en": "Hardware version",
+                "nl": "Hardwareversie",
+                "de": "Hardwareversion"
+              },
+              "value": ""
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Advanced",
+            "nl": "Geavanceerd",
+            "de": "Erweitert"
+          },
+          "children": [
+            {
+              "id": "diagnostics",
+              "type": "checkbox",
+              "label": {
+                "en": "Show diagnostic sensors",
+                "nl": "Toon diagnostische sensoren",
+                "de": "Diagnosesensoren anzeigen"
+              },
+              "value": false,
+              "hint": {
+                "en": "Adds motor currents, voltages, board temperatures, GPS position and raw robot states.",
+                "nl": "Voegt motorstromen, spanningen, bordtemperaturen, GPS-positie en ruwe robotstatussen toe.",
+                "de": "Fügt Motorströme, Spannungen, Platinentemperaturen, GPS-Position und Rohzustände hinzu."
               }
             }
           ]
@@ -821,6 +1712,46 @@
       "uiComponent": "sensor",
       "icon": "/assets/accuracy.svg"
     },
+    "blade_height": {
+      "type": "number",
+      "title": {
+        "en": "Cutting height",
+        "nl": "Maaihoogte",
+        "de": "Schnitthöhe"
+      },
+      "units": {
+        "en": "cm"
+      },
+      "decimals": 1,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "/assets/height.svg"
+    },
+    "emergency_stop": {
+      "type": "boolean",
+      "title": {
+        "en": "Emergency stop",
+        "nl": "Noodstop",
+        "de": "Not-Aus"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "uiQuickAction": false,
+      "insights": true,
+      "insightsTitleTrue": {
+        "en": "Emergency stop activated",
+        "nl": "Noodstop geactiveerd",
+        "de": "Not-Aus aktiviert"
+      },
+      "insightsTitleFalse": {
+        "en": "Emergency stop released",
+        "nl": "Noodstop vrijgegeven",
+        "de": "Not-Aus freigegeben"
+      }
+    },
     "height": {
       "type": "number",
       "title": {
@@ -864,6 +1795,135 @@
       "getable": true,
       "setable": false,
       "icon": "./assets/measure_location_longitude.svg"
+    },
+    "mower_state": {
+      "type": "enum",
+      "title": {
+        "en": "Mower state",
+        "nl": "Maaierstatus",
+        "de": "Mäherstatus"
+      },
+      "values": [
+        {
+          "id": "mowing",
+          "title": {
+            "en": "Mowing",
+            "nl": "Maaien",
+            "de": "Mähen"
+          }
+        },
+        {
+          "id": "returning",
+          "title": {
+            "en": "Returning to dock",
+            "nl": "Terug naar laadstation",
+            "de": "Rückkehr zur Ladestation"
+          }
+        },
+        {
+          "id": "charging",
+          "title": {
+            "en": "Charging",
+            "nl": "Opladen",
+            "de": "Laden"
+          }
+        },
+        {
+          "id": "docked",
+          "title": {
+            "en": "Docked",
+            "nl": "In laadstation",
+            "de": "Angedockt"
+          }
+        },
+        {
+          "id": "manual",
+          "title": {
+            "en": "Manual driving",
+            "nl": "Handmatig rijden",
+            "de": "Manuelles Fahren"
+          }
+        },
+        {
+          "id": "mapping",
+          "title": {
+            "en": "Mapping",
+            "nl": "Kaart maken",
+            "de": "Kartierung"
+          }
+        },
+        {
+          "id": "emergency",
+          "title": {
+            "en": "Emergency stop",
+            "nl": "Noodstop",
+            "de": "Not-Aus"
+          }
+        },
+        {
+          "id": "idle",
+          "title": {
+            "en": "Idle",
+            "nl": "Inactief",
+            "de": "Untätig"
+          }
+        }
+      ],
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/broad-activity-feed-svgrepo-com.svg"
+    },
+    "mowing_time_today": {
+      "type": "number",
+      "title": {
+        "en": "Mowed today",
+        "nl": "Vandaag gemaaid",
+        "de": "Heute gemäht"
+      },
+      "units": {
+        "en": "min"
+      },
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "/assets/activity-svgrepo-com.svg"
+    },
+    "mowing_time_total": {
+      "type": "number",
+      "title": {
+        "en": "Total mowing time",
+        "nl": "Totale maaitijd",
+        "de": "Gesamte Mähzeit"
+      },
+      "units": {
+        "en": "h"
+      },
+      "decimals": 1,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "/assets/activity-svgrepo-com.svg"
+    },
+    "remaining_mowing_time": {
+      "type": "number",
+      "title": {
+        "en": "Remaining mowing time",
+        "nl": "Resterende maaitijd",
+        "de": "Verbleibende Mähzeit"
+      },
+      "units": {
+        "en": "min"
+      },
+      "decimals": 0,
+      "getable": true,
+      "setable": false,
+      "insights": true,
+      "uiComponent": "sensor",
+      "icon": "/assets/spinning-blades-svgrepo-com.svg"
     },
     "rpm": {
       "type": "number",

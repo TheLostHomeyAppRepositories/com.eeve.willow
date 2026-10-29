@@ -1,0 +1,58 @@
+[
+  {
+    "type": "group",
+    "label": { "en": "Robot", "nl": "Robot", "de": "Roboter" },
+    "children": [
+      {
+        "id": "address",
+        "type": "label",
+        "label": { "en": "IP address", "nl": "IP-adres", "de": "IP-Adresse" },
+        "value": "",
+        "hint": {
+          "en": "Found automatically on your network and kept up to date.",
+          "nl": "Automatisch gevonden op je netwerk en up-to-date gehouden.",
+          "de": "Wird automatisch im Netzwerk gefunden und aktuell gehalten."
+        }
+      },
+      {
+        "id": "serial",
+        "type": "label",
+        "label": { "en": "Serial number", "nl": "Serienummer", "de": "Seriennummer" },
+        "value": ""
+      },
+      {
+        "id": "firmware",
+        "type": "label",
+        "label": { "en": "Software version", "nl": "Softwareversie", "de": "Softwareversion" },
+        "value": ""
+      },
+      {
+        "id": "hardware",
+        "type": "label",
+        "label": { "en": "Hardware version", "nl": "Hardwareversie", "de": "Hardwareversion" },
+        "value": ""
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": { "en": "Advanced", "nl": "Geavanceerd", "de": "Erweitert" },
+    "children": [
+      {
+        "id": "diagnostics",
+        "type": "checkbox",
+        "label": {
+          "en": "Show diagnostic sensors",
+          "nl": "Toon diagnostische sensoren",
+          "de": "Diagnosesensoren anzeigen"
+        },
+        "value": false,
+        "hint": {
+          "en": "Adds motor currents, voltages, board temperatures, GPS position and raw robot states.",
+          "nl": "Voegt motorstromen, spanningen, bordtemperaturen, GPS-positie en ruwe robotstatussen toe.",
+          "de": "Fügt Motorströme, Spannungen, Platinentemperaturen, GPS-Position und Rohzustände hinzu."
+        }
+      }
+    ]
+  }
+]

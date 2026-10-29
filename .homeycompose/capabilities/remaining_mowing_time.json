@@ -1,0 +1,15 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Remaining mowing time",
+    "nl": "Resterende maaitijd",
+    "de": "Verbleibende Mähzeit"
+  },
+  "units": { "en": "min" },
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "insights": true,
+  "uiComponent": "sensor",
+  "icon": "/assets/spinning-blades-svgrepo-com.svg"
+}

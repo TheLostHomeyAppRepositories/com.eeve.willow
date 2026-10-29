@@ -1,0 +1,15 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Mowed today",
+    "nl": "Vandaag gemaaid",
+    "de": "Heute gemäht"
+  },
+  "units": { "en": "min" },
+  "decimals": 0,
+  "getable": true,
+  "setable": false,
+  "insights": true,
+  "uiComponent": "sensor",
+  "icon": "/assets/activity-svgrepo-com.svg"
+}

@@ -1,0 +1,4475 @@
+openapi: 3.0.3
+info:
+  title: Willow APIs
+  description: |
+    This page contains documentation for the Willow API (application public interface), described by means of HTTP requests.
+    As this web page is hosted on the robot's web server, the 'Try it out' buttons can be used to test the APIs directly on the robot itself.
+
+    ## WebRTC connectivity
+
+    The [EEVE mobile app](https://eeve.com) (`eeve-app`) connects to the robot over **WebRTC** for remote and local access:
+
+    1. **Signaling** — WebSocket at `/webrtc` (LAN) or via the EEVE cloud relay.
+    2. **Data channel** — After the peer connection is established, REST calls are tunneled over the `httpcalls` protobuf data channel (`DatachannelApi.proto`).
+    3. **Video** — Live camera or MKV file playback is started with `POST /api/livestreams/startVideo`.
+    4. **File playback controls** — Paths such as `/info`, `/play`, `/pause`, and `/goto` are served on a dedicated file WebRTC tunnel.
+
+    All HTTP endpoints documented below can be called either directly on the robot web server or through the WebRTC data channel tunnel.
+
+    Further questions while developing your custom application? Head to the [EEVE forum](https://forum.eeve.com) for additional help.
+  version: 4.1.0
+servers:
+  - url: /
+tags:
+  - name: Activities and tools
+    description: Information about your robot's activities, and software tools
+  - name: Localization
+    description: More info on your robot's current location
+  - name: Maps
+    description: A deeper look inside your robot's internalized maps
+  - name: Miscellaneous
+  - name: Navigation
+    description: Control your robot's navigation
+  - name: Recordings
+    description: Video recordings and annotation media
+  - name: Annotations
+    description: Annotation images and corrections
+  - name: Settings
+    description: Change your robot's system settings
+  - name: Status and system information
+    description: More information on your robot's status and system information
+  - name: WebRTC and livestreams
+    description: WebRTC signaling, video streaming, and file playback over WebRTC tunnels
+paths:
+  /activities/info:
+    get:
+      deprecated: true
+      tags:
+        - Activities and tools
+      description: Gets information on the robot's current activities
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentActivities'
+              examples:
+                While mowing:
+                  value:
+                    scheduledActivity: MowingPlannerActivity
+                    userActivity: ''
+                Not busy:
+                  value:
+                    scheduledActivity: ''
+                    userActivity: ''
+                Manual mode:
+                  value:
+                    scheduledActivity: ''
+                    userActivity: manualdriving
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/activities/info:
+    get:
+      tags:
+        - Activities and tools
+      description: Gets information on the robot's current activities
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentActivities'
+              examples:
+                While mowing:
+                  value:
+                    scheduledActivity: MowingPlannerActivity
+                    userActivity: ''
+                Not busy:
+                  value:
+                    scheduledActivity: ''
+                    userActivity: ''
+                Manual mode:
+                  value:
+                    scheduledActivity: ''
+                    userActivity: manualdriving
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/calibration/camera/lens/reset:
+    put:
+      tags:
+        - Settings
+      description: Resets the calibration of the camera lens. This will reboot the robot application
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/calibration/camera/lens/isCalibrated:
+    get:
+      tags:
+        - Settings
+      description: Gets if the calibration of the camera lens has been performed
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: boolean
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/configHistory:
+    get:
+      tags:
+        - Miscellaneous
+      description: Returns the history of the application config
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: A sorted list of config history entries
+                type: array
+                items:
+                  $ref: '#/components/schemas/ConfigHistoryInfo'
+  /api/configuration/application:
+    get:
+      tags:
+        - Settings
+      description: Returns the current application config
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                description: The current application config
+                $ref: '#/components/schemas/ApplicationConfig'
+    put:
+      tags:
+        - Settings
+      description: Triggers a reconfigure of the application config system
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+    post:
+      tags:
+        - Settings
+      description: Updates the application config. Requires a reconfigure to take effect.
+      requestBody:
+        description: The new application config
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationConfig'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /maintenance/clearRainSensor:
+    get:
+      deprecated: true
+      tags:
+        - Miscellaneous
+      description: Clears the rain sensor status
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maintenance/clearRainSensor:
+    put:
+      tags:
+        - Miscellaneous
+      description: Clears the rain sensor status
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maintenance/mapsFilesystem/diskInfo:
+    get:
+      tags:
+        - Miscellaneous
+      description: Returns information about the maps filesystem
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DiskInfo'
+  /api/maintenance/mapsFilesystem/listMaps:
+    get:
+      tags:
+        - Miscellaneous
+      description: Returns a list of all maps
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DirectoryInfo'
+                example:
+                  - id: /home/toadi/data/maps/MapExplore_0001_20230316-115349
+                    name: MapExplore_0001_20230316-115349
+                    size: 60
+  /api/maintenance/mapsFilesystem/listRecordings:
+    get:
+      tags:
+        - Miscellaneous
+      description: Returns a list of all recordings
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DirectoryInfo'
+                example:
+                  - id: /home/toadi/data/recordings/maps/MapExplore_0001_20220920-090835
+                    name: MapExplore_0001_20220920-090835
+                    size: 276
+  /api/maintenance/mapsFilesystem/remove:
+    post:
+      tags:
+        - Miscellaneous
+      description: Removes a directory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DirectoryInfo'
+              example:
+                id: /home/toadi/data/maps/MapExplore_0001_20230316-115349
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maintenance/mapsFilesystem/toggleDisable:
+    put:
+      tags:
+        - Miscellaneous
+      description: Marks a directory as active or inactive
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DirectoryInfo'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /maintenance/reboot:
+    get:
+      deprecated: true
+      tags:
+        - Miscellaneous
+      description: Reboots the robot application
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maintenance/reboot:
+    put:
+      tags:
+        - Miscellaneous
+      description: Reboots the robot application
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /maintenance/showEmotion:
+    get:
+      deprecated: true
+      tags:
+        - Miscellaneous
+      description: Shows an emotion on the displays
+      parameters:
+        - $ref: '#/components/parameters/emotionName'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maintenance/shutdown:
+    put:
+      tags:
+        - Miscellaneous
+      description: Shuts the robot down
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maintenance/showEmotion:
+    put:
+      tags:
+        - Miscellaneous
+      description: Shows an emotion on the displays
+      parameters:
+        - $ref: '#/components/parameters/emotionName'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/mapobjects:
+    get:
+      tags:
+        - Maps
+      description: Gets the objects available in the map
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureCollection'
+              example:
+                features:
+                  - geometry:
+                      coordinates:
+                        - 3.540569
+                        - 50.977033
+                      type: Point
+                    id: CHARGING_STATION_e6257851-5f40-4818-93cf-fa75ae9172d9
+                    properties:
+                      description: CHARGINGSTATION created by the toadi web interface.
+                      enabled: true
+                      objectType: CHARGINGSTATION
+                    type: Feature
+                type: FeatureCollection
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maps:
+    get:
+      tags:
+        - Maps
+      description: Gets the robot's maps
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MapInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maps/{id}:
+    get:
+      description: Gets a map by ID
+      tags:
+        - Maps
+      parameters:
+        - $ref: '#/components/parameters/mapId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MapInfo'
+        '404':
+          $ref: '#/components/responses/invalidMapId'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maps/{id}/bounds:
+    get:
+      tags:
+        - Maps
+      description: Gets the bounds of a map by ID
+      parameters:
+        - $ref: '#/components/parameters/mapId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Geometry'
+        '404':
+          $ref: '#/components/responses/invalidMapId'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maps/{id}/delete:
+    put:
+      tags:
+        - Maps
+      description: Deletes the recording and processed map associated to the map ID
+      parameters:
+        - $ref: '#/components/parameters/mapId'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '404':
+          $ref: '#/components/responses/invalidMapId'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maps/{id}/geopoints:
+    get:
+      tags:
+        - Maps
+      description: Gets the map's observed feature points
+      parameters:
+        - $ref: '#/components/parameters/mapId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/geo+json:
+              schema:
+                $ref: '#/components/schemas/FeatureCollection'
+        '404':
+          $ref: '#/components/responses/invalidMapId'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maps/{id}/name:
+    put:
+      tags:
+        - Maps
+      description: Sets the name of the map
+      parameters:
+        - $ref: '#/components/parameters/mapId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '400':
+          $ref: '#/components/responses/badRequestBody'
+        '404':
+          $ref: '#/components/responses/invalidMapId'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maps/{id}/trajectory:
+    get:
+      tags:
+        - Maps
+      description: Gets the current trajectory of the robot within the given map
+      parameters:
+        - $ref: '#/components/parameters/mapId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Geometry'
+        '404':
+          $ref: '#/components/responses/invalidMapId'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maps/{id}/transform:
+    put:
+      deprecated: true
+      tags:
+        - Maps
+      description: Applies a homogeneous transformation to the map
+      parameters:
+        - $ref: '#/components/parameters/mapId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/GeoEuclideanTransformation'
+                - $ref: '#/components/schemas/EuclideanTransformation'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '400':
+          $ref: '#/components/responses/badRequestBody'
+        '500':
+          $ref: '#/components/responses/default500'
+    post:
+      tags:
+        - Maps
+      description: Applies a homogeneous transformation to the map
+      parameters:
+        - $ref: '#/components/parameters/mapId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              anyOf:
+                - $ref: '#/components/schemas/GeoEuclideanTransformation'
+                - $ref: '#/components/schemas/EuclideanTransformation'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '400':
+          $ref: '#/components/responses/badRequestBody'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maps/{id}/type:
+    get:
+      tags:
+        - Maps
+      description: Gets the type of a map by ID
+      parameters:
+        - $ref: '#/components/parameters/mapId'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MapType'
+        '404':
+          $ref: '#/components/responses/invalidMapId'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maps/{id}/firstImage:
+    get:
+      tags:
+        - Maps
+      description: Gets the first keyframe preview image of an explore map
+      parameters:
+        - $ref: '#/components/parameters/mapId'
+      responses:
+        '200':
+          description: OK
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/invalidMapId'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maps/{id}/lastImage:
+    get:
+      tags:
+        - Maps
+      description: Gets the last keyframe preview image of an explore map
+      parameters:
+        - $ref: '#/components/parameters/mapId'
+      responses:
+        '200':
+          description: OK
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/invalidMapId'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maps/build:
+    put:
+      tags:
+        - Maps
+      description: Starts map building. Any current activity will be aborted and the 'learning' sensor alarm will be set
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maps/autoalign:
+    put:
+      tags:
+        - Maps
+      description: Automatically align the maps to each other and to the zones and to their gps signal as a fallback
+      parameters:
+        - name: force
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: If false, any manually transformed maps will not be changed. If true, all maps will be aligned
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /navigation/autopilot:
+    get:
+      deprecated: true
+      tags:
+        - Navigation
+      description: Navigate on autopilot
+      parameters:
+        - $ref: '#/components/parameters/speed'
+        - $ref: '#/components/parameters/distance'
+        - name: latitude
+          in: query
+          schema:
+            type: number
+            format: double
+          required: false
+          description: The latitude of the point to navigate to
+        - name: longitude
+          in: query
+          schema:
+            type: number
+            format: double
+          required: false
+          description: The longitude of the point to navigate to
+        - name: goto
+          in: query
+          schema:
+            type: string
+            enum:
+              - currentMowingZone
+              - gotoZone
+              - keyFrame
+          required: false
+          description: A specification for the endpoint of the autopilot navigation
+        - name: zone
+          in: query
+          schema:
+            type: string
+          required: false
+          description: The zone to navigate to, if goto:gotoZone is specified
+        - name: object
+          in: query
+          schema:
+            type: string
+            enum:
+              - person
+              - border
+          required: false
+          description: An object for the robot to follow
+        - name: keyFrameId
+          in: query
+          schema:
+            type: integer
+          required: false
+          description: The ID of the key frame to navigate to, if goto:keyFrame is specified
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /api/navigation/autopilot:
+    put:
+      tags:
+        - Navigation
+      description: Navigates on autopilot
+      parameters:
+        - $ref: '#/components/parameters/speed'
+        - $ref: '#/components/parameters/distance'
+        - name: latitude
+          in: query
+          schema:
+            type: number
+            format: double
+          required: false
+          description: The latitude of the point to navigate to
+        - name: longitude
+          in: query
+          schema:
+            type: number
+            format: double
+          required: false
+          description: The longitude of the point to navigate to
+        - name: goto
+          in: query
+          schema:
+            type: string
+            enum:
+              - currentMowingZone
+              - gotoZone
+              - keyFrame
+          required: false
+          description: A specification for the endpoint of the autopilot navigation
+        - name: zone
+          in: query
+          schema:
+            type: string
+          required: false
+          description: The zone to navigate to, if goto:gotoZone is specified
+        - name: object
+          in: query
+          schema:
+            type: string
+            enum:
+              - person
+              - border
+          required: false
+          description: An object for the robot to follow
+        - name: keyFrameId
+          in: query
+          schema:
+            type: integer
+          required: false
+          description: The ID of the key frame to navigate to, if goto:keyFrame is specified
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /api/navigation/auto-camera-lens-calibration:
+    put:
+      tags:
+        - Settings
+      description: Starts an automatic calibration of the camera lens. This will reboot the robot application
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /navigation/backwards:
+    get:
+      deprecated: true
+      tags:
+        - Navigation
+      description: While in [manual driving mode](#/Navigation/put_api_navigation_startmanualdriving), makes the robot navigate backwards
+      parameters:
+        - $ref: '#/components/parameters/speed'
+        - $ref: '#/components/parameters/distance'
+        - $ref: '#/components/parameters/turnRadius'
+        - $ref: '#/components/parameters/rotation'
+        - $ref: '#/components/parameters/powerLimit'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /api/navigation/backwards:
+    put:
+      tags:
+        - Navigation
+      description: While in [manual driving mode](#/Navigation/put_api_navigation_startmanualdriving), makes the robot navigate backwards
+      parameters:
+        - $ref: '#/components/parameters/speed'
+        - $ref: '#/components/parameters/distance'
+        - $ref: '#/components/parameters/turnRadius'
+        - $ref: '#/components/parameters/rotation'
+        - $ref: '#/components/parameters/powerLimit'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /api/navigation/driveToCameraCoordinate:
+    put:
+      tags:
+        - Navigation
+      description: While in [manual driving mode](#/Navigation/put_api_navigation_startmanualdriving), makes the robot navigate to a coordinate in the camera frame
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CameraCoordinate'
+            examples:
+              To the visual center:
+                value:
+                  x: 320
+                  'y': 240
+      parameters:
+        - $ref: '#/components/parameters/speed'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /navigation/forward:
+    get:
+      deprecated: true
+      tags:
+        - Navigation
+      description: While in [manual driving mode](#/Navigation/put_api_navigation_startmanualdriving), makes the robot navigate forward
+      parameters:
+        - $ref: '#/components/parameters/speed'
+        - $ref: '#/components/parameters/distance'
+        - $ref: '#/components/parameters/turnRadius'
+        - $ref: '#/components/parameters/rotation'
+        - $ref: '#/components/parameters/powerLimit'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /api/navigation/forward:
+    put:
+      tags:
+        - Navigation
+      description: While in [manual driving mode](#/Navigation/put_api_navigation_startmanualdriving), makes the robot navigate forward
+      parameters:
+        - $ref: '#/components/parameters/speed'
+        - $ref: '#/components/parameters/distance'
+        - $ref: '#/components/parameters/turnRadius'
+        - $ref: '#/components/parameters/rotation'
+        - $ref: '#/components/parameters/powerLimit'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /navigation/hardEmergencyStop:
+    get:
+      deprecated: true
+      tags:
+        - Navigation
+      description: Places the robot in hard emergency stop
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/navigation/hardEmergencyStop:
+    put:
+      tags:
+        - Navigation
+      description: Places the robot in hard emergency stop
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /navigation/releaseEmergencyStop:
+    get:
+      deprecated: true
+      tags:
+        - Navigation
+      description: Releases all active emergency stops
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/navigation/releaseEmergencyStop:
+    put:
+      tags:
+        - Navigation
+      description: Releases all active emergency stops
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /navigation/spinAround:
+    get:
+      deprecated: true
+      tags:
+        - Navigation
+      description: While in [manual driving mode](#/Navigation/put_api_navigation_startmanualdriving), makes the robot navigate in a circle
+      parameters:
+        - $ref: '#/components/parameters/speed'
+        - $ref: '#/components/parameters/rotation'
+        - $ref: '#/components/parameters/wheelLock'
+        - $ref: '#/components/parameters/powerLimit'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /api/navigation/spinAround:
+    put:
+      tags:
+        - Navigation
+      description: While in [manual driving mode](#/Navigation/put_api_navigation_startmanualdriving), makes the robot navigate in a circle
+      parameters:
+        - $ref: '#/components/parameters/speed'
+        - $ref: '#/components/parameters/rotation'
+        - $ref: '#/components/parameters/wheelLock'
+        - $ref: '#/components/parameters/powerLimit'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /navigation/spinaround:
+    get:
+      deprecated: true
+      tags:
+        - Navigation
+      description: While in [manual driving mode](#/Navigation/put_api_navigation_startmanualdriving), makes the robot navigate in a circle
+      parameters:
+        - $ref: '#/components/parameters/speed'
+        - $ref: '#/components/parameters/rotation'
+        - $ref: '#/components/parameters/wheelLock'
+        - $ref: '#/components/parameters/powerLimit'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /navigation/startdocking:
+    get:
+      deprecated: true
+      tags:
+        - Navigation
+      description: Lets the robot start docking
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/navigation/startdocking:
+    put:
+      tags:
+        - Navigation
+      description: Lets the robot start docking
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /navigation/startmanualdriving:
+    get:
+      deprecated: true
+      tags:
+        - Navigation
+      description: Activates manual driving mode
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /api/navigation/startmanualdriving:
+    put:
+      tags:
+        - Navigation
+      description: Activates manual driving mode
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /navigation/startmowing:
+    get:
+      deprecated: true
+      tags:
+        - Navigation
+      description: Lets the robot start mowing using random full coverage
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/navigation/startmowing:
+    put:
+      tags:
+        - Navigation
+      description: Lets the robot start mowing using random full coverage
+      parameters:
+        - $ref: '#/components/parameters/maxMowingTime'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /navigation/stop:
+    get:
+      deprecated: true
+      tags:
+        - Navigation
+      description: Stops any robot movement
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /api/navigation/stop:
+    put:
+      tags:
+        - Navigation
+      description: Stops any robot movement
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /navigation/stopdocking:
+    get:
+      deprecated: true
+      tags:
+        - Navigation
+      description: Makes the robot stop docking
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/navigation/stopdocking:
+    put:
+      tags:
+        - Navigation
+      description: Makes the robot stop docking
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /navigation/stopmanualdriving:
+    get:
+      deprecated: true
+      tags:
+        - Navigation
+      description: Deactivates manual driving mode
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /api/navigation/stopmanualdriving:
+    put:
+      tags:
+        - Navigation
+      description: Deactivates manual driving mode
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /navigation/stopmowing:
+    get:
+      deprecated: true
+      tags:
+        - Navigation
+      description: Makes the robot stop mowing
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /api/navigation/stopmowing:
+    put:
+      tags:
+        - Navigation
+      description: Makes the robot stop mowing
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /api/recovery/reset:
+    get:
+      deprecated: true
+      tags:
+        - Settings
+      description: Resets the robot app's recovery status
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+    put:
+      tags:
+        - Settings
+      description: Resets the robot app's recovery status
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/recovery/recoveryMode:
+    get:
+      tags:
+        - Settings
+      description: Obtains information on recovery mode of the robot app
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecoveryInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/recovery/setNextBoot:
+    post:
+      deprecated: true
+      tags:
+        - Settings
+      description: Applies recovery mode settings for the next reboot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecoveryInfo'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+    put:
+      tags:
+        - Settings
+      description: Applies recovery mode settings for the next reboot
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecoveryInfo'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /settings/mowActivity/mowerHeight:
+    get:
+      deprecated: true
+      tags:
+        - Settings
+      description: Obtains the height of the mower blades
+      responses:
+        '200':
+          description: The height of the mower blades (expressed in millimeters)
+          content:
+            text/plain:
+              schema:
+                type: number
+                format: float
+  /api/settings/mowActivity/mowerHeight:
+    get:
+      tags:
+        - Settings
+      description: Obtains the height of the mower blades
+      responses:
+        '200':
+          description: The height of the mower blades (expressed in millimeters)
+          content:
+            text/plain:
+              schema:
+                type: number
+                format: float
+  /settings/mowActivity/mowingFrequency:
+    get:
+      deprecated: true
+      tags:
+        - Settings
+      description: Obtains the mowing frequency of the robot
+      responses:
+        '200':
+          description: The mowing frequency of the robot
+          content:
+            text/plain:
+              schema:
+                type: string
+                enum:
+                  - STOP
+                  - CONTINUOUS
+                  - MORE
+                  - NORMAL
+                  - LESS
+  /api/settings/mowActivity/mowingFrequency:
+    get:
+      tags:
+        - Settings
+      description: Obtains the mowing frequency of the robot
+      responses:
+        '200':
+          description: The mowing frequency of the robot
+          content:
+            text/plain:
+              schema:
+                type: string
+                enum:
+                  - STOP
+                  - CONTINUOUS
+                  - MORE
+                  - NORMAL
+                  - LESS
+  /settings/mowActivity/squareMeterPerHour:
+    get:
+      deprecated: true
+      tags:
+        - Settings
+      description: Obtains the area the robot mows per hour of work
+      responses:
+        '200':
+          description: The area the robot mows per hour of work
+          content:
+            text/plain:
+              schema:
+                type: integer
+                enum:
+                  - -1
+                  - 30
+                  - 45
+                  - 90
+                description: A value of -1 signifies no mowing, other values correspond to the area mowed per hour
+  /api/settings/mowActivity/squareMeterPerHour:
+    get:
+      tags:
+        - Settings
+      description: Obtains the area the robot mows per hour of work
+      responses:
+        '200':
+          description: The area the robot mows per hour of work
+          content:
+            text/plain:
+              schema:
+                type: integer
+                enum:
+                  - -1
+                  - 30
+                  - 45
+                  - 90
+                description: A value of -1 signifies no mowing, other values correspond to the area mowed per hour
+  /settings/perimeters:
+    get:
+      deprecated: true
+      tags:
+        - Maps
+        - Settings
+      description: Gets information on the robot's perimeters
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureCollection'
+  /api/settings/perimeters:
+    get:
+      tags:
+        - Maps
+        - Settings
+      description: Gets information on the robot's perimeters
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureCollection'
+  /settings/security/securitySchedule:
+    get:
+      deprecated: true
+      tags:
+        - Settings
+      description: Obtains the robot's security schedule
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: cron
+  /api/settings/security/securitySchedule:
+    get:
+      tags:
+        - Settings
+      description: Obtains the robot's security schedule
+      responses:
+        '200':
+          description: OK
+          content:
+            text/plain:
+              schema:
+                type: string
+                format: cron
+  /settings/wifi:
+    get:
+      deprecated: true
+      tags:
+        - Settings
+      description: Gets wifi information
+      responses:
+        '403':
+          $ref: '#/components/responses/default403'
+    post:
+      deprecated: true
+      tags:
+        - Settings
+      description: Sets wifi information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WifiSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '400':
+          $ref: '#/components/responses/badRequestBody'
+        '403':
+          description: It is forbidden to set empty wifi settings
+        '408':
+          description: Authentication timed out
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/settings/wifi:
+    get:
+      tags:
+        - Settings
+      description: Gets wifi information
+      responses:
+        '403':
+          $ref: '#/components/responses/default403'
+    post:
+      tags:
+        - Settings
+      description: Sets wifi information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WifiSettings'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '400':
+          $ref: '#/components/responses/badRequestBody'
+        '403':
+          description: It is forbidden to set empty wifi settings
+        '408':
+          description: Authentication timed out
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/slam/distanceToObject/{sceneObject}:
+    get:
+      tags:
+        - Maps
+        - Localization
+      description: Gets the distance (in meters) from the current robot position to a scene object, if it was detected in the last 10 seconds.
+      parameters:
+        - $ref: '#/components/parameters/sceneObject'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DistanceInfo'
+        '404':
+          $ref: '#/components/responses/default404'
+  /slam/odometry:
+    get:
+      deprecated: true
+      tags:
+        - Localization
+      description: Gets the current robot GPS odometry.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GpsOdometryDeprecated'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/slam/odometry:
+    get:
+      tags:
+        - Localization
+      description: Gets the current robot GPS odometry.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GpsOdometry'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/slam/mapExplore/start:
+    put:
+      tags:
+        - Maps
+      description: Starts recording a manual map exploration
+      parameters:
+        - name: mode
+          in: query
+          schema:
+            type: string
+            enum:
+              - manual
+              - auto
+            default: manual
+          description: If mode is manual the robot will be controlled by the user otherwise the robot will explore the zone automatically
+        - name: zoneId
+          in: query
+          schema:
+            type: string
+          description: If set the robot will navigate to the specified zone before starting the exploration otherwise the robot will explore the current zone
+        - name: exploreTime
+          in: query
+          schema:
+            type: integer
+            default: -1
+          description: The exploreTime in minutes. If set (>0) the robot will explore for the specified time, if not the robot will explore time determined by the size of the zone
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/slam/mapExplore/finish:
+    put:
+      tags:
+        - Maps
+      description: Finishes and saves the manually or auto explored map
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/slam/mapExplore/abort:
+    put:
+      tags:
+        - Maps
+      description: Aborts and deletes the manually or auto explored map
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/slam/mapRecordings:
+    get:
+      tags:
+        - Maps
+      description: Obtains a list of recordings that still need to be analyzed for map building
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecordingInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /statuslog/sensors/gps:
+    get:
+      deprecated: true
+      tags:
+        - Localization
+      description: Returns the current GPS sensor data
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GpsData'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/statuslog/sensors/gps:
+    get:
+      tags:
+        - Localization
+      description: Returns the current GPS sensor data
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GpsData'
+        '500':
+          $ref: '#/components/responses/default500'
+  /system/batteryStatus:
+    get:
+      deprecated: true
+      tags:
+        - Status and system information
+      description: Returns the current battery status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatteryStatus'
+              example:
+                While mowing:
+                  availableMowingTime: 299
+                  chargerState: 0
+                  percentage: 77
+                  percentagePerMowingHour: 11.428571701049805
+                  temperature: 15.18028643502987
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/system/batteryStatus:
+    get:
+      tags:
+        - Status and system information
+      description: Returns the current battery status
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatteryStatus'
+              example:
+                While mowing:
+                  availableMowingTime: 299
+                  chargerState: 0
+                  percentage: 77
+                  percentagePerMowingHour: 11.428571701049805
+                  temperature: 15.18028643502987
+        '500':
+          $ref: '#/components/responses/default500'
+  /system/bootcount:
+    get:
+      deprecated: true
+      tags:
+        - Status and system information
+      description: Returns the number of times the robot has rebooted
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BootCount'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/system/bootcount:
+    get:
+      tags:
+        - Status and system information
+      description: Returns the number of times the robot has rebooted
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BootCount'
+        '500':
+          $ref: '#/components/responses/default500'
+  /system/dockingInfo:
+    get:
+      deprecated: true
+      tags:
+        - Status and system information
+      description: Returns general information on the robot's docking state
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DockingInfo'
+              examples:
+                While mowing:
+                  value:
+                    chargeStatus: Charger off
+                    chargerState: Charger suspended
+                    chargingCurrent: 0
+                    chargingPower: 0
+                    counters:
+                      AutoCharging: 37
+                      ConnectToCharger: 9
+                      GotoChargingStationProximity: 20
+                      GotoRetryPosition: 82
+                      ManualCharging: 336
+                      PositionInFrontOfChargingStation: 29
+                    dockingState: Idle
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/system/dockingInfo:
+    get:
+      tags:
+        - Status and system information
+      description: Returns general information on the robot's docking state
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DockingInfo'
+              examples:
+                While mowing:
+                  value:
+                    chargeStatus: Charger off
+                    chargerState: Charger suspended
+                    chargingCurrent: 0
+                    chargingPower: 0
+                    counters:
+                      AutoCharging: 37
+                      ConnectToCharger: 9
+                      GotoChargingStationProximity: 20
+                      GotoRetryPosition: 82
+                      ManualCharging: 336
+                      PositionInFrontOfChargingStation: 29
+                    dockingState: Idle
+        '500':
+          $ref: '#/components/responses/default500'
+  /system/emergencyStop:
+    get:
+      deprecated: true
+      tags:
+        - Status and system information
+      description: Returns a description of the current emergency stop state
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmergencyStop'
+              example:
+                No emergency stop:
+                  value:
+                    description: none
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/system/emergencyStop:
+    get:
+      tags:
+        - Status and system information
+      description: Returns a description of the current emergency stop state
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmergencyStop'
+              example:
+                No emergency stop:
+                  value:
+                    description: none
+        '500':
+          $ref: '#/components/responses/default500'
+  /system/exploringInfo:
+    get:
+      deprecated: true
+      tags:
+        - Status and system information
+      description: Returns a description of the current exploring state
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExploringInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/system/exploringInfo:
+    get:
+      tags:
+        - Status and system information
+      description: Returns a description of the current exploring state
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExploringInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /system/hardwareInfo:
+    get:
+      deprecated: true
+      tags:
+        - Status and system information
+      description: Returns information on the robot's hardware
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HardwareInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/system/hardwareInfo:
+    get:
+      tags:
+        - Status and system information
+      description: Returns information on the robot's hardware
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HardwareInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /system/motorController/status:
+    get:
+      deprecated: true
+      tags:
+        - Status and system information
+      description: Returns information on the status of the motor controller
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MotorControllerStatus'
+  /api/system/motorController/status:
+    get:
+      tags:
+        - Status and system information
+      description: Returns information on the status of the motor controller
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MotorControllerStatus'
+  /system/mowerInfo:
+    get:
+      deprecated: true
+      tags:
+        - Status and system information
+      description: Returns information on the mower
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MowerInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/system/mowerInfo:
+    get:
+      tags:
+        - Status and system information
+      description: Returns information on the mower
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MowerInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /system/mowingInfo:
+    get:
+      deprecated: true
+      tags:
+        - Status and system information
+      description: Returns mowing information
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MowingInfo'
+              example:
+                value:
+                  currentZoneId: 1
+                  mowingTime:
+                    current: 72
+                    max: 170
+                    today: 84
+                    total: 1642
+                  nextZoneId: -1
+                  numberOfZones: 1
+                  todayEndTime: '17:18:50'
+                  totalArea: 124.27378
+                  totalElapsedMowingTime: 151
+                  totalRequiredMowingTime: 249
+                  zonesInfo:
+                    - area: 124.27378
+                      elapsedMowingTime: 151
+                      elapsedMowingTimeToday: 84
+                      id: 1
+                      requiredMowingTime: 249
+                      startMowingTime: '2022-03-30 13:13:00'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/system/mowingInfo:
+    get:
+      tags:
+        - Status and system information
+      description: Returns mowing information
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MowingInfo'
+              example:
+                lastRainTime: '2023-05-15T15:36:37+02:00'
+                mowingTime:
+                  today: 0
+                  total: 4059
+                todayEndTime: '19:30:07'
+                zoneIdToMow: GRASSZONE_556ef0c9-ce24-4237-85a2-e39a5ae00e78
+                zonesInfo:
+                  - area: 103.7713935
+                    elapsedMowingTime: 9856
+                    elapsedMowingTimeToday: 0
+                    id: GRASSZONE_556ef0c9-ce24-4237-85a2-e39a5ae00e78
+                    resumeMowingTime: '2023-05-17T06:53:48+02:00'
+                    startMowingTime: '2023-05-14T07:00:20+02:00'
+                    totalRequiredMowingTime: 8340
+        '500':
+          $ref: '#/components/responses/default500'
+  /system/networkInfo:
+    get:
+      deprecated: true
+      tags:
+        - Status and system information
+      description: Returns information on the network the robot is connected to
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NetworkInfo'
+              example:
+                value:
+                  default: Wifi
+                  mobile:
+                    reason: None
+                    state: Pending
+                  state: Online
+                  wifi:
+                    localIp: 192.168.0.220
+                    reason: None
+                    signal: 40
+                    ssid: telenet-FA2FC
+                    state: Online
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/system/networkInfo:
+    get:
+      tags:
+        - Status and system information
+      description: Returns information on the network the robot is connected to
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NetworkInfo'
+              example:
+                value:
+                  default: Wifi
+                  mobile:
+                    reason: None
+                    state: Pending
+                  state: Online
+                  wifi:
+                    localIp: 192.168.0.220
+                    reason: None
+                    signal: 40
+                    ssid: telenet-FA2FC
+                    state: Online
+        '500':
+          $ref: '#/components/responses/default500'
+  /system/powermanager:
+    get:
+      deprecated: true
+      tags:
+        - Status and system information
+      description: Returns the status of the robot's power manager
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PowerManagerStatus'
+              example:
+                status: FullPower
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/system/powermanager:
+    get:
+      tags:
+        - Status and system information
+      description: Returns the status of the robot's power manager
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PowerManagerStatus'
+              example:
+                status: FullPower
+        '500':
+          $ref: '#/components/responses/default500'
+  /system/time:
+    get:
+      deprecated: true
+      tags:
+        - Status and system information
+      description: Returns information about the robot's time
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/system/time:
+    get:
+      tags:
+        - Status and system information
+      description: Returns information about the robot's time
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /system/version:
+    get:
+      deprecated: true
+      tags:
+        - Status and system information
+      description: Returns the robot's software version numbers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/system/version:
+    get:
+      tags:
+        - Status and system information
+      description: Returns the robot's software version numbers
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/system/weedy/status:
+    get:
+      tags:
+        - Status and system information
+      description: Returns whether weeding is enabled on this robot
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WeedingInfo'
+              example:
+                enabled: true
+        '500':
+          $ref: '#/components/responses/default500'
+  /system/wifi/networks:
+    get:
+      deprecated: true
+      tags:
+        - Status and system information
+      description: Returns information on the networks the robot can access
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Networks'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/system/wifi/networks:
+    get:
+      tags:
+        - Status and system information
+      description: Returns information on the networks the robot can access
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Networks'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/toolplanner/resume:
+    put:
+      tags:
+        - Activities and tools
+      description: Resumes the toolplanner after forced docking
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/toolplanner/status:
+    get:
+      tags:
+        - Activities and tools
+      description: Returns the status of all the tools in the toolplanner.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ToolPlannerStatus'
+              examples:
+                While mowing:
+                  value:
+                    tools:
+                      - active: false
+                        name: SupervisedMappingPlannerActivity
+                      - active: false
+                        manual:
+                          blockedBy:
+                            - name: activity
+                              reason: MowingPlannerActivity
+                        name: manualdriving
+                      - active: true
+                        name: mowing
+                Before scheduled mowing time:
+                  value:
+                    tools:
+                      - active: false
+                        name: SupervisedMappingPlannerActivity
+                      - active: false
+                        manual: {}
+                        name: manualdriving
+                      - active: false
+                        manual: {}
+                        name: mowing
+                        schedule:
+                          blockedBy:
+                            - name: tooEarly
+                          nextSchedule:
+                            - resume: '2022-04-01T08:30:00+02:00'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/zones/list:
+    get:
+      tags:
+        - Settings
+      description: Gets information about the zones on the robot
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneIds'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/recording/maps/start:
+    get:
+      tags:
+        - Maps
+      description: Starts a map recording
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/recording/maps/finish:
+    get:
+      tags:
+        - Maps
+      description: Finishes and saves a map recording
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/recording/maps/abort:
+    get:
+      tags:
+        - Maps
+      description: Aborts and deletes a map recording
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/recording/maps/info:
+    get:
+      tags:
+        - Maps
+      description: Returns map recording information
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MapRecordingInfo'
+              example:
+                isRecording: false
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/annotations/listRecordings:
+    get:
+      tags:
+        - Recordings
+      description: Lists all recordings that can be streamed with webrtc
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnnotationRecordingInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/annotations/list:
+    get:
+      tags:
+        - Annotations
+      description: Lists all annotation images
+      responses:
+        '200':
+          description: OK
+  /api/annotations/getFile:
+    get:
+      tags:
+        - Annotations
+      description: get a specific file part from an annotation
+      parameters:
+        - $ref: '#/components/parameters/annotationPartId'
+      responses:
+        '200':
+          description: OK
+  /api/annotations/getFile/:
+    get:
+      tags:
+        - Annotations
+      description: get a specific file part from an annotation
+      parameters:
+        - $ref: '#/components/parameters/annotationPartId'
+      responses:
+        '200':
+          description: OK
+  /api/annotations/saveCurrent:
+    get:
+      tags:
+        - Annotations
+      description: Saves the current live image as annotation image
+      responses:
+        '200':
+          description: OK
+  /api/annotations/deleteCorrections:
+    get:
+      tags:
+        - Annotations
+      description: Delete given correction by id
+      parameters:
+        - $ref: '#/components/parameters/annotationId'
+      responses:
+        '200':
+          description: OK
+  /api/annotations/saveUserCorrections:
+    post:
+      tags:
+        - Annotations
+      description: Save user corrections file part
+      parameters:
+        - $ref: '#/components/parameters/annotationPartId'
+      responses:
+        '200':
+          description: OK
+  /api/annotations/saveUserFile:
+    post:
+      tags:
+        - Annotations
+      description: Save custom file to corrections id
+      parameters:
+        - $ref: '#/components/parameters/annotationId'
+        - name: filename
+          in: query
+          schema:
+            type: string
+          required: true
+          description: The filename of the file save under the given id
+      responses:
+        '200':
+          description: OK
+  /api/annotations/uploadUserCorrections:
+    post:
+      tags:
+        - Annotations
+      description: Upload a given annotation by id to the server
+      parameters:
+        - $ref: '#/components/parameters/annotationId'
+      responses:
+        '200':
+          description: OK
+  /api/annotations/getRecordingDetails:
+    get:
+      tags:
+        - Recordings
+      summary: Get recording metadata
+      description: |
+        Returns detailed metadata for a single recording (size, dimensions, frame count, thumbnail path).
+        Used by the EEVE mobile app (`eeve-app`) tasks screen.
+      parameters:
+        - name: path
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Recording path from `/api/annotations/listRecordings`
+      responses:
+        '200':
+          description: Recording details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnnotationRecordingInfo'
+        '404':
+          $ref: '#/components/responses/default404'
+        '500':
+          $ref: '#/components/responses/default500'
+  /webrtc:
+    get:
+      tags:
+        - WebRTC and livestreams
+      summary: WebRTC signaling endpoint (WebSocket)
+      description: |
+        Clients establish a WebRTC session by connecting to this path as a **WebSocket**
+        (`ws://<robot-host>:8080/webrtc` on LAN, or via the EEVE cloud relay at
+        `wss://app.services.eeve.com/api/robots/{robotId}/webSocket` when using remote access).
+
+        The robot advertises this path via Bonjour (`_toadi._tcp`, TXT `path=/webrtc`).
+
+        ### Connection flow
+
+        1. Open the WebSocket and send `startHttpTunnel` with a unique `peerUuid`.
+        2. Receive `sdpOffer` from the robot.
+        3. Create an `RTCPeerConnection`, set the remote offer, create an answer, and send `sdpAnswer`.
+        4. Optionally handle `iceCandidate` messages from the robot.
+        5. Once connected, the robot opens a WebRTC data channel labelled `httpcalls` for tunneled HTTP,
+           and may add a video track for live or file-based streaming.
+        6. Send `stopHttpTunnel` to tear down the session.
+
+        ### Client → robot messages (JSON)
+
+        | command | fields | purpose |
+        |---------|--------|---------|
+        | `startHttpTunnel` | `peerUuid`, optional `sessionSettings.videoFile` | Start a WebRTC session. `videoFile` selects file-playback mode for MKV recordings. |
+        | `sdpAnswer` | `peerUuid`, `sdpAnswer: { type, sdp }` | Send the local SDP answer after receiving `sdpOffer`. |
+        | `stopHttpTunnel` | `peerUuid` | Close the WebRTC peer connection. |
+
+        ### Robot → client messages (JSON)
+
+        | command | fields | purpose |
+        |---------|--------|---------|
+        | `sdpOffer` | `sdpOffer: { type, sdp }` | Remote SDP offer after `startHttpTunnel`. |
+        | `sdpAnswer` | `sdpAnswer: { type, sdp }` | Confirmed SDP after `sdpAnswer` (negotiated codecs/methods). |
+        | `iceCandidate` | `candidate` | Trickle ICE candidate from the robot. |
+      responses:
+        '101':
+          description: Switching Protocols (WebSocket upgrade)
+        '426':
+          description: Upgrade Required (client did not request WebSocket)
+  /info:
+    get:
+      tags:
+        - WebRTC and livestreams
+      summary: MKV playback state (file tunnel)
+      description: |
+        Returns playback state for an MKV recording streamed over a **file WebRTC tunnel**
+        (second peer connection with `sessionSettings.videoFile` set during `startHttpTunnel`).
+        Requests are sent on the file tunnel's `httpcalls` data channel, not the main tunnel.
+      responses:
+        '200':
+          description: Playback info
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MkvPlaybackInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /play:
+    get:
+      tags:
+        - WebRTC and livestreams
+      summary: Resume MKV playback (file tunnel)
+      description: Resumes frame streaming for the active file WebRTC session.
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /pause:
+    get:
+      tags:
+        - WebRTC and livestreams
+      summary: Pause MKV playback (file tunnel)
+      description: Pauses frame streaming for the active file WebRTC session.
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /goto:
+    get:
+      tags:
+        - WebRTC and livestreams
+      summary: Seek to frame (file tunnel)
+      description: Seeks the MKV playback position to the given frame number.
+      parameters:
+        - name: frame
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Zero-based frame index
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /surface:
+    get:
+      tags:
+        - WebRTC and livestreams
+      summary: Surface-segmentation overlay (file tunnel)
+      description: Returns a PNG image of the surface-segmentation class map for the current frame.
+      responses:
+        '200':
+          description: PNG image
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/default404'
+  /saveAnnotation:
+    get:
+      tags:
+        - WebRTC and livestreams
+      summary: Save annotation from current frame (file tunnel)
+      description: Saves an annotation snapshot from the current MKV playback frame.
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /playMode:
+    get:
+      tags:
+        - WebRTC and livestreams
+      summary: Set MKV playback mode (file tunnel)
+      description: Changes how frames are sent during file playback.
+      parameters:
+        - name: mode
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - keyframes
+              - fast
+              - all
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /sliderFrames:
+    get:
+      tags:
+        - WebRTC and livestreams
+      summary: Low-res frame thumbnails for scrubber (file tunnel)
+      description: |
+        Returns a JSON array of low-resolution preview frames for the recording scrubber UI.
+        Used by the EEVE mobile app (`eeve-app`).
+      responses:
+        '200':
+          description: Frame thumbnail metadata
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '500':
+          $ref: '#/components/responses/default500'
+  /preview:
+    get:
+      tags:
+        - WebRTC and livestreams
+      summary: Preview frame at position (file tunnel)
+      description: |
+        Returns a preview image for a given playback position. Used while scrubbing recordings
+        in the EEVE mobile app (`eeve-app`).
+      parameters:
+        - name: position
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Frame position to preview
+        - name: buffer
+          in: query
+          schema:
+            type: integer
+          description: Optional buffer size for preview generation
+      responses:
+        '200':
+          description: Preview image
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/default404'
+  /api/livestreams/startVideo:
+    post:
+      tags:
+        - WebRTC and livestreams
+      summary: Start live or recording video stream
+      description: |
+        Starts sending video over an established WebRTC peer connection.
+        The `peerUuid` must match the peer created via the `/webrtc` signaling WebSocket.
+        Call this on the main `httpcalls` data channel (or via direct HTTP when on LAN).
+
+        For `streamType: recording`, optionally pass `videoFile` with the path from
+        `/api/annotations/listRecordings` to stream a specific MKV file.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LivestreamStartRequest'
+      responses:
+        '200':
+          description: Stream start accepted
+          content:
+            application/json:
+              schema:
+                type: string
+                example: video_start_pending+{peerUuid}
+        '400':
+          description: Missing peerUuid, invalid streamType, or no video track
+          content:
+            application/json:
+              schema:
+                type: string
+        '404':
+          description: Peer not found
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/livestreams/stopVideo:
+    post:
+      tags:
+        - WebRTC and livestreams
+      summary: Stop live or recording video stream
+      description: |
+        Stops video streaming for the given WebRTC peer.
+        Set `streamType` to `recording` when stopping a file-playback peer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LivestreamStopRequest'
+      responses:
+        '200':
+          description: Stream stopped
+          content:
+            application/json:
+              schema:
+                type: string
+                example: video_stopped+{peerUuid}
+        '400':
+          description: Missing or invalid request body
+        '404':
+          description: Peer not found
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/livestreams/openVideos:
+    get:
+      tags:
+        - WebRTC and livestreams
+      summary: List recordings available for WebRTC playback
+      description: |
+        Returns recordings that can be opened for WebRTC file playback.
+        Used by the EEVE mobile app (`eeve-app`) to populate the video library.
+      responses:
+        '200':
+          description: List of streamable recordings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnnotationRecordingInfo'
+        '500':
+          $ref: '#/components/responses/default500'
+  /livestreams/startVideo:
+    post:
+      tags:
+        - WebRTC and livestreams
+      summary: Start live or recording video stream
+      description: |
+        Starts sending video over an established WebRTC peer connection.
+        The `peerUuid` must match the peer created via the `/webrtc` signaling WebSocket.
+        Call this on the main `httpcalls` data channel (or via direct HTTP when on LAN).
+
+        For `streamType: recording`, optionally pass `videoFile` with the path from
+        `/api/annotations/listRecordings` to stream a specific MKV file.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LivestreamStartRequest'
+      responses:
+        '200':
+          description: Stream start accepted
+          content:
+            application/json:
+              schema:
+                type: string
+                example: video_start_pending+{peerUuid}
+        '400':
+          description: Missing peerUuid, invalid streamType, or no video track
+          content:
+            application/json:
+              schema:
+                type: string
+        '404':
+          description: Peer not found
+        '500':
+          $ref: '#/components/responses/default500'
+  /livestreams/stopVideo:
+    post:
+      tags:
+        - WebRTC and livestreams
+      summary: Stop live or recording video stream
+      description: |
+        Stops video streaming for the given WebRTC peer.
+        Set `streamType` to `recording` when stopping a file-playback peer.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LivestreamStopRequest'
+      responses:
+        '200':
+          description: Stream stopped
+          content:
+            application/json:
+              schema:
+                type: string
+                example: video_stopped+{peerUuid}
+        '400':
+          description: Missing or invalid request body
+        '404':
+          description: Peer not found
+        '500':
+          $ref: '#/components/responses/default500'
+  /observations/all/observations:
+    get:
+      tags:
+        - Status and system information
+      summary: List all sheriff observations
+      description: |
+        Returns all observations stored on the robot (Sheriff / security feature).
+        Used by the EEVE mobile app (`eeve-app`).
+      responses:
+        '200':
+          description: JSON array of observations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '500':
+          $ref: '#/components/responses/default500'
+  /observations/image/{imageId}:
+    get:
+      tags:
+        - Status and system information
+      summary: Get observation image
+      description: Returns the JPEG image for a sheriff observation.
+      parameters:
+        - name: imageId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Observation image identifier (may contain slashes)
+      responses:
+        '200':
+          description: JPEG image
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/default404'
+  /observations/image/{imageId}/remove:
+    post:
+      tags:
+        - Status and system information
+      summary: Remove an observation
+      description: Deletes a sheriff observation and its image from the robot database.
+      parameters:
+        - name: imageId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '404':
+          $ref: '#/components/responses/default404'
+  /api/observations/image/{imageId}:
+    get:
+      tags:
+        - Status and system information
+      summary: Get observation image
+      description: Returns the JPEG image for a sheriff observation.
+      parameters:
+        - name: imageId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: Observation image identifier (may contain slashes)
+      responses:
+        '200':
+          description: JPEG image
+          content:
+            image/jpeg:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/default404'
+  /recording/recordEvent:
+    get:
+      tags:
+        - Recordings
+      summary: Trigger an event recording
+      description: |
+        Starts an on-robot MKV event recording with configurable pre/post durations.
+        Used from the livestream screen in the EEVE mobile app (`eeve-app`).
+      parameters:
+        - name: preEventMovieDuration
+          in: query
+          schema:
+            type: integer
+            default: 120
+          description: Seconds of video to retain before the trigger
+        - name: postEventMovieDuration
+          in: query
+          schema:
+            type: integer
+            default: 1
+          description: Seconds of video to record after the trigger
+        - name: eventName
+          in: query
+          schema:
+            type: string
+            default: default
+          description: Name label for the recorded event
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/recording/remove:
+    post:
+      tags:
+        - Recordings
+      summary: Delete a recording
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+                  description: Recording name or path to delete
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /navigation/dockingFrom:
+    get:
+      tags:
+        - Navigation
+      summary: Start docking from charger (test flow)
+      description: |
+        Triggers a docking sequence starting from the charger exit state.
+        Used by the docking test flow in the EEVE mobile app (`eeve-app`).
+      parameters:
+        - name: startState
+          in: query
+          schema:
+            type: string
+            enum:
+              - ExitAndRetry
+          description: Starting state for the docking procedure
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /navigation/startsprayzone:
+    get:
+      tags:
+        - Navigation
+      summary: Start weeding in a zone
+      description: Starts spray/weeding navigation for a specific zone.
+      parameters:
+        - name: zoneId
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: maxDrivingTime
+          in: query
+          schema:
+            type: integer
+          description: Maximum driving time in minutes
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /navigation/startspray:
+    get:
+      tags:
+        - Navigation
+      summary: Start weeding for a duration
+      description: Starts spray/weeding for a fixed duration in seconds.
+      parameters:
+        - name: duration
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: Spray duration in seconds
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /navigation/stopspray:
+    get:
+      tags:
+        - Navigation
+      summary: Stop weeding / spray activity
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /slam/gridmaps/heatmap:
+    get:
+      tags:
+        - Maps
+      summary: Get mowing heatmap
+      description: |
+        Returns the mowing coverage heatmap as a PNG image or GeoJSON depending on query parameters.
+        Used by the EEVE mobile app (`eeve-app`) mow status screen.
+      responses:
+        '200':
+          description: Heatmap data
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+            application/json:
+              schema:
+                type: object
+        '500':
+          $ref: '#/components/responses/default500'
+    reset:
+      get:
+        tags:
+          - Maps
+        summary: Reset mowing heatmap
+        description: Clears the mowing coverage heatmap data.
+        responses:
+          '200':
+            $ref: '#/components/responses/default200'
+          '500':
+            $ref: '#/components/responses/default500'
+  /slam/gridmaps/heatmap/reset:
+    get:
+      tags:
+        - Maps
+      summary: Reset mowing heatmap
+      description: Clears the mowing coverage heatmap data.
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /configuration/mobileapp:
+    get:
+      tags:
+        - Settings
+      summary: Get mobile app configuration
+      description: |
+        Returns persisted configuration used by the EEVE mobile app during onboarding
+        (explore status, alignment progress, etc.).
+      responses:
+        '200':
+          description: Mobile app config JSON
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          $ref: '#/components/responses/default500'
+    put:
+      tags:
+        - Settings
+      summary: Update mobile app configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /configuration/hardware:
+    get:
+      tags:
+        - Settings
+      summary: Get hardware configuration
+      responses:
+        '200':
+          description: Hardware config JSON
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          $ref: '#/components/responses/default500'
+    post:
+      tags:
+        - Settings
+      summary: Update hardware configuration
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /settings/security:
+    get:
+      tags:
+        - Settings
+      summary: Get sheriff security schedule
+      description: |
+        Returns the security patrol schedule configuration (Sheriff feature) as JSON.
+        Used by the EEVE mobile app (`eeve-app`). Distinct from `/api/settings/security/securitySchedule`.
+      responses:
+        '200':
+          description: Security schedule JSON
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          $ref: '#/components/responses/default500'
+    post:
+      tags:
+        - Settings
+      summary: Update sheriff security schedule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /settings/zones:
+    get:
+      tags:
+        - Settings
+      summary: Get zone name mapping
+      description: Returns zone IDs and their display names.
+      responses:
+        '200':
+          description: Zone ID to name mapping
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ZoneIds'
+        '500':
+          $ref: '#/components/responses/default500'
+    post:
+      tags:
+        - Settings
+      summary: Update zone settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /settings/{settingPath}:
+    get:
+      tags:
+        - Settings
+      summary: Get a user configuration value
+      description: |
+        Generic GET for any user setting path under `/settings/`.
+        The `{settingPath}` captures the config key segments (e.g. `identity/name`).
+
+        Paths used by the EEVE mobile app (`eeve-app`) include:
+        `identity/name`, `surfaceSegmentation/erosionSize`, `audioPlayer/masterVolume`,
+        `batteryMonitorAlgo/lowBatteryPercentageThreshold`, `beacons/enabled`,
+        `autoAnnotation/enabled`, `autoAnnotation/personScanningBehaviour`,
+        `connectivity`, `tracking`, `gps`, `mowingPlanner/mowingFrequency`.
+      parameters:
+        - name: settingPath
+          in: path
+          required: true
+          schema:
+            type: string
+          example: identity/name
+      responses:
+        '200':
+          description: Configuration value (JSON)
+          content:
+            application/json:
+              schema:
+                type: object
+        '404':
+          $ref: '#/components/responses/default404'
+        '500':
+          $ref: '#/components/responses/default500'
+    post:
+      tags:
+        - Settings
+      summary: Set a user configuration value
+      parameters:
+        - name: settingPath
+          in: path
+          required: true
+          schema:
+            type: string
+          example: connectivity
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /production/lid/open:
+    get:
+      tags:
+        - Miscellaneous
+      summary: Open the robot tool bay lid
+      description: |
+        Opens the physical lid on the robot for tool installation or maintenance.
+        Used during onboarding in the EEVE mobile app (`eeve-app`).
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/maintenance/mapsFilesystem/thumbnail:
+    get:
+      tags:
+        - Miscellaneous
+      description: Get a jpeg thumbnail of a recording from the /api/annotations/listRecordings call
+      parameters:
+        - $ref: '#/components/parameters/recordingFilepath'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/controller/bluetooth/deviceInfo:
+    get:
+      tags:
+        - Activities and tools
+      summary: Get connected Bluetooth controller info
+      description: Returns information about the currently connected Bluetooth game controller.
+      responses:
+        '200':
+          description: Controller device info
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/controller/bluetooth/devices:
+    get:
+      tags:
+        - Activities and tools
+      summary: List paired Bluetooth controllers
+      description: Returns a list of known/paired Bluetooth controller devices.
+      responses:
+        '200':
+          description: List of devices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/controller/bluetooth/startDiscovery:
+    get:
+      tags:
+        - Activities and tools
+      summary: Start Bluetooth device discovery
+      description: Starts scanning for nearby Bluetooth controllers.
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/controller/bluetooth/connect:
+    get:
+      tags:
+        - Activities and tools
+      summary: Connect to a Bluetooth controller
+      description: Connects to a Bluetooth controller by MAC address.
+      parameters:
+        - name: address
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Bluetooth MAC address of the device
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/arm/inout/originsState:
+    get:
+      tags:
+        - Activities and tools
+      summary: Get arm origins calibration state
+      description: Returns whether the robot arm origin positions are calibrated.
+      responses:
+        '200':
+          description: Origins state
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/arm/inout/initializeOrigins:
+    get:
+      tags:
+        - Activities and tools
+      summary: Initialize arm origins
+      description: Starts the arm origin calibration procedure.
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /wheel/motor/steering/originsState:
+    get:
+      tags:
+        - Activities and tools
+      summary: Get steering motor origins state
+      description: Returns whether the steering motor origin is calibrated.
+      responses:
+        '200':
+          description: Origins state
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          $ref: '#/components/responses/default500'
+  /wheel/motor/steering/origins:
+    post:
+      tags:
+        - Activities and tools
+      summary: Calibrate steering motor origins
+      description: Runs the steering motor origin calibration procedure.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/actions/get:
+    get:
+      tags:
+        - Activities and tools
+      summary: List all robot actions (tasks)
+      description: Returns user-defined actions/tasks for the X training feature.
+      responses:
+        '200':
+          description: List of actions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/actions/trained:
+    get:
+      tags:
+        - Activities and tools
+      summary: List trained action models
+      description: Returns actions that have a trained model available.
+      responses:
+        '200':
+          description: List of trained actions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/actions/create:
+    post:
+      tags:
+        - Activities and tools
+      summary: Create a new action
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/training-recordings/get:
+    get:
+      tags:
+        - Activities and tools
+      summary: List training recordings
+      description: Returns recordings available for X action training.
+      responses:
+        '200':
+          description: List of training recordings
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/training-recordings/for-action:
+    get:
+      tags:
+        - Activities and tools
+      summary: List recordings assigned to an action
+      parameters:
+        - name: taskName
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Recordings for the given action
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/training-recordings/assign:
+    post:
+      tags:
+        - Activities and tools
+      summary: Assign a recording to an action
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taskName:
+                  type: string
+                recordingName:
+                  type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/training-recordings/remove:
+    post:
+      tags:
+        - Activities and tools
+      summary: Remove a recording from an action
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taskName:
+                  type: string
+                recordingName:
+                  type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/labels/get:
+    get:
+      tags:
+        - Activities and tools
+      summary: List X label definitions
+      responses:
+        '200':
+          description: Label list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/labels/check:
+    post:
+      tags:
+        - Activities and tools
+      summary: Check if a label name is available
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - label
+              properties:
+                label:
+                  type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/labels/add:
+    post:
+      tags:
+        - Activities and tools
+      summary: Add a new label
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - label
+              properties:
+                id:
+                  type: string
+                label:
+                  type: string
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/object-tracking/start:
+    post:
+      tags:
+        - Activities and tools
+      summary: Start object tracking on a recording
+      description: |
+        Starts VOS (video object segmentation) tracking for StarTag / X annotation workflows.
+      parameters:
+        - name: isCorrection
+          in: query
+          schema:
+            type: boolean
+          description: When true, runs tracking as a correction pass on existing annotations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /api/annotationTracking/verifyRecording:
+    post:
+      tags:
+        - Activities and tools
+      summary: Mark a recording as verified
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - recordingPath
+                - verified
+              properties:
+                recordingPath:
+                  type: string
+                  description: Absolute path to the recording on the robot
+                verified:
+                  type: boolean
+                verifiedAt:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /higgs/train:
+    post:
+      tags:
+        - Activities and tools
+      summary: Train an action model (Higgs ML)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HiggsTrainRequest'
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /higgs/start:
+    get:
+      tags:
+        - Activities and tools
+      summary: Start a trained model
+      parameters:
+        - name: path
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Path to the trained model
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+        '500':
+          $ref: '#/components/responses/default500'
+  /higgs/reset:
+    get:
+      tags:
+        - Activities and tools
+      summary: Reset Higgs ML runtime state
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+  /higgs/action:
+    get:
+      tags:
+        - Activities and tools
+      summary: Get currently loaded Higgs action
+      responses:
+        '200':
+          description: Current action info
+          content:
+            application/json:
+              schema:
+                type: object
+        '500':
+          $ref: '#/components/responses/default500'
+  /higgs/stop:
+    get:
+      tags:
+        - Activities and tools
+      summary: Stop the running Higgs action
+      responses:
+        '200':
+          $ref: '#/components/responses/default200'
+components:
+  parameters:
+    emotionName:
+      name: emotionName
+      in: query
+      schema:
+        type: string
+        enum:
+          - HardEmergencyStop
+          - EmergencyStop
+          - Docked
+          - FollowPersons
+          - WaitForPersons
+          - NoPersonFound
+          - SupervisedMappingFailed
+          - Docking
+          - QrScanning
+          - QrScanned
+          - WifiConnected
+          - WifiFailed
+          - BackendConnected
+          - UserLinked
+          - BatteryEmpty
+          - BatteryLow
+          - BatteryMedium
+          - BatteryHigh
+          - BatteryFull
+          - RemoteControl
+      required: true
+      description: The name of the emotion
+    mapId:
+      name: id
+      in: path
+      schema:
+        type: string
+        format: uuid
+      required: true
+      description: Unique ID of the map to retrieve
+    speed:
+      name: speed
+      in: query
+      schema:
+        type: number
+        format: double
+        default: 0.2
+      required: false
+      description: The robot speed while driving (in meters per second)
+    distance:
+      name: distance
+      in: query
+      schema:
+        type: number
+        format: double
+        default: 0.8
+      required: false
+      description: The travelling distance (in meters)
+    turnRadius:
+      name: turnRadius
+      in: query
+      schema:
+        type: number
+        format: double
+        default: 0
+      required: false
+      description: The turn radius (in meters)
+    rotation:
+      name: rotation
+      in: query
+      schema:
+        type: number
+        format: double
+        default: 0
+      required: false
+      description: The rotation (in degrees)
+    powerLimit:
+      name: powerLimit
+      in: query
+      schema:
+        type: number
+        format: float
+        default: 1
+      required: false
+      description: The fraction of power to use (1.0 corresponds to 100%)
+    wheelLock:
+      name: wheelLock
+      in: query
+      schema:
+        $ref: '#/components/schemas/WheelLock'
+        default: none
+      required: false
+      description: A mode for controlling any of the wheels to be locked, i.e. not turning, while driving
+    maxMowingTime:
+      name: maxMowingTime
+      in: query
+      schema:
+        type: integer
+        default: 0
+      required: false
+      description: The maximum duration to mow
+    sceneObject:
+      name: sceneObject
+      in: path
+      schema:
+        type: string
+        enum:
+          - toadicharger
+          - person
+      required: true
+      description: The name of the object in the scene
+    annotationPartId:
+      name: file
+      in: query
+      schema:
+        type: string
+      required: true
+      description: filename of specific part of the annotation
+    annotationId:
+      name: id
+      in: query
+      schema:
+        type: string
+      required: true
+      description: id of the annotation
+    recordingFilepath:
+      name: path
+      in: path
+      schema:
+        type: string
+      required: true
+      description: file path of the recording
+  responses:
+    default500:
+      description: The server could not handle the request
+    default200:
+      description: OK
+    invalidMapId:
+      description: Not a valid map ID
+    badRequestBody:
+      description: The request body is ill-formed
+    default403:
+      description: The operation is forbidden
+    default404:
+      description: The requested resource was not found
+  schemas:
+    CurrentActivities:
+      type: object
+      properties:
+        userActivity:
+          description: The name of the currently active user activity
+          type: string
+        scheduledActivity:
+          description: The name of the currently active scheduled activity
+          type: string
+    ConfigHistoryInfo:
+      type: object
+      properties:
+        filename:
+          description: The timestamped name of the configuration file
+          type: string
+        contents:
+          description: The contents of the configuration file
+          type: object
+    ApplicationConfig:
+      description: The application configuration
+    DiskInfo:
+      type: object
+      properties:
+        capacity:
+          description: The total capacity of the maps filesystem in MB
+          type: integer
+        free:
+          description: The free space of the maps filesystem in MB
+          type: integer
+      example:
+        capacity: 13339
+        free: 10607
+    DirectoryInfo:
+      required:
+        - id
+      properties:
+        id:
+          description: The absolute name of the directory
+          type: string
+        name:
+          description: The name of the directory
+          type: string
+        size:
+          description: The size of the directory in MB
+          type: integer
+      example:
+        id: /home/toadi/data/maps/MapExplore_0001_20230316-115349
+    GeoCoordinate:
+      type: array
+      items:
+        type: number
+        format: float
+        description: Pairs of longitude, latitude
+    Geometry:
+      required:
+        - coordinates
+        - type
+      properties:
+        coordinates:
+          type: array
+          items:
+            $ref: '#/components/schemas/GeoCoordinate'
+        type:
+          type: string
+          enum:
+            - Point
+            - Polygon
+            - LineString
+            - MultiPoint
+    FeatureProperties:
+      required:
+        - description
+      properties:
+        color:
+          type: string
+          description: A hexadecimal color value for visualization purposes
+        description:
+          type: string
+        direction:
+          type: number
+          format: float
+          description: The direction the object is facing, i.e. the yaw angle (expressed in radians). 0 radians represents north, pi/4 radians east, pi/2 radians south and -pi/4 radians west
+        enabled:
+          type: boolean
+        fill:
+          type: boolean
+        objectType:
+          type: string
+          enum:
+            - CHARGINGSTATION
+        perimeterType:
+          type: string
+          enum:
+            - GRASSZONE
+            - PORTAL
+            - INNER
+            - OUTER
+    Feature:
+      required:
+        - geometry
+        - properties
+        - type
+      properties:
+        geometry:
+          $ref: '#/components/schemas/Geometry'
+        id:
+          type: string
+        properties:
+          $ref: '#/components/schemas/FeatureProperties'
+        type:
+          type: string
+          enum:
+            - Feature
+    FeatureCollection:
+      properties:
+        features:
+          type: array
+          items:
+            $ref: '#/components/schemas/Feature'
+        type:
+          type: string
+          enum:
+            - FeatureCollection
+    HomogeneousTransformationArray:
+      description: A row-major representation of the 16 elements in a homogeneous transformation matrix
+      type: array
+      items:
+        type: number
+        format: float
+      minItems: 16
+      maxItems: 16
+    MapInfo:
+      required:
+        - directory
+        - id
+      properties:
+        directory:
+          description: The name of the directory the map is located in
+          type: string
+        name:
+          type: string
+        id:
+          description: The unique identifier of this map
+          type: string
+          format: uuid
+        transform:
+          description: The total of the homogeneous transformations applied to this map
+          $ref: '#/components/schemas/HomogeneousTransformationArray'
+        featureCollection:
+          $ref: '#/components/schemas/FeatureCollection'
+    GeoCoordinateObject:
+      description: A geo-special coordinate specified by its latitude and longitude
+      type: object
+      required:
+        - lat
+        - lng
+      properties:
+        lat:
+          type: number
+          format: float
+        lng:
+          type: number
+          format: float
+    GeoEuclideanTransformation:
+      description: A geo-spatial (i.e. in terms of GPS coordinates) Euclidian transformation
+      required:
+        - origin
+      properties:
+        origin:
+          $ref: '#/components/schemas/GeoCoordinateObject'
+        translation:
+          $ref: '#/components/schemas/GeoCoordinateObject'
+          default:
+            lat: 0
+            lng: 0
+        rotation:
+          description: The angle of rotation about the y-axis placed at the translation point
+          type: number
+          format: double
+          default: 0
+        scale:
+          description: The scale factor
+          type: number
+          format: double
+          default: 1
+    WorldCoordinateXZ:
+      type: array
+      description: The x- and y- coordinates of a point within the robot's world frame (positive z is north, positive x is east, positive y is up)
+      items:
+        type: number
+        format: float
+      minItems: 2
+      maxItems: 2
+    WorldCoordinate3D:
+      type: array
+      description: A coordinate within the robot's world frame (positive z is north, positive x is east, positive y is up)
+      items:
+        type: number
+        format: float
+      minItems: 3
+      maxItems: 3
+    EuclideanTransformation:
+      description: An Euclidian world transformation
+      required:
+        - origin
+      properties:
+        origin:
+          $ref: '#/components/schemas/WorldCoordinateXZ'
+        translation:
+          $ref: '#/components/schemas/WorldCoordinate3D'
+          default:
+            value:
+              - 0
+              - 0
+              - 0
+        rotation:
+          description: The angle of rotation about the y-axis placed at the translation point
+          type: number
+          format: double
+          default: 0
+        scale:
+          description: The scale factor
+          type: number
+          format: double
+          default: 1
+    MapType:
+      type: string
+      enum:
+        - Orb
+        - Superpoint
+    CameraCoordinate:
+      required:
+        - x
+        - 'y'
+      properties:
+        x:
+          type: number
+          format: double
+          minimum: 0
+          maximum: 640
+          description: The x-coordinate of the point in the camera image, expressed in pixels.
+        'y':
+          type: number
+          format: double
+          minimum: 0
+          maximum: 480
+          description: The y-coordinate of the point in the camera image, expressed in pixels.
+      description: A camera coordinate, expressed in pixels. The top-left corner has coordinate (0,0) and the image frame has a size of 640x480 pixels.
+    WheelLock:
+      type: string
+      enum:
+        - none
+        - left
+        - right
+    RecoveryInfo:
+      required:
+        - recoveryMode
+      properties:
+        recoveryMode:
+          type: string
+          enum:
+            - 'Off'
+            - Minimal
+            - WithCamera
+    WifiSettings:
+      required:
+        - ssid
+        - password
+      properties:
+        ssid:
+          type: string
+        password:
+          type: string
+        userEmail:
+          type: string
+    DistanceInfo:
+      type: object
+      properties:
+        distance:
+          description: The distance to a scene object in meters
+          type: number
+          format: double
+      example:
+        distance: 1.3970121145248413
+    GpsOdometryDeprecated:
+      properties:
+        lat:
+          description: The latitude
+          type: number
+          format: double
+        lon:
+          description: The longitude
+          type: number
+          format: double
+        acc:
+          description: The accuracy of the GPS data (expressed in meters)
+          type: number
+          format: double
+        yaw:
+          description: The yaw angle (expressed in degrees). 0 degrees represents north, 90 degrees east, 180 degrees south and -90 degrees west
+          type: number
+          format: double
+      example:
+        acc: 1
+        lat: 50.97703599999775
+        lon: 3.5405639999799075
+        yaw: -80.90320822820219
+    GpsOdometry:
+      properties:
+        lat:
+          description: The latitude
+          type: number
+          format: double
+        lon:
+          description: The longitude
+          type: number
+          format: double
+        acc:
+          description: The accuracy of the GPS data (expressed in meters)
+          type: number
+          format: double
+        yaw:
+          description: The yaw angle (expressed in radians). 0 radians represents north, pi/4 radians east, pi/2 radians south and -pi/4 radians west
+          type: number
+          format: double
+      example:
+        acc: 1
+        lat: 50.97703599999775
+        lon: 3.5405639999799075
+        yaw: -1.412027359008789
+    RecordingInfo:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    GpsData:
+      properties:
+        accuracy:
+          type: number
+          format: double
+          description: Expressed in meters
+        datetime:
+          type: string
+          format: iso8601
+        latitude:
+          type: number
+          format: double
+          description: The latitude geocoordinate
+        longitude:
+          type: number
+          format: double
+          description: The longitude geocoordinate
+        numSatellites:
+          type: integer
+        speed:
+          type: number
+          format: double
+          description: Expressed in meters per second
+        status:
+          type: integer
+          enum:
+            - 0
+            - 1
+            - 2
+          description: 0 corresponds to no connection, 1 to no data and 2 to valid data
+        valid:
+          type: boolean
+      example:
+        accuracy: 8.1035
+        datetime: '2022-09-20T13:16:16.000Z'
+        latitude: 50.9770208994093
+        longitude: 3.5405845681746984
+        numSatellites: 11
+        speed: 0.041
+        status: 2
+        valid: true
+    BatteryStatus:
+      properties:
+        percentage:
+          type: integer
+        percentagePerMowingHour:
+          type: number
+          format: double
+        availableMowingTime:
+          type: integer
+          description: Expressed in seconds
+        chargerState:
+          type: integer
+          enum:
+            - 0
+            - 1
+          description: An integer representing if the charger is connected
+        temperature:
+          type: integer
+          description: Expressed in degrees Celsius
+    BootCount:
+      required:
+        - bootcount
+      properties:
+        bootcount:
+          type: integer
+      example:
+        bootcount: 352
+    DockingState:
+      type: string
+      enum:
+        - StartDocking
+        - FindPositionInMap
+        - GotoChargingStationProximity
+        - GotoRetryPosition
+        - PositionInFrontOfChargingStation
+        - ConnectToCharger
+        - AutoDocked
+        - AutoCharging
+        - ManualCharging
+        - ExitAndRetry
+        - GeneralRetry
+        - Idle
+        - ManualDocked
+        - Unknown
+    ChargeStatus:
+      type: string
+      enum:
+        - Thermal regulation active
+        - Vin Uvcl active
+        - Iin limit active
+        - Constant current
+        - Constant voltage
+        - Charger off
+        - Error
+    ChargerState:
+      type: string
+      enum:
+        - Battery detect failed fault
+        - Battery detection
+        - Charger suspended
+        - Precharge
+        - cc-cv charge
+        - Ntc pause
+        - Timer terminated
+        - c over x terminated
+        - Max charge time fault
+        - Battery missing fault
+        - Battery short fault
+        - Unknown
+    DockingPosition:
+      type: string
+      enum:
+        - Bad
+        - Good
+        - Unknown
+    DockingInfo:
+      properties:
+        dockingState:
+          $ref: '#/components/schemas/DockingState'
+        chargeStatus:
+          $ref: '#/components/schemas/ChargeStatus'
+        chargerState:
+          $ref: '#/components/schemas/ChargerState'
+        chargingCurrent:
+          type: number
+          format: double
+          description: Expressed in amperes
+        chargingPower:
+          type: number
+          format: double
+          description: Expressed in watts
+        dockingPosition:
+          $ref: '#/components/schemas/DockingPosition'
+        counters:
+          description: The number of times the robot has been in a particular docking state ("../components/schemas.yaml#/DockingState")
+          type: object
+          additionalProperties:
+            type: integer
+    EmergencyStop:
+      properties:
+        description:
+          type: string
+    ExploringInfo:
+      properties:
+        exploringState:
+          type: string
+          enum:
+            - Idle
+            - Mapping
+            - GotoZone
+            - DockingAndRecording
+            - DockingAndReadyToBuildMap
+            - DockedAndRecording
+            - DockedAndReadyToBuildMap
+            - ExploringDone
+            - ExploringError
+            - ExploringPaused
+        lastExploreTime:
+          type: string
+          format: date-time
+    HardwareInfo:
+      description: Information on the robot's hardware
+      properties:
+        hardwareVersion:
+          type: string
+          format: version-number
+        motorDirection:
+          type: integer
+          enum:
+            - 0
+            - 1
+          description: 0 represents a normal motor direction, 1 an inverted motor direction
+        mowerType:
+          type: integer
+          enum:
+            - 0
+            - 1
+          description: 0 represents the V1 mower, 1 the 70W V2 mower, 2 the BLDC V3 mower
+        serialNumber:
+          type: string
+        uniqueHardwareId:
+          type: string
+          format: mac
+        wheelMotorsType:
+          type: integer
+          enum:
+            - 0
+            - 1
+            - 2
+          description: 0 represents gearbox motors, 1 outrunners
+      example:
+        hardwareVersion: 3.5.1
+        motorDirection: 1
+        mowerType: 2
+        serialNumber: TOADI000003002
+        uniqueHardwareId: 48:b0:2d:3e:20:b1
+        wheelMotorsType: 1
+    MotorControllerStatus:
+      properties:
+        errors:
+          type: array
+          items:
+            type: string
+        firmwareVersion:
+          type: string
+          format: version
+        hardwareVersion:
+          type: string
+          format: version
+        serialNumber:
+          type: string
+        type:
+          type: string
+          enum:
+            - ODrive
+        uptime:
+          type: integer
+          description: The uptime of the motor controller (expressed in seconds)
+    MowerInfo:
+      properties:
+        mowerHeight:
+          type: number
+          format: double
+          description: The height of the mower blades (expressed in meters)
+        rpm:
+          type: integer
+          description: The current RPM of the mower blades
+    MowingTime:
+      required:
+        - today
+        - total
+      properties:
+        current:
+          type: integer
+          description: The time mowed in this mowing session (expressed in minutes)
+        max:
+          type: integer
+          description: The maximum time of a mowing session (expressed in minutes)
+        today:
+          type: integer
+          description: The time mowed today (expressed in minutes)
+        total:
+          type: integer
+          description: The total time mowed (expressed in minutes)
+    ZoneMowingInfo:
+      required:
+        - area
+        - id
+        - totalRequiredMowingTime
+      properties:
+        area:
+          type: number
+          format: double
+          description: The area of the zone (expressed in square meters)
+        elapsedMowingTime:
+          type: integer
+          description: The total mowing time in this zone (expressed in seconds)
+        elapsedMowingTimeToday:
+          type: integer
+          description: Today's mowing time in this zone (expressed in seconds)
+        id:
+          type: string
+        totalRequiredMowingTime:
+          type: integer
+          description: The time it approximately takes to mow this zone (expressed in seconds)
+        resumeMowingTime:
+          type: string
+          format: time
+          description: The time when mowing in this zone will resume
+        startMowingTime:
+          type: string
+          format: time
+          description: The time that mowing started in this zone
+    MowingInfo:
+      required:
+        - mowingTime
+        - zoneIdToMow
+        - zonesInfo
+      properties:
+        mowingTime:
+          $ref: '#/components/schemas/MowingTime'
+        lastRainTime:
+          type: string
+          format: time
+          description: The last time it was raining
+        todayEndTime:
+          type: string
+          format: time
+          description: The time when mowing ends today
+        zoneIdToMow:
+          type: string
+          description: The id of the zone currently being mowed
+        zonesInfo:
+          type: array
+          items:
+            $ref: '#/components/schemas/ZoneMowingInfo'
+    NetworkInterface:
+      type: string
+      enum:
+        - Unknown
+        - Wifi
+        - MobileNetwork
+        - Ethernet
+    ConnectivityState:
+      type: string
+      enum:
+        - Offline
+        - Online
+        - Pending
+        - ConnectedButNotOnline
+    DisconnectedReason:
+      type: string
+      enum:
+        - None
+        - WrongPassword
+    MobileInfo:
+      properties:
+        state:
+          $ref: '#/components/schemas/ConnectivityState'
+        reason:
+          $ref: '#/components/schemas/DisconnectedReason'
+    WifiInfo:
+      properties:
+        ssid:
+          type: string
+        localIp:
+          type: string
+        state:
+          $ref: '#/components/schemas/ConnectivityState'
+        reason:
+          $ref: '#/components/schemas/DisconnectedReason'
+    NetworkInfo:
+      properties:
+        default:
+          $ref: '#/components/schemas/NetworkInterface'
+        mobile:
+          $ref: '#/components/schemas/MobileInfo'
+        state:
+          $ref: '#/components/schemas/ConnectivityState'
+        wifi:
+          $ref: '#/components/schemas/WifiInfo'
+    PowerManagerStatus:
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - Unknown
+            - LowPower
+            - ReducedPower
+            - FullPower
+    TimeInfo:
+      required:
+        - systemTime
+        - timeZone
+        - uptime
+      properties:
+        sunrise:
+          type: string
+          format: time
+        sunset:
+          type: string
+          format: time
+        systemTime:
+          type: string
+          format: time
+        timeZone:
+          type: string
+        uptime:
+          type: integer
+          description: The time since last reboot (expressed in seconds)
+          example:
+            sunrise: '2022-09-19 07:27:06'
+            sunset: '2022-09-19 19:51:09'
+            systemTime: '2022-09-19 12:18:16'
+            timeZone: Europe/Brussels
+            uptime: 255777
+    VersionInfo:
+      properties:
+        applicationVersion:
+          type: string
+        osVersion:
+          type: string
+        apiVersion:
+          type: integer
+    WeedingInfo:
+      required:
+        - enabled
+      properties:
+        enabled:
+          type: boolean
+          description: Whether the robot has a working weeding sprayer available
+    NetworkStatus:
+      properties:
+        BSSID:
+          type: string
+        SSID:
+          type: string
+        frequency:
+          type: integer
+        signal:
+          type: integer
+    Networks:
+      properties:
+        networks:
+          type: array
+          items:
+            $ref: '#/components/schemas/NetworkStatus'
+    BlockingReason:
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          description: The name of the reason that blocks the start of an activity. For example, "inChargingStation" means that the activity cannot be started because the robot is currently in the charging station.
+    Schedule:
+      properties:
+        resume:
+          type: string
+          format: date-time
+    ScheduleInfo:
+      properties:
+        blockedBy:
+          type: array
+          items:
+            $ref: '#/components/schemas/BlockingReason'
+        schedule:
+          type: array
+          items:
+            $ref: '#/components/schemas/Schedule'
+    Tool:
+      required:
+        - active
+        - name
+      properties:
+        active:
+          type: boolean
+        auto:
+          description: Blocking reasons for automatic scheduling
+          $ref: '#/components/schemas/ScheduleInfo'
+        manual:
+          description: Blocking reasons for manual activation
+          $ref: '#/components/schemas/ScheduleInfo'
+        name:
+          type: string
+    ToolPlannerStatus:
+      required:
+        - tools
+      properties:
+        tools:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tool'
+    ZoneIds:
+      type: object
+      additionalProperties:
+        type: string
+      description: An associative array between zone IDs and their names
+      example:
+        GRASSZONE_556ef0c9-ce24-4237-85a2-e39a5ae00e78: Grass Zone 1
+    MapRecordingInfo:
+      required:
+        - isRecording
+      properties:
+        isRecording:
+          type: boolean
+        recordingPath:
+          type: string
+    AnnotationRecordingInfo:
+      required:
+        - path
+      properties:
+        path:
+          type: string
+        name:
+          type: string
+        size:
+          type: integer
+        width:
+          type: integer
+        height:
+          type: integer
+        totalFrames:
+          type: integer
+        thumbnailPath:
+          type: string
+    MkvPlaybackInfo:
+      type: object
+      properties:
+        numFrames:
+          type: integer
+        currentFrameNum:
+          type: integer
+        streamFrameNum:
+          type: integer
+    LivestreamStartRequest:
+      type: object
+      required:
+        - peerUuid
+        - streamType
+      properties:
+        peerUuid:
+          type: string
+          description: WebRTC peer UUID from the `/webrtc` signaling session
+        streamType:
+          type: string
+          enum:
+            - live
+            - recording
+        videoFile:
+          type: string
+          description: Path to MKV file (required for recording playback when opening a specific file)
+    LivestreamStopRequest:
+      type: object
+      required:
+        - peerUuid
+      properties:
+        peerUuid:
+          type: string
+        streamType:
+          type: string
+          enum:
+            - live
+            - recording
+          description: Set to `recording` when stopping a file-playback peer
+    HiggsTrainRequest:
+      type: object
+      required:
+        - actionName
+        - recordingDirs
+        - modelName
+      properties:
+        actionName:
+          type: string
+        recordingDirs:
+          type: array
+          items:
+            type: string
+        modelName:
+          type: string
+        epochs:
+          type: integer
+          default: 300
+        arm:
+          type: array
+          items:
+            type: string
+            enum:
+              - left
+              - right

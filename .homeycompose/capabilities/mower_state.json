@@ -1,0 +1,22 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Mower state",
+    "nl": "Maaierstatus",
+    "de": "Mäherstatus"
+  },
+  "values": [
+    { "id": "mowing", "title": { "en": "Mowing", "nl": "Maaien", "de": "Mähen" } },
+    { "id": "returning", "title": { "en": "Returning to dock", "nl": "Terug naar laadstation", "de": "Rückkehr zur Ladestation" } },
+    { "id": "charging", "title": { "en": "Charging", "nl": "Opladen", "de": "Laden" } },
+    { "id": "docked", "title": { "en": "Docked", "nl": "In laadstation", "de": "Angedockt" } },
+    { "id": "manual", "title": { "en": "Manual driving", "nl": "Handmatig rijden", "de": "Manuelles Fahren" } },
+    { "id": "mapping", "title": { "en": "Mapping", "nl": "Kaart maken", "de": "Kartierung" } },
+    { "id": "emergency", "title": { "en": "Emergency stop", "nl": "Noodstop", "de": "Not-Aus" } },
+    { "id": "idle", "title": { "en": "Idle", "nl": "Inactief", "de": "Untätig" } }
+  ],
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/broad-activity-feed-svgrepo-com.svg"
+}

@@ -1,0 +1,23 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Emergency stop",
+    "nl": "Noodstop",
+    "de": "Not-Aus"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "toggle",
+  "uiQuickAction": false,
+  "insights": true,
+  "insightsTitleTrue": {
+    "en": "Emergency stop activated",
+    "nl": "Noodstop geactiveerd",
+    "de": "Not-Aus aktiviert"
+  },
+  "insightsTitleFalse": {
+    "en": "Emergency stop released",
+    "nl": "Noodstop vrijgegeven",
+    "de": "Not-Aus freigegeben"
+  }
+}

@@ -5,24 +5,24 @@ const Homey = require("homey");
 class App extends Homey.App {
   async onInit() {
     this.log("Started");
-
-    const strategy = this.homey.discovery.getStrategy("toadi");
-
-    // Anything already discovered
-    for (const r of Object.values(strategy.getDiscoveryResults())) {
-      this.log("existing:", r.id, r.address, r.port, r.txt);
-    }
-
-    // Live results as they arrive
-    strategy.on("result", (r) => {
-      this.log("NEW:", r.id, r.address, r.port, r.txt);
-    });
   }
 
   /** WIDGET API */
 
+  /** Devices of the new (mDNS) driver handle widget calls themselves. */
+  getWillow2Device(id) {
+    try {
+      return this.homey.drivers.getDriver("willow2").getDevice({ id });
+    } catch {
+      return null;
+    }
+  }
+
   async apiWillowImage(id) {
     this.log("Getting image for device ID:", id);
+    const willow2 = this.getWillow2Device(id);
+    if (willow2) return willow2.getWidgetImage();
+
     const device = this.homey.drivers.getDriver("willow").getDevice({ id });
     if (!device) throw new Error("Device not found");
     const image = device.myImage;
@@ -40,6 +40,9 @@ class App extends Homey.App {
 
   async apiWillowData(id) {
     this.log("Getting data for device ID:", id);
+
+    const willow2 = this.getWillow2Device(id);
+    if (willow2) return willow2.getWidgetData();
 
     const device = this.homey.drivers.getDriver("willow").getDevice({ id });
     if (!device) throw new Error("Device not found");
@@ -70,6 +73,9 @@ class App extends Homey.App {
 
   async apiExecuteTask(task) {
     this.log("Executing task for device", task);
+    const willow2 = this.getWillow2Device(task.id);
+    if (willow2) return willow2.runWidgetTask(task.description);
+
     const device = this.homey.drivers
       .getDriver("willow")
       .getDevice({ id: task.id });

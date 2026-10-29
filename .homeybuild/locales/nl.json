@@ -1,5 +1,20 @@
 {
-    "device_timeout": "Timout probleem, controleer of Willow het juiste IP adres heeft en online is.",
-    "device_404": "404 probleem, contacteer de ontwikkelaar van de App.",
-    "camera": "Camera"
+  "device_timeout": "Timout probleem, controleer of Willow het juiste IP adres heeft en online is.",
+  "device_404": "404 probleem, contacteer de ontwikkelaar van de App.",
+  "camera": "Camera",
+  "state": {
+    "mowing": "Maaien",
+    "returning": "Terug naar laadstation",
+    "charging": "Opladen",
+    "docked": "In laadstation",
+    "manual": "Handmatig rijden",
+    "mapping": "Kaart maken",
+    "emergency": "Noodstop",
+    "idle": "Inactief"
+  },
+  "errors": {
+    "offline": "Willow is niet bereikbaar. Controleer of hij aanstaat en verbonden is met je netwerk.",
+    "not_supported": "Deze functie wordt niet ondersteund door de software van je Willow.",
+    "unknown": "Willow gaf een onverwachte fout."
+  }
 }

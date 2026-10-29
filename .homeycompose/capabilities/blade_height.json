@@ -1,0 +1,15 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Cutting height",
+    "nl": "Maaihoogte",
+    "de": "Schnitthöhe"
+  },
+  "units": { "en": "cm" },
+  "decimals": 1,
+  "getable": true,
+  "setable": false,
+  "insights": true,
+  "uiComponent": "sensor",
+  "icon": "/assets/height.svg"
+}

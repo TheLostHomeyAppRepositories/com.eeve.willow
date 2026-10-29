@@ -1,0 +1,116 @@
+{
+  "name": {
+    "en": "Willow"
+  },
+  "class": "lawnmower",
+  "capabilities": [
+    "mower_state",
+    "measure_battery",
+    "remaining_mowing_time",
+    "mowing_time_today",
+    "mowing_time_total",
+    "blade_height",
+    "measure_temperature.battery",
+    "measure_power",
+    "alarm_water",
+    "alarm_motion",
+    "emergency_stop",
+    "button.start_mowing",
+    "button.stop_mowing",
+    "button.dock",
+    "button.reboot"
+  ],
+  "capabilitiesOptions": {
+    "measure_temperature.battery": {
+      "decimals": 1,
+      "title": { "en": "Battery temperature", "nl": "Batterijtemperatuur", "de": "Batterietemperatur" }
+    },
+    "measure_power": {
+      "decimals": 1,
+      "title": { "en": "Power usage", "nl": "Stroomverbruik", "de": "Leistungsaufnahme" }
+    },
+    "alarm_water": {
+      "title": { "en": "Rain", "nl": "Regen", "de": "Regen" }
+    },
+    "alarm_motion": {
+      "title": { "en": "Person detected", "nl": "Persoon gezien", "de": "Person erkannt" }
+    },
+    "button.start_mowing": {
+      "title": { "en": "Start mowing", "nl": "Start maaien", "de": "Mähen starten" }
+    },
+    "button.stop_mowing": {
+      "title": { "en": "Stop mowing", "nl": "Stop maaien", "de": "Mähen stoppen" }
+    },
+    "button.dock": {
+      "title": { "en": "Return to dock", "nl": "Naar laadstation", "de": "Zur Ladestation" }
+    },
+    "button.reboot": {
+      "maintenanceAction": true,
+      "title": { "en": "Reboot", "nl": "Herstarten", "de": "Neustart" }
+    },
+    "status.activity": {
+      "title": { "en": "Activity (raw)", "nl": "Activiteit (ruw)", "de": "Aktivität (roh)" }
+    },
+    "status.docking": {
+      "title": { "en": "Docking state (raw)", "nl": "Dokstatus (ruw)", "de": "Andockzustand (roh)" }
+    },
+    "measure_temperature.motherboard": {
+      "decimals": 1,
+      "title": { "en": "Motherboard temperature", "nl": "Moederbordtemperatuur", "de": "Hauptplatinentemperatur" }
+    },
+    "measure_temperature.module": {
+      "decimals": 1,
+      "title": { "en": "Module temperature", "nl": "Moduletemperatuur", "de": "Modultemperatur" }
+    },
+    "measure_humidity.motherboard": {
+      "decimals": 1,
+      "title": { "en": "Motherboard humidity", "nl": "Moederbord vochtigheid", "de": "Hauptplatinenfeuchte" }
+    },
+    "measure_current.charging": {
+      "decimals": 2,
+      "title": { "en": "Charging current", "nl": "Laadstroom", "de": "Ladestrom" }
+    },
+    "measure_current.blades": {
+      "decimals": 2,
+      "title": { "en": "Blade motor current", "nl": "Maaimotor stroom", "de": "Mähmotor Strom" }
+    },
+    "measure_current.wheel_left": {
+      "decimals": 2,
+      "title": { "en": "Left wheel current", "nl": "Linker wiel stroom", "de": "Linkes Rad Strom" }
+    },
+    "measure_current.wheel_right": {
+      "decimals": 2,
+      "title": { "en": "Right wheel current", "nl": "Rechter wiel stroom", "de": "Rechtes Rad Strom" }
+    },
+    "measure_voltage.battery": {
+      "decimals": 2,
+      "title": { "en": "Battery voltage", "nl": "Batterijspanning", "de": "Batteriespannung" }
+    },
+    "measure_voltage.receiver": {
+      "decimals": 2,
+      "title": { "en": "Charging station voltage", "nl": "Laadstation spanning", "de": "Ladestation Spannung" }
+    }
+  },
+  "platforms": ["local"],
+  "connectivity": ["lan"],
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
+  "discovery": "toadi",
+  "pair": [
+    {
+      "id": "list_devices",
+      "template": "list_devices",
+      "navigation": { "next": "add_devices" }
+    },
+    {
+      "id": "add_devices",
+      "template": "add_devices"
+    }
+  ],
+  "energy": {
+    "batteries": ["INTERNAL"]
+  }
+}
