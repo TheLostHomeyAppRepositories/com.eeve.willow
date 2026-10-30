@@ -34,11 +34,12 @@ const round = (value, decimals = 1) =>
   typeof value === "number" ? Number(value.toFixed(decimals)) : null;
 
 /**
- * The spec documents mowing times as plain minutes. Firmware 6.8 does that for
- * `total`, but returns `today` as a two-number array whose meaning is not yet
- * known (only seen as [0, 0]), so that is not converted for now.
+ * The spec documents mowing times as minutes, but firmware 6.8 reports them in
+ * seconds. `today` is a two-number array: the first matches the zones'
+ * `elapsedMowingTimeToday` (time spent actually mowing), the second is larger
+ * and presumably includes driving to and between zones.
  */
-const toMinutes = (value) => (typeof value === "number" ? value : null);
+const toMinutes = (seconds) => (typeof seconds === "number" ? seconds / 60 : null);
 
 class Willow2Device extends Homey.Device {
   async onInit() {
@@ -239,7 +240,7 @@ class Willow2Device extends Homey.Device {
       // stays 0 while the robot idles on the dock with a full battery.
       measure_power: power?.receiver_power,
       blade_height: round(mower?.mowerHeight * 100),
-      mowing_time_today: round(toMinutes(mowing?.mowingTime?.today), 0),
+      mowing_time_today: round(toMinutes(mowing?.mowingTime?.today?.[0]), 0),
       mowing_time_total: round(toMinutes(mowing?.mowingTime?.total) / 60),
       alarm_water: rain ? rain.state === 1 : null,
     });
