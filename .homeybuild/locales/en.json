@@ -26,5 +26,11 @@
     "offline": "Willow can't be reached. Check that it is switched on and connected to your network.",
     "not_supported": "This function is not supported by the software on your Willow.",
     "unknown": "Willow returned an unexpected error."
+  },
+  "emergency_reason": {
+    "none": "None",
+    "wheel": "Wheels stuck or slipping",
+    "endlessSpin": "Spinning without making progress",
+    "cpuTooHot": "Processor too hot"
   }
 }

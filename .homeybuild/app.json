@@ -378,6 +378,62 @@
             "filter": "driver_id=willow2"
           }
         ]
+      },
+      {
+        "id": "emergency_stop_activated",
+        "title": {
+          "en": "An emergency stop was activated",
+          "nl": "Er is een noodstop geactiveerd",
+          "de": "Ein Not-Aus wurde ausgelöst"
+        },
+        "hint": {
+          "en": "Triggers when the robot enters an emergency stop, and again when another reason is added while it is stopped. Several reasons can be active at once; the codes are separated by a comma. Known codes: wheel (wheels stuck or slipping), endlessSpin (spinning without making progress), cpuTooHot (processor too hot). Use a Logic card with \"contains\" on the Codes tag to react to a specific reason.",
+          "nl": "Wordt geactiveerd wanneer de robot in noodstop gaat, en opnieuw wanneer er een reden bijkomt terwijl hij stilstaat. Er kunnen meerdere redenen tegelijk actief zijn; de codes worden gescheiden door een komma. Bekende codes: wheel (wielen vast of slippen), endlessSpin (blijft ronddraaien zonder vooruit te komen), cpuTooHot (processor te warm). Gebruik een Logica-kaart met \"bevat\" op de Codes-tag om op een specifieke reden te reageren.",
+          "de": "Wird ausgelöst, wenn der Roboter in den Not-Aus geht, und erneut, wenn während des Stillstands ein weiterer Grund hinzukommt. Mehrere Gründe können gleichzeitig aktiv sein; die Codes werden durch ein Komma getrennt. Bekannte Codes: wheel (Räder stecken fest oder rutschen), endlessSpin (dreht sich ohne voranzukommen), cpuTooHot (Prozessor zu heiß). Verwende eine Logik-Karte mit \"enthält\" auf dem Codes-Tag, um auf einen bestimmten Grund zu reagieren."
+        },
+        "tokens": [
+          {
+            "name": "reasons",
+            "type": "string",
+            "title": {
+              "en": "Reasons",
+              "nl": "Redenen",
+              "de": "Gründe"
+            },
+            "example": {
+              "en": "Wheels stuck or slipping, Processor too hot",
+              "nl": "Wielen vast of slippen, Processor te warm",
+              "de": "Räder stecken fest oder rutschen, Prozessor zu heiß"
+            }
+          },
+          {
+            "name": "codes",
+            "type": "string",
+            "title": {
+              "en": "Codes",
+              "nl": "Codes",
+              "de": "Codes"
+            },
+            "example": "wheel, cpuTooHot"
+          },
+          {
+            "name": "new_codes",
+            "type": "string",
+            "title": {
+              "en": "New codes",
+              "nl": "Nieuwe codes",
+              "de": "Neue Codes"
+            },
+            "example": "cpuTooHot"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=willow2"
+          }
+        ]
       }
     ],
     "conditions": [
@@ -1302,6 +1358,7 @@
         "alarm_water",
         "alarm_motion",
         "emergency_stop",
+        "emergency_reason",
         "button.start_mowing",
         "button.stop_mowing",
         "button.dock",
@@ -1728,6 +1785,18 @@
       "insights": true,
       "uiComponent": "sensor",
       "icon": "/assets/height.svg"
+    },
+    "emergency_reason": {
+      "type": "string",
+      "title": {
+        "en": "Emergency stop reason",
+        "nl": "Reden noodstop",
+        "de": "Grund für Not-Aus"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/broad-activity-feed-svgrepo-com.svg"
     },
     "emergency_stop": {
       "type": "boolean",

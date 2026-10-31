@@ -16,6 +16,7 @@ class Willow2Driver extends Homey.Driver {
       .getDeviceTriggerCard("mower_state_changed_to")
       .registerRunListener(async (args, state) => args.state === state.state);
     this.personDetectedTrigger = flow.getDeviceTriggerCard("person_detected");
+    this.emergencyStopTrigger = flow.getDeviceTriggerCard("emergency_stop_activated");
 
     flow
       .getConditionCard("mower_state_is")

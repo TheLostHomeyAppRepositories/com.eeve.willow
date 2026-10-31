@@ -16,5 +16,11 @@
     "offline": "Willow is niet bereikbaar. Controleer of hij aanstaat en verbonden is met je netwerk.",
     "not_supported": "Deze functie wordt niet ondersteund door de software van je Willow.",
     "unknown": "Willow gaf een onverwachte fout."
+  },
+  "emergency_reason": {
+    "none": "Geen",
+    "wheel": "Wielen vast of slippen",
+    "endlessSpin": "Blijft ronddraaien",
+    "cpuTooHot": "Processor te warm"
   }
 }

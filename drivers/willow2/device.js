@@ -3,6 +3,7 @@
 const Homey = require("homey");
 const { WillowClient } = require("../../lib/WillowClient");
 const { deriveMowerState, ACTIVE_STATES } = require("../../lib/mowerState");
+const { sameReasons } = require("../../lib/emergencyStop");
 
 const POLL_INTERVAL_ACTIVE = 15 * 1000;
 const POLL_INTERVAL_IDLE = 60 * 1000;
@@ -46,6 +47,10 @@ class Willow2Device extends Homey.Device {
     this.client = new WillowClient(this.getStoreValue("address"));
     this.lastValues = {};
 
+    // Added after the first release of this driver.
+    if (!this.hasCapability("emergency_reason")) {
+      await this.addCapability("emergency_reason").catch(this.error);
+    }
     await this.syncDiagnosticCapabilities(this.getSetting("diagnostics"));
     this.registerCapabilityListeners();
     await this.setupCamera();
@@ -197,12 +202,13 @@ class Willow2Device extends Homey.Device {
     const diagnostics = this.getSetting("diagnostics");
 
     // Without these we can't tell what the robot is doing, so failing here marks the device unavailable.
-    const [activities, battery, docking, inEmergency] = await Promise.all([
+    const [activities, battery, docking, emergencyReasons] = await Promise.all([
       client.getActivities(),
       client.getBatteryStatus(),
       client.getDockingInfo(),
-      client.isInEmergencyStop(),
+      client.getEmergencyStopReasons(),
     ]);
+    const inEmergency = emergencyReasons.length > 0;
 
     const [mower, mowing, rain, power, baseboard, module, odometry] = await Promise.all(
       [
@@ -223,6 +229,7 @@ class Willow2Device extends Homey.Device {
 
     const state = deriveMowerState({ inEmergency, activities, docking });
     await this.setMowerState(state);
+    await this.setEmergencyReasons(emergencyReasons);
 
     this.lastValues = {
       chargingCurrent: docking.chargingCurrent,
@@ -295,6 +302,47 @@ class Willow2Device extends Homey.Device {
     this.driver.stateChangedToTrigger
       .trigger(this, {}, { state })
       .catch(this.error);
+  }
+
+  /**
+   * Several reasons can be active at once. The trigger fires when the robot
+   * enters an emergency stop, and again whenever another reason is added.
+   * The last reasons are kept in the store so an app restart doesn't re-trigger.
+   */
+  async setEmergencyReasons(reasons) {
+    await this.setValues({
+      emergency_reason: reasons.length
+        ? this.describeEmergencyReasons(reasons)
+        : this.homey.__("emergency_reason.none"),
+    });
+
+    const previous = this.getStoreValue("emergencyReasons");
+    if (previous && sameReasons(previous, reasons)) return;
+    await this.setStoreValue("emergencyReasons", reasons).catch(this.error);
+    if (!previous) return;
+
+    const added = reasons.filter((reason) => !previous.includes(reason));
+    this.log("Emergency stop reasons changed to", JSON.stringify(reasons));
+    if (added.length === 0) return;
+
+    this.driver.emergencyStopTrigger
+      .trigger(this, {
+        reasons: this.describeEmergencyReasons(reasons),
+        codes: reasons.join(", "),
+        new_codes: added.join(", "),
+      })
+      .catch(this.error);
+  }
+
+  /** Translated reasons. Codes we don't know yet are shown as reported by the robot. */
+  describeEmergencyReasons(reasons) {
+    return reasons
+      .map((code) => {
+        const key = `emergency_reason.${code}`;
+        const label = this.homey.__(key);
+        return label && label !== key ? label : code;
+      })
+      .join(", ");
   }
 
   /**

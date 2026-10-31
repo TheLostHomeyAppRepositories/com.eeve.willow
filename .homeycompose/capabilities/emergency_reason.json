@@ -1,0 +1,12 @@
+{
+  "type": "string",
+  "title": {
+    "en": "Emergency stop reason",
+    "nl": "Reden noodstop",
+    "de": "Grund für Not-Aus"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "icon": "/assets/broad-activity-feed-svgrepo-com.svg"
+}

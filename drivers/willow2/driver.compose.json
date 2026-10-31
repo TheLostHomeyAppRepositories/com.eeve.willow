@@ -15,6 +15,7 @@
     "alarm_water",
     "alarm_motion",
     "emergency_stop",
+    "emergency_reason",
     "button.start_mowing",
     "button.stop_mowing",
     "button.dock",

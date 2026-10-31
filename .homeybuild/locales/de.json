@@ -16,5 +16,11 @@
     "offline": "Willow ist nicht erreichbar. Prüfe, ob er eingeschaltet und mit deinem Netzwerk verbunden ist.",
     "not_supported": "Diese Funktion wird von der Software deines Willow nicht unterstützt.",
     "unknown": "Willow hat einen unerwarteten Fehler gemeldet."
+  },
+  "emergency_reason": {
+    "none": "Keiner",
+    "wheel": "Räder stecken fest oder rutschen",
+    "endlessSpin": "Dreht sich ohne voranzukommen",
+    "cpuTooHot": "Prozessor zu heiß"
   }
 }
